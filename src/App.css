@@ -1,3 +1,35 @@
-h1{
-  background-color: #e7e6e6;
+.imagen-productos{
+  background-image: url("../src/images/productos.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.imagen-proveedores{
+  background-image: url("../src/images/proveedores.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.imagen-clientes{
+  background-image: url("../src/images/clientes.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.imagen-operaciones{
+  background-image: url("../src/images/operaciones.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.imagen-empleados{
+  background-image: url("../src/images/empleados.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.imagen-administrador{
+  background-image: url("../src/images/administrador.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
 }

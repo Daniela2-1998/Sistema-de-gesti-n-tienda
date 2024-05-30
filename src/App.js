@@ -20,6 +20,10 @@ function App() {
             <Route path='/' element={<Login />} />
 
             <Route path='/inicio/:usuario' element={<Inicio />} />
+
+            <Route path='/productos/:usuario' element={<Inicio />} />
+            <Route path='/proveedores/:usuario' element={<Inicio />} />
+            <Route path='/clientes/:usuario' element={<Inicio />} />
           </Routes>
 
       </BrowserRouter >

@@ -1,15 +1,11 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Helmet
 import { Helmet } from "react-helmet";
 
 // Firebase
-import db from '../firebase/FirebaseConfig';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
-
-import GuardarUsuario from '../firebase/UsuarioSesion';
 
 // Componentes e imágenes.
 import {
@@ -18,8 +14,6 @@ import {
 } from '../components/FormulariosComponentes';
 
 import LogoLogin from '../images/Logo.svg';
-import { usuarioContext } from '../contexts/UsuarioContexto';
-
 
 
 
@@ -28,10 +22,8 @@ function Login() {
     const [usuario, setUsuario] = useState("");
     const [contraseña, setContraseña] = useState("");
 
-    const [usuarioInfo, setUsuarioInfo] = useState(useContext(usuarioContext));
 
     const navigate = useNavigate();
-
 
 
     const handleChange = (e) => {
@@ -42,25 +34,7 @@ function Login() {
         }
     }
 
-    /*
-    const buscarUsuarioFirebase = async (usuario) => {
-        const usuarioRecuperado = await getDoc(doc(db, "usuarios", usuario));
-        console.log(usuarioRecuperado);
-        if (usuarioRecuperado.exists()) {
-            setUsuarioInfo(usuarioRecuperado);
-            localStorage.setItem('usuarioSesion', usuarioInfo);
 
-
-            console.log(usuarioInfo," y ahora storage", localStorage.getItem);
-            
-            //navigate("/inicio");
-        } else {
-            console.log("Usuario no encontrado");
-            navigate("/");
-        }
-    }
-
-*/
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -69,27 +43,7 @@ function Login() {
 
         await signInWithEmailAndPassword(auth, usuario, contraseña)
             .then(() => {
-
-                /*const consulta = query(
-                    collection(db, 'usuarios'),
-                    where('usuario', '==', usuario),
-                );
-            
-                const usuarioSesion = getDoc(consulta);
-                setUsuarioInfo(
-                    usuarioSesion.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-                );
-          
-    
-                console.log("El usuario es:" + usuarioSesion);
-                    setUsuarioInfo(usuarioSesion.data().contraseña);
-                    localStorage.setItem('usuarioInfo', usuarioInfo);
-
-
-                    console.log(usuarioInfo, " y ahora storage", localStorage.getItem);
-*/
                 navigate(`/inicio/${usuario}`);
-
             })
             .catch((error) => {
                 console.log(error);
