@@ -100,6 +100,14 @@ const BotonIngresoLogin = styled.button`
 `;
 
 
+// FORMULARIOS REGISTROS
+// Contenedores
+const ContenedorFormularioRegistro = styled.div`
+
+`;
+
+
+
 export {ContenedorGeneralLogin, ContenedorEspacioBlancoLogin, ContenedorFormularioLogin, LogoLoginEstilos,
   TituloLogin, FormularioLogin, LabelLogin, InputLogin, BotonIngresoLogin
 };

@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Login from './pages/Login';
 import Inicio from './pages/Inicio';
+import Productos from './pages/Productos';
+import AgregarProducto from './pages/AgregarProducto';
 
 
 function App() {
@@ -21,7 +23,9 @@ function App() {
 
             <Route path='/inicio/:usuario' element={<Inicio />} />
 
-            <Route path='/productos/:usuario' element={<Inicio />} />
+            <Route path='/productos/:usuario' element={<Productos />} />
+            <Route path='/productos/agregar/:usuario' element={<AgregarProducto />} />
+
             <Route path='/proveedores/:usuario' element={<Inicio />} />
             <Route path='/clientes/:usuario' element={<Inicio />} />
           </Routes>

@@ -58,6 +58,11 @@ const Cards = styled.div`
   display: flex;
   flex-direction: column;
 
+  &:hover{
+    background-color: #dbdbdb;
+    border: 2px solid #cccaca;
+  }
+
 
   @media (max-width: 950px) {
     width: 50%;
@@ -70,7 +75,7 @@ const Cards = styled.div`
     height: 330px;
     margin-left: 20%;
   }
-`;
+  `;
 
 const ImagenesCards = styled.img`
   width: 95%;
@@ -118,6 +123,10 @@ const BotonesCards = styled.button`
   color: #fff;
   border: none;
   border-radius: 10px;
+
+  &:hover{
+    background-color: #d77e35;
+  }
 
   
   @media (max-width: 950px) {
