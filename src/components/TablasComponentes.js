@@ -43,6 +43,7 @@ const BotonHeaderTabla = styled.button`
   background-color: #fff;
   color: #ED8936;
   font-weight: bolder;
+  font-size: 16px;
   border: none;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -55,10 +56,14 @@ const BotonHeaderTabla = styled.button`
     margin-right: 5%;
   }
 
-   ${(props) => {
+  ${(props) => {
     if (props.tipo === 'agregar') {
-      return 'border-radius: 10px';
-    }
+      return 'width: 20%; border-radius: 10px';
+    } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
+      return 'height: 50px; margin-left: 2%; border-radius: 10px;';
+    } else  if (props.tipo === 'regresar') {
+      return 'height: 50px; margin-left: 32%; border-radius: 10px;';
+    } 
   }}
 `;
 
@@ -111,11 +116,6 @@ const ContenedorBusquedaCompleta = styled.div`
   }
 `;
 
-const BusquedaCompleta = styled.button`
-  width: 50%;
-  margin-top: -0.3%;
-  margin-left: 5%;
-`;
 
 const BusquedaDescargaPDF = styled.button`
   height: 40px;
@@ -164,6 +164,6 @@ border-bottom-right-radius: 10px;
 export {
   ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, 
   
-  Tabla, EncabezadoTabla, RegistroTabla, ContenedorBusquedaCompleta, BusquedaCompleta,
+  Tabla, EncabezadoTabla, RegistroTabla, ContenedorBusquedaCompleta,
   BusquedaDescargaPDF, BotonBusqueda
 };

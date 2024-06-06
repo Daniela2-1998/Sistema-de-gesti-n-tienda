@@ -10,13 +10,13 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
     const [mostrarSelect, cambiarMostrarSelect] = useState(false);
 
     const filtrosProducto = [
-        { id: 'listado completo', texto: 'Listado completo' },
-        { id: 'nombre producto', texto: 'Nombre producto' },
-        { id: 'categoría', texto: 'Categoría' },
-        { id: 'disponibilidad', texto: 'Disponibilidad' },
-        { id: 'descuento', texto: 'Descuento' },
-        { id: 'código de producto', texto: 'Código de producto' },
-        { id: 'tipo de producto', texto: 'Tipo de producto' },
+        { id: 'Listado completo', texto: 'Listado completo' },
+        { id: 'Nombre producto', texto: 'Nombre producto' },
+        { id: 'Categoría', texto: 'Categoría' },
+        { id: 'Disponibilidad', texto: 'Disponibilidad' },
+        { id: 'Descuento', texto: 'Descuento' },
+        { id: 'Código de producto', texto: 'Código de producto' },
+        { id: 'Tipo de producto', texto: 'Tipo de producto' },
     ];
 
     const handleClick = (e) => {
@@ -35,8 +35,11 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
             {mostrarSelect &&
                 <Opciones>
                     {
-                        tipo == 'productos' ?
+                        tipo === 'productos' ?
                             filtrosProducto.map((filtrosProducto) => {
+
+                                setFiltro(filtrosProducto.texto);
+
                                 return <Opcion
                                     key={filtrosProducto.id}
                                     data-valor={filtrosProducto.id}

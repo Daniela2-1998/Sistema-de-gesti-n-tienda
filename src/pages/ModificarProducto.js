@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { setDoc, doc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 // Imports estilos
@@ -20,13 +20,15 @@ import withReactContent from 'sweetalert2-react-content';
 
 
 
+// Alerta de confirmación de borrado.
 const MySwal = withReactContent(Swal);
 
 
 
-const AgregarProducto = () => {
+const ModificarProducto = () => {
 
     const { usuario } = useParams();
+    const { id } = useParams();
 
     // Variables
     const [producto, setProducto] = useState('');
@@ -38,7 +40,7 @@ const AgregarProducto = () => {
     const [disponibilidad, setDisponibilidad] = useState('En stock');
     const [precio, setPrecio] = useState(0);
     const [cantidad, setCantidad] = useState(0);
-    const [promocion, setPromocion] = useState(0.0);
+    const [promocion, setPromocion] = useState(0.00);
 
 
     const navigate = useNavigate();
@@ -47,7 +49,30 @@ const AgregarProducto = () => {
     const [alerta, cambiarAlerta] = useState('');
 
 
-    
+    const obtenerProductoById = async (id) => {
+        const productoFirebase = await getDoc( doc(db, "productos", id) );
+
+        if(productoFirebase.exists) {
+            setProducto(productoFirebase.data().producto);
+            setCodigo(productoFirebase.data().codigo);
+            setCategoria(productoFirebase.data().categoria);
+            setTipo(productoFirebase.data().tipo);
+            setDescripcion(productoFirebase.data().descripcion);
+            setDescuento(productoFirebase.data().descuento);
+            setDisponibilidad(productoFirebase.data().disponibilidad);
+            setPrecio(productoFirebase.data().precio);
+            setCantidad(productoFirebase.data().cantidad);
+            setPromocion(productoFirebase.data().promocion);
+        }else{
+            console.log("No existe el producto solicitado.");
+        }
+    }
+
+    useEffect( () => {
+        obtenerProductoById(id);
+    }, []);
+
+
     const aplicarDescuento = () => {
         const descuentoBase = parseFloat(descuento);
         const descuentoAAplicar = parseFloat(1 - descuentoBase);
@@ -56,7 +81,7 @@ const AgregarProducto = () => {
     }
 
 
-    const almacenarProducto = async (e) => {
+    const actualizarProducto = async (e) => {
         e.preventDefault();
 
         // Verificaciones
@@ -79,8 +104,7 @@ const AgregarProducto = () => {
             });
             return;
         }
-
-        if(precio < 0){
+          if(precio < 0){
             cambiarEstadoAlerta(true);
             cambiarAlerta({
                 tipo: 'error',
@@ -88,18 +112,20 @@ const AgregarProducto = () => {
             });
             return;
         }
-
+        
         setDescuento(parseFloat(descuento));
 
-        await setDoc(doc(db, "productos", codigo),
-            {
-                producto: producto, codigo: codigo, categoria: categoria, tipo: tipo, descripcion: descripcion, cantidad: cantidad,
-                descuento: descuento, disponibilidad: disponibilidad, precio: precio, promocion: promocion
-            });
+   
+
+        const productoRecuperado = doc(db, "productos", id);
+        const productoActualizado = { producto: producto, codigo: codigo, categoria: categoria, tipo: tipo, descripcion: descripcion, cantidad: cantidad,
+            descuento: descuento, disponibilidad: disponibilidad, precio: precio, promocion: promocion };
+
+        await updateDoc(productoRecuperado, productoActualizado);
 
         new MySwal({
-            title: "Ingreso éxitoso",
-            text: "Producto ingresado al sistema.",
+            title: "Modificación éxitosa",
+            text: "Se modificó el producto solicitado.",
             icon: "success",
             button: "aceptar",
         });
@@ -117,7 +143,7 @@ const AgregarProducto = () => {
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>System Solutions - Agregar productos</title>
+                <title>System Solutions - Modificar productos</title>
                 <link rel="icon" href="../images/Logo.svg" />
             </Helmet>
 
@@ -128,9 +154,9 @@ const AgregarProducto = () => {
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
 
-                <Titulo>Ingresar producto al sistema:</Titulo>
+                <Titulo>Modificar producto del sistema:</Titulo>
 
-                <ContenedorFormularioRegistro onSubmit={almacenarProducto}>
+                <ContenedorFormularioRegistro onSubmit={actualizarProducto}>
 
                     <ContenedorCamposTriplesFormularioRegistro>
 
@@ -157,8 +183,7 @@ const AgregarProducto = () => {
                             <InputFormularioRegistro
                                 type="text"
                                 value={descuento}
-                                onChange={(e) => {setDescuento(e.target.value); aplicarDescuento();}}                                
-                                placeholder='Ingrese descuento en este formato: 0.10'
+                                onChange={(e) => {setDescuento(e.target.value); aplicarDescuento();}}
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -233,7 +258,7 @@ const AgregarProducto = () => {
 
                     <ContenedorBotonesDoblesFormularioRegistro>
                         <BotonFormularioRegistro tipo='regresar' onClick={irAProductos}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
-                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Ingresar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Modificar</BotonFormularioRegistro>
                     </ContenedorBotonesDoblesFormularioRegistro>
                 </ContenedorFormularioRegistro>
 
@@ -242,4 +267,4 @@ const AgregarProducto = () => {
     )
 }
 
-export default AgregarProducto;
+export default ModificarProducto;

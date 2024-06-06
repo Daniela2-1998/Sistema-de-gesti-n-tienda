@@ -142,7 +142,11 @@ const BotonesCards = styled.button`
   }
 `;
 
+const Titulo = styled.h1`
+  margin-left: 5%;
+  color: #ED8936;
+  font-weight: bolder;
+`;
 
 
-
-export { ContenedorGeneral, Header, ContenedorCards, Cards, ImagenesCards, BotonesCards};
+export { ContenedorGeneral, Header, ContenedorCards, Cards, ImagenesCards, BotonesCards, Titulo};

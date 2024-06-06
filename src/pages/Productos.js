@@ -11,7 +11,7 @@ import db from '../firebase/FirebaseConfig';
 import { ContenedorGeneral, Header } from '../components/InicioComponentes';
 import {
     ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, Tabla, EncabezadoTabla, RegistroTabla,
-    ContenedorBusquedaCompleta, BusquedaCompleta,
+    ContenedorBusquedaCompleta, 
     BusquedaDescargaPDF
 } from '../components/TablasComponentes';
 import SelectFiltros from '../components/SelectFiltros';
@@ -46,9 +46,7 @@ const Productos = () => {
     const navigate = useNavigate();
 
     const productosCollection = collection(db, "productos");
-
-    const consultaBusqueda = query(productosCollection, where(filtro, '==', busqueda));
-
+   
 
     // Funciones
     // Generales
@@ -61,7 +59,7 @@ const Productos = () => {
 
     useEffect(() => {
         obtenerProductos();
-    }, [])
+    }, []);
 
 
     const eliminarProducto = async (id) => {
@@ -96,48 +94,42 @@ const Productos = () => {
 
     // Específicas
     const obtenerProductosByNombre = async () => {
-        setFiltro("producto");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("producto", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByCategoria = async () => {
-        setFiltro("categoria");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("categoria", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByDisponibilidad = async () => {
-        setFiltro("disponibilidad");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("disponibilidad", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByDescuento = async () => {
-        setFiltro("descuento");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("descuento", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByCodigo = async () => {
-        setFiltro("codigo");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("codigo", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByTipo = async () => {
-        setFiltro("tipo");
-        const dataFiltrada = await getDocs(consultaBusqueda);
+        const dataFiltrada = await getDocs(query(productosCollection,where("tipo", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
@@ -147,7 +139,7 @@ const Productos = () => {
 
     const realizarFiltrado = (e) => {
         e.preventDefault();
-
+        
         if (filtro === 'Listado completo') {
             obtenerProductos();
         } else if (filtro === 'Nombre producto') {
@@ -163,11 +155,21 @@ const Productos = () => {
         } else if (filtro === 'Tipo de producto') {
             obtenerProductosByTipo();
         }
+        
     }
 
     // Enlaces
     const irAAgregarProductos = () => {
         navigate(`/productos/agregar/${usuario}`);
+    }
+
+    const irAModificarCantidad = () => {
+        navigate(`/productos/modificar-cantidad/${usuario}`);
+    }
+
+
+    const irAInicio = () => {
+        navigate(`/inicio/${usuario}`);
     }
 
 
@@ -200,6 +202,7 @@ const Productos = () => {
                                     />
                                     <InputHeaderTabla
                                         type="text"
+                                        value={busqueda}
                                         onChange={(e) => setBusqueda(e.target.value)}
                                     />
                                 </ContenedorFiltroHeaderTabla>
@@ -225,10 +228,10 @@ const Productos = () => {
                                             <RegistroTabla>{producto.codigo}</RegistroTabla>
                                             <RegistroTabla>{producto.producto}</RegistroTabla>
                                             <RegistroTabla>{producto.categoria}</RegistroTabla>
+                                            <RegistroTabla>{producto.cantidad}</RegistroTabla>
                                             <RegistroTabla>${producto.precio}</RegistroTabla>
-                                            <RegistroTabla>{producto.disponibilidad}</RegistroTabla>
                                             <RegistroTabla>
-                                                <Link to={`/editar-producto/${usuario}`} className="icono btn btn-light"><i className="fa-solid fa-pencil"></i></Link>
+                                                <Link to={`/productos/modificar/${usuario}/${producto.id}`} className="icono btn btn-light"><i className="fa-solid fa-pencil"></i></Link>
                                                 <button onClick={() => { confirmacionEliminar(producto.id) }} className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
                                             </RegistroTabla>
                                         </tr>
@@ -237,7 +240,10 @@ const Productos = () => {
                             </Tabla>
 
                             <ContenedorBusquedaCompleta>
-                                <BusquedaCompleta onClick={obtenerProductos} className='btn boton-registro'>Tabla completa</BusquedaCompleta>
+                                <BotonHeaderTabla tipo='descarga'>Descargar PDF</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='modificar' onClick={irAModificarCantidad}>Modificar cantidad</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='agregar-subcategoria'>Agregar subcategoría</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='regresar' onClick={irAInicio}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonHeaderTabla>
                             </ContenedorBusquedaCompleta>
 
 
