@@ -18,23 +18,40 @@ const ContenedorHeaderTabla = styled.div`
   
 
 
-  @media (max-width: 900px) {
-    width: 106% !important;
-    margin-left: 0.2%;
+  @media (max-width: 1100px) {
+    width: 90%;
   }
 
-  @media (max-width: 800px) {
-    width: 110%;
+  @media (max-width: 900px) {
+    width: 96%;
+    margin-left: 1%;
   }
-  
-  @media (max-width: 500px) {
-    width: 134.6%;
+
+   @media (max-width: 750px) {
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-evenly;
   }
+
+
+  @media (max-width: 650px) {
+    width: 115%;
+    margin-left: 7%;
+  }
+
 `;
 
 const ContenedorFiltroHeaderTabla = styled.form`
   width: 100%;
   display: flex;
+ 
+
+  @media (max-width: 750px) {
+    margin-left: 2%;
+  }
 `;
 
 const BotonHeaderTabla = styled.button`
@@ -58,13 +75,69 @@ const BotonHeaderTabla = styled.button`
 
   ${(props) => {
     if (props.tipo === 'agregar') {
-      return 'width: 20%; border-radius: 10px';
+      return 'width: 20%; border-radius: 10px;';
     } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
-      return 'height: 50px; margin-left: 2%; border-radius: 10px;';
-    } else  if (props.tipo === 'regresar') {
+      return 'width: 15%; height: 50px; margin-left: 2%; border-radius: 10px;';
+    } else if (props.tipo === 'regresar') {
       return 'height: 50px; margin-left: 32%; border-radius: 10px;';
-    } 
+    }
   }}
+
+ 
+  @media(max-width: 1400px) { 
+    ${(props) => {
+      if(props.tipo === 'filtro'){
+        return 'width: 20%;';
+      } else if (props.tipo === 'agregar') {
+        return 'width: 25%;';
+      } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
+        return 'width: 22%;';
+      } else if (props.tipo === 'regresar') {
+        return 'margin-left: 10%;';
+      }
+    }}
+  }
+
+  @media(max-width: 1100px) { 
+    ${(props) => {
+      if(props.tipo === 'filtro'){
+        return 'width: 22%;';
+      } else if (props.tipo === 'agregar') {
+        return 'width: 28%;';
+      } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
+        return 'width: 22%;';
+      } else if (props.tipo === 'regresar') {
+        return 'margin-left: 10%;';
+      }
+    }}
+  }
+
+  @media(max-width: 900px) { 
+    ${(props) => {
+      if(props.tipo === 'filtro'){
+        return 'width: 25%;';
+      } else if (props.tipo === 'agregar') {
+        return 'width: 32%; margin-left: -3%;';
+      } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
+        return 'width: 25%;';
+      } else if (props.tipo === 'regresar') {
+        return 'margin-left: 2%;';
+      }
+    }}
+  }
+
+ @media(max-width: 750px) { 
+   ${(props) => {
+     if (props.tipo === 'agregar') {
+      return 'width: 93%; height: 50px;';
+      } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar' || props.tipo === 'regresar') {
+        return 'width: 45%; height: 60px;';
+      } else if (props.tipo === 'regresar'){
+        return 'margin-bottom: 5%;';
+      }
+    }}
+  }
+
 `;
 
 const InputHeaderTabla = styled.input`
@@ -82,9 +155,20 @@ const Tabla = styled.table`
   border: 2px solid #ED8936;
 
 
-  @media(max-width: 900px) {
-     margin-left: 0%;
+  @media (max-width: 1100px) {
+    width: 92%;
   }
+
+  @media (max-width: 900px) {
+    width: 98%;
+    margin-left: 1%;
+  }
+
+  @media (max-width: 650px) {
+    width: 117%;
+    margin-left: 7%;
+  }
+
 `;
 
 const EncabezadoTabla = styled.th`
@@ -95,13 +179,15 @@ const EncabezadoTabla = styled.th`
 const RegistroTabla = styled.th`
   background-color: rgb(239, 238, 239);
   border-bottom: 2px dashed #ED8936;
+
+  i{
+    margin-right: 15%;
+  }
+
+
 `;
 
-
-
-
-
-const ContenedorBusquedaCompleta = styled.div`
+const ContenedorOpcionesTabla = styled.div`
   height: 70px;
   width: 87%;
   margin-left: 5%;
@@ -109,11 +195,29 @@ const ContenedorBusquedaCompleta = styled.div`
   background-color: #ED8936;
 
 
-  @media(max-width: 500px) {
-    width: 100%;
-    margin-left: 0%;
-    padding-top: 3%;
+  @media (max-width: 1100px) {
+    width: 92%;
   }
+
+  @media (max-width: 900px) {
+    width: 98%;
+    margin-left: 1%;
+  }
+
+  @media (max-width: 750px) {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  @media (max-width: 650px) {
+    width: 117%;
+    margin-left: 7%;
+  }
+
 `;
 
 
@@ -136,34 +240,11 @@ const BusquedaDescargaPDF = styled.button`
 
 
 
-const BotonBusqueda = styled.button`
-width: 40 %;
-background-color: #55a4d8;
-color: #fff;
-border: 1px solid #0073c0;
-border-top-right-radius: 10px;
-border-bottom-right-radius: 10px;
-
-  &:hover {
-  background-color: rgb(42, 107, 237);
-  font-weight: bolder;
-  box-shadow: 0px 2px 20px 0px rgb(41, 73, 133);
-}
-
-
-@media(max - width: 760px) {
-  width: 85 %;
-  height: 70px;
-  margin-left: 6 %;
-  border-radius: 10px;
-}
-`;
-
 
 
 export {
-  ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, 
-  
-  Tabla, EncabezadoTabla, RegistroTabla, ContenedorBusquedaCompleta,
-  BusquedaDescargaPDF, BotonBusqueda
+  ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla,
+
+  Tabla, EncabezadoTabla, RegistroTabla, ContenedorOpcionesTabla,
+  BusquedaDescargaPDF
 };

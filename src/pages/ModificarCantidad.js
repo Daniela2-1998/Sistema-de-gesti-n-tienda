@@ -3,12 +3,12 @@ import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
 
 // Imports estilos
-import styled from "styled-components";
 import { ContenedorGeneral, Header, Titulo } from "../components/InicioComponentes";
 import {
     InputFormularioRegistro, BotonFormularioRegistro, ContenedorGeneralBusquedaFormulario, ContenedorBusquedaFormulario,
     TituloBuscadorFormulario, CartelAvisoColorFormulario, ContenedorCantidadFormularioRegistro, LabelFormularioRegistro
 } from "../components/FormulariosComponentes";
+import Alerta from "../components/Alerta";
 
 // Imports Firebase
 import { getDoc, getDocs, updateDoc, doc, query, collection, where } from "firebase/firestore";
@@ -196,6 +196,14 @@ const EditarCantidadProducto = () => {
                     : ''}
 
             </ContenedorGeneral>
+
+            <Alerta 
+                tipo={alerta.tipo}
+                mensaje={alerta.mensaje}
+                estadoAlerta={estadoAlerta}
+                cambiarEstadoAlerta={cambiarEstadoAlerta}
+            />
+
         </>
     )
 

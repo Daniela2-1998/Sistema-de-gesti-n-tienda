@@ -11,7 +11,7 @@ import db from '../firebase/FirebaseConfig';
 import { ContenedorGeneral, Header } from '../components/InicioComponentes';
 import {
     ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, Tabla, EncabezadoTabla, RegistroTabla,
-    ContenedorBusquedaCompleta, 
+    ContenedorOpcionesTabla, 
     BusquedaDescargaPDF
 } from '../components/TablasComponentes';
 import SelectFiltros from '../components/SelectFiltros';
@@ -167,6 +167,10 @@ const Productos = () => {
         navigate(`/productos/modificar-cantidad/${usuario}`);
     }
 
+    const irAAgregarSubcategoria = () => {
+        navigate(`/productos/agregar-subcategoria/${usuario}`);
+    }
+
 
     const irAInicio = () => {
         navigate(`/inicio/${usuario}`);
@@ -183,7 +187,7 @@ const Productos = () => {
 
             <ContenedorGeneral>
 
-                <Header>
+                <Header tipo='tablas'>
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
 
@@ -194,7 +198,7 @@ const Productos = () => {
                             <ContenedorHeaderTabla>
 
                                 <ContenedorFiltroHeaderTabla>
-                                    <BotonHeaderTabla onClick={realizarFiltrado}>Filtrar búsqueda</BotonHeaderTabla>
+                                    <BotonHeaderTabla tipo='filtro' onClick={realizarFiltrado}>Filtrar búsqueda</BotonHeaderTabla>
                                     <SelectFiltros
                                         tipo='productos'
                                         filtro={filtro}
@@ -239,12 +243,12 @@ const Productos = () => {
                                 </tbody>
                             </Tabla>
 
-                            <ContenedorBusquedaCompleta>
+                            <ContenedorOpcionesTabla>
                                 <BotonHeaderTabla tipo='descarga'>Descargar PDF</BotonHeaderTabla>
                                 <BotonHeaderTabla tipo='modificar' onClick={irAModificarCantidad}>Modificar cantidad</BotonHeaderTabla>
-                                <BotonHeaderTabla tipo='agregar-subcategoria'>Agregar subcategoría</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='agregar-subcategoria'onClick={irAAgregarSubcategoria}>Agregar subcategoría</BotonHeaderTabla>
                                 <BotonHeaderTabla tipo='regresar' onClick={irAInicio}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonHeaderTabla>
-                            </ContenedorBusquedaCompleta>
+                            </ContenedorOpcionesTabla>
 
 
                         </div>

@@ -14,6 +14,8 @@ import {
     BotonFormularioRegistro
 } from '../components/FormulariosComponentes';
 import SelectOpciones from '../components/SelectOpciones';
+import Alerta from '../components/Alerta';
+
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -238,6 +240,14 @@ const AgregarProducto = () => {
                 </ContenedorFormularioRegistro>
 
             </ContenedorGeneral>
+
+            <Alerta 
+                tipo={alerta.tipo}
+                mensaje={alerta.mensaje}
+                estadoAlerta={estadoAlerta}
+                cambiarEstadoAlerta={cambiarEstadoAlerta}
+            />
+
         </>
     )
 }

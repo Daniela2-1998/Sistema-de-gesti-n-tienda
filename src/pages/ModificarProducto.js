@@ -14,6 +14,7 @@ import {
     BotonFormularioRegistro
 } from '../components/FormulariosComponentes';
 import SelectOpciones from '../components/SelectOpciones';
+import Alerta from '../components/Alerta';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -37,14 +38,12 @@ const ModificarProducto = () => {
     const [tipo, setTipo] = useState('Muebles');
     const [descripcion, setDescripcion] = useState('');
     const [descuento, setDescuento] = useState('');
-    const [disponibilidad, setDisponibilidad] = useState('En stock');
+    const [disponibilidad, setDisponibilidad] = useState('');
     const [precio, setPrecio] = useState(0);
     const [cantidad, setCantidad] = useState(0);
     const [promocion, setPromocion] = useState(0.00);
 
-
     const navigate = useNavigate();
-
     const [estadoAlerta, cambiarEstadoAlerta] = useState(false);
     const [alerta, cambiarAlerta] = useState('');
 
@@ -81,6 +80,7 @@ const ModificarProducto = () => {
     }
 
 
+
     const actualizarProducto = async (e) => {
         e.preventDefault();
 
@@ -96,7 +96,7 @@ const ModificarProducto = () => {
 
         setPrecio(parseFloat(precio));
         
-        if(cantidad <= 0){
+        if(cantidad < 0){
             cambiarEstadoAlerta(true);
             cambiarAlerta({
                 tipo: 'error',
@@ -115,7 +115,6 @@ const ModificarProducto = () => {
         
         setDescuento(parseFloat(descuento));
 
-   
 
         const productoRecuperado = doc(db, "productos", id);
         const productoActualizado = { producto: producto, codigo: codigo, categoria: categoria, tipo: tipo, descripcion: descripcion, cantidad: cantidad,
@@ -232,6 +231,7 @@ const ModificarProducto = () => {
                                 tipo='disponibilidad'
                                 opciones={disponibilidad}
                                 setOpciones={setDisponibilidad}
+                                cantidad={cantidad}
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -263,6 +263,14 @@ const ModificarProducto = () => {
                 </ContenedorFormularioRegistro>
 
             </ContenedorGeneral>
+
+            <Alerta 
+                tipo={alerta.tipo}
+                mensaje={alerta.mensaje}
+                estadoAlerta={estadoAlerta}
+                cambiarEstadoAlerta={cambiarEstadoAlerta}
+            />
+
         </>
     )
 }

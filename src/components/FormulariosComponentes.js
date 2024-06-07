@@ -109,6 +109,15 @@ const ContenedorFormularioRegistro = styled.form`
   border: 2px dashed #ED8936;
   border-radius: 20px;
   background: ${theme.grisClaro};
+
+
+  @media(max-width: 900px){
+    height: 1300px;
+  }
+
+  @media(max-width: 700px){
+    margin-bottom: 8%;
+  }
 `;
 
 const ContenedorCamposTriplesFormularioRegistro = styled.div`
@@ -117,10 +126,17 @@ const ContenedorCamposTriplesFormularioRegistro = styled.div`
   margin-left: 4%;
   margin-bottom: 3%;
   display: flex;
+
+
+  @media(max-width: 900px){
+    width: 100%;
+    flex-direction: column;
+    height: 360px;
+  }
 `;
 
 const ContenedorCampoFormularioRegistro = styled.div`
-  width: 35%;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -144,10 +160,23 @@ const InputFormularioRegistro = styled.input`
   ${(props) => {
     if (props.tipo === 'buscar-codigo') {
       return 'height: 45px; margin-top: 4%; margin-left: 0%; width: 74%; border-top-left-radius: 0px; border-bottom-left-radius: 0px;';
+    } else if (props.tipo === 'agregar subcategoria') {
+      return 'height: 45px; margin-top: 4%; margin-left: 5%; width: 60%;';
     } else if (props.tipo === 'cantidad') {
       return 'width: 35%; height: 45px; margin-top: 5%; margin-left: 7%; border-top-right-radius: 0px; border-bottom-right-radius: 0px;';
-    } 
+    }
   }}
+
+
+
+  @media(max-width: 600px){
+    ${(props) => {
+      if (props.tipo === 'buscar-codigo') {
+        return 'width: 87%; height: 45px; margin-top:-2%; margin-left: 5%; border-radius: 10px;';
+      } else if (props.tipo === 'agregar subcategoria') {
+        return 'width: 87%;';
+    }}
+  }
 
 `;
 
@@ -162,6 +191,17 @@ const TextAreaFormularioRegistro = styled.textarea`
   border: none;
   border-radius: 10px;
   color: #ED8936;
+
+
+  @media(max-width: 1100px){
+    margin-top: 6%;
+  }
+
+  @media(max-width: 900px){
+    width: 90%;
+    position: relative;
+    margin-top: 0%;
+  }
 `;
 
 const ContenedorBotonesDoblesFormularioRegistro = styled.div`
@@ -194,18 +234,82 @@ const BotonFormularioRegistro = styled.button`
   ${(props) => {
     if (props.tipo === 'regresar') {
       return 'width: 12%; margin-left: 5%;';
-    } else if (props.tipo === 'ingresar'){
+    } else if (props.tipo === 'ingresar') {
       return 'width: 25%; margin-left: 21%;';
-    } else if (props.tipo === 'a-inicio'){
+    } else if (props.tipo === 'a-inicio') {
       return 'width: 15%; margin-top: 2%; margin-left: 10%;';
-    } else if (props.tipo === 'buscar'){
+    } else if (props.tipo === 'buscar') {
       return 'width: 15%; margin-top: 4%; margin-left: 5%; background-color: #fff; color: #ED8936; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 1px solid';
-    } else if (props.tipo === 'sumar-restar'){
+    } else if (props.tipo === 'sumar-restar') {
       return 'width: 10%; background-color: #ED8936; color: #fff; margin-top: 5%; border-radius: 0%; font-size: 45px;';
-    } else if (props.tipo === 'modificar-cantidad'){
+    } else if (props.tipo === 'modificar-cantidad') {
       return 'width: 20%; background-color: #ED8936; color: #fff; margin-top: 5%; margin-left: 8%;';
+    } else if (props.tipo === 'agregar subcategoria'){
+      return 'width: 20%; margin-top: 4%; margin-left: 10%;';
     }
   }}
+
+
+  @media(max-width: 1400px){
+    ${(props) => {
+      if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+        return 'width: 20%; margin-top: 15%;';
+      }
+    }}
+  }
+
+  @media(max-width: 1100px){
+    ${(props) => {
+      if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+        return 'margin-top: 20%;';
+      } else if (props.tipo === 'a-inicio') {
+        return 'margin-left: 5%;';
+      } 
+    }}
+  }
+
+    @media(max-width: 900px){
+      ${(props) => {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+          return 'width: 25%; margin-top: 5%;';
+        } 
+      }}
+    }
+
+    @media(max-width: 800px){
+      ${(props) => {
+        if (props.tipo === 'a-inicio') {
+          return 'width: 90%; height: 70px;';
+        } 
+      }}
+    }
+
+    @media(max-width: 700px){
+      ${(props) => {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+          return 'margin-top: 10%;';
+        } 
+      }}
+    }
+  
+    @media(max-width: 600px){
+      ${(props) => {
+        if (props.tipo === 'buscar') {
+          return 'width: 90%; height: 50px; border-radius: 10px;';
+        } else if (props.tipo === 'agregar subcategoria'){
+          return 'width: 88%; margin-top: 10%; margin-left: 5%;';
+        }
+      }}
+    }
+
+
+    @media(max-width: 500px){
+      ${(props) => {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+          return 'width: 35%;';
+        }
+      }}
+    }
 
 
 `;
@@ -216,6 +320,14 @@ const ContenedorGeneralBusquedaFormulario = styled.div`
   width: 100%;
   height: 120px;
   display: flex;
+
+
+  @media(max-width: 800px){
+    height: 350px;
+    flex-direction: column;
+  }
+
+  
 `;
 
 const ContenedorBusquedaFormulario = styled.form`
@@ -231,8 +343,24 @@ const ContenedorBusquedaFormulario = styled.form`
   ${(props) => {
     if (props.tipo === 'data-formulario') {
       return 'height: 450px; margin-top: 5%; display: flex; flex-direction: column;';
-    } 
+    }
   }}
+
+
+  @media(max-width: 1100px){
+    width: 70%;
+    margin-left: 5%;
+  }
+
+  @media(max-width: 800px){
+    width: 90%;
+  }
+
+  @media(max-width: 600px){
+    height: 450px;
+    flex-direction: column;
+  }
+
 
 `;
 
@@ -244,6 +372,12 @@ const TituloBuscadorFormulario = styled.h3`
   color: #ED8936;
   font-weight: bolder;
   margin-left: 35%;
+
+
+ @media(max-width: 600px){
+  margin-left: 22%;
+  text-align: left;
+ }
 `;
 
 const CartelAvisoColorFormulario = styled.div`
@@ -260,13 +394,14 @@ const CartelAvisoColorFormulario = styled.div`
     } else if (props.tipo === 'stock') {
       return 'margin-left: 30%;';
     } else if (props.tipo === 'preventa') {
-        return 'margin-left: 30%;';
+      return 'margin-left: 30%;';
     } else if (props.tipo === 'próximo ingreso') {
       return 'margin-left: 12%;';
     } else if (props.tipo === 'unidades') {
       return 'margin-left: 5%; font-weight: bolder; color: #ED8936; ';
-    } 
-  }}}
+    }
+  }}
+  }
 
 
   ${(props) => {
@@ -283,6 +418,18 @@ const CartelAvisoColorFormulario = styled.div`
     }
   }}
 
+
+
+  
+ @media(max-width: 600px){
+  p{ ${(props) => {
+    if (props.tipo === 'sin-stock' || props.tipo === 'stock' || props.tipo === 'preventa' || props.tipo === 'próximo ingreso') {
+      return 'margin-left: 12%;';
+    } 
+  }}
+}}
+
+ 
 `;
 
 const ContenedorCantidadFormularioRegistro = styled.div`
@@ -297,10 +444,11 @@ const LabelFormularioRegistro = styled.label`
 `;
 
 
-export {ContenedorGeneralLogin, ContenedorEspacioBlancoLogin, ContenedorFormularioLogin, LogoLoginEstilos,
+export {
+  ContenedorGeneralLogin, ContenedorEspacioBlancoLogin, ContenedorFormularioLogin, LogoLoginEstilos,
   TituloLogin, FormularioLogin, LabelLogin, InputLogin, BotonIngresoLogin,
 
-  ContenedorFormularioRegistro, TituloFormularioRegistro, ContenedorCamposTriplesFormularioRegistro, 
+  ContenedorFormularioRegistro, TituloFormularioRegistro, ContenedorCamposTriplesFormularioRegistro,
   ContenedorCampoFormularioRegistro, InputFormularioRegistro, TextAreaFormularioRegistro, ContenedorBotonesDoblesFormularioRegistro,
   BotonFormularioRegistro,
 

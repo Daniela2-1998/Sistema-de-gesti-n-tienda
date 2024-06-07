@@ -9,9 +9,11 @@ import theme from '../theme';
 //import { ReactComponent as IconDown } from '../images/down.svg';
 
 
-function SelectOpciones({ tipo, opciones, setOpciones }) {
+function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
 
     const [mostrarSelect, cambiarMostrarSelect] = useState(false);
+    // const [estado, setEstado] = useState('');
+
 
     const opcionesDisponibilidad = [
         { id: 'en stock', texto: 'En stock' },
@@ -19,6 +21,17 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
         { id: 'próximo ingreso', texto: 'Próximo ingreso' },
         { id: 'preventa', texto: 'Preventa' },
     ];
+
+    /*
+        const cambiarDisponibilidad = () => {
+            if (cantidad === 0 && disponibilidad === 'en stock') {
+                setEstado('sin stock');
+            } else if (cantidad > 0 && disponibilidad === 'sin stock') {
+                setEstado('en stock');
+            }
+        }
+    
+        */
 
     const opcionesCategorias = [
         { id: 'General', texto: 'General' },
@@ -95,7 +108,9 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
                                             {opcionSubCategorias.subcategoria}
                                         </Opcion>
                                     })
-                                    : ''
+
+                                    :
+                                    ''
                     }
                 </Opciones>
             }

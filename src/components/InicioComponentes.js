@@ -20,6 +20,16 @@ const Header = styled.div`
     background-color: transparent;
     font-weight: bolder;
   }
+
+  @media (max-width: 550px) {
+    ${(props) => {
+      if (props.tipo === 'tablas') {
+        return 'width: 130%;';
+      } 
+    }
+  }
+}
+  
 `;
 
 const ContenedorCards = styled.div`

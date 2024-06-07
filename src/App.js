@@ -9,6 +9,7 @@ import Productos from './pages/Productos';
 import AgregarProducto from './pages/AgregarProducto';
 import ModificarProducto from './pages/ModificarProducto';
 import ModificarCantidad from './pages/ModificarCantidad';
+import AgregarSubcategoria from './pages/AgregarSubcategoria';
 
 
 
@@ -27,8 +28,8 @@ function App() {
             <Route path='/productos/agregar/:usuario' element={<AgregarProducto />} />
             <Route path='/productos/modificar/:usuario/:id' element={<ModificarProducto />} />
             <Route path='/productos/modificar-cantidad/:usuario' element={<ModificarCantidad />} />
-
-
+            <Route path='/productos/agregar-subcategoria/:usuario' element={<AgregarSubcategoria />} />
+           
             <Route path='/proveedores/:usuario' element={<Inicio />} />
             <Route path='/clientes/:usuario' element={<Inicio />} />
           </Routes>
