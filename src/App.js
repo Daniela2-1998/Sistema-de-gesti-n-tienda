@@ -11,6 +11,10 @@ import ModificarProducto from './pages/ModificarProducto';
 import ModificarCantidad from './pages/ModificarCantidad';
 import AgregarSubcategoria from './pages/AgregarSubcategoria';
 
+import Administrador from './pages/Administrador';
+import Sucursales from './pages/Sucursales';
+import Configuracion from './pages/Configuracion';
+
 
 
 function App() {
@@ -32,6 +36,10 @@ function App() {
            
             <Route path='/proveedores/:usuario' element={<Inicio />} />
             <Route path='/clientes/:usuario' element={<Inicio />} />
+
+            <Route path='/administrador/:usuario' element={<Administrador />} />
+            <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
+            <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
           </Routes>
 
       </BrowserRouter >

@@ -12,7 +12,6 @@ import theme from '../theme';
 function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
 
     const [mostrarSelect, cambiarMostrarSelect] = useState(false);
-    // const [estado, setEstado] = useState('');
 
 
     const opcionesDisponibilidad = [
@@ -22,16 +21,6 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
         { id: 'preventa', texto: 'Preventa' },
     ];
 
-    /*
-        const cambiarDisponibilidad = () => {
-            if (cantidad === 0 && disponibilidad === 'en stock') {
-                setEstado('sin stock');
-            } else if (cantidad > 0 && disponibilidad === 'sin stock') {
-                setEstado('en stock');
-            }
-        }
-    
-        */
 
     const opcionesCategorias = [
         { id: 'General', texto: 'General' },
@@ -54,8 +43,19 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
         );
     }
 
+    const [opcionesSucursales, setOpcionesSucursales] = useState([]);
+    const sucursalesCollection = collection(db, "sucursales");
+
+    const obtenerSucursales = async () => {
+        const data = await getDocs(sucursalesCollection);
+        setOpcionesSucursales(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
     useEffect(() => {
         obtenerSubCategorias();
+        obtenerSucursales();
     }, []);
 
 
@@ -109,6 +109,16 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
                                         </Opcion>
                                     })
 
+                                    : tipo === 'sucursales' ?
+                                    opcionesSucursales.map((opcionSucursal) => {
+                                        return <Opcion
+                                            key={opcionSucursal.id}
+                                            data-valor={opcionSucursal.id}
+                                            onClick={handleClick}
+                                        >
+                                            {opcionSucursal.sucursal}
+                                        </Opcion>
+                                    })
                                     :
                                     ''
                     }

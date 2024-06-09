@@ -10,6 +10,7 @@ import theme from '../theme';
 function Listado({ contenidoListado }) {
 
     const [subcategorias, setOpcionesSubCategorias] = useState([]);
+    const [sucursales, setSucursales] = useState([]);
 
     const subCategoriasCollection = collection(db, "subcategorias");
 
@@ -20,8 +21,19 @@ function Listado({ contenidoListado }) {
         );
     }
 
+    const sucursalesCollection = collection(db, "sucursales");
+
+    const obtenerSucursales = async () => {
+        const data = await getDocs(sucursalesCollection);
+        setSucursales(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
+
     useEffect(() => {
         obtenerSubCategorias();
+        obtenerSucursales();
     }, []);
 
 
@@ -32,16 +44,30 @@ function Listado({ contenidoListado }) {
                 contenidoListado === 'subcategorias' ?
                     <ContenedorListado>
                         {subcategorias.map((subcategoria) => {
-                                return <div
-                                    key={subcategoria.id}
-                                    data-valor={subcategoria.id}
-                                >
-                                    {subcategoria.subcategoria}
-                                </div>
-                            })
+                            return <div
+                                key={subcategoria.id}
+                                data-valor={subcategoria.id}
+                            >
+                                {subcategoria.subcategoria}
+                            </div>
+                        })
                         }
                     </ContenedorListado>
-                    : ''
+                    : contenidoListado === 'sucursales' ?
+                        <ContenedorListado>
+                            {sucursales.map((sucursal) => {
+                                return <div
+                                    key={sucursal.id}
+                                    data-valor={sucursal.id}
+                                >
+                                    {sucursal.sucursal}
+                                </div>
+                            })
+                            }
+                        </ContenedorListado>
+                        :
+                        ''
+
             }
         </>
     )

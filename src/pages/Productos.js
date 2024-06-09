@@ -11,7 +11,7 @@ import db from '../firebase/FirebaseConfig';
 import { ContenedorGeneral, Header } from '../components/InicioComponentes';
 import {
     ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, Tabla, EncabezadoTabla, RegistroTabla,
-    ContenedorOpcionesTabla, 
+    ContenedorOpcionesTabla,
     BusquedaDescargaPDF
 } from '../components/TablasComponentes';
 import SelectFiltros from '../components/SelectFiltros';
@@ -23,8 +23,8 @@ import withReactContent from 'sweetalert2-react-content';
 
 
 // Imports PDF.
-//import { PDFDownloadLink} from '@react-pdf/renderer';
-//import PDFTablaDemo from '../components/PDFTablaDemo';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import PDFTablaDemo from '../components/PDFTablaDemo';
 
 
 
@@ -40,13 +40,28 @@ const Productos = () => {
     const [productos, setProductos] = useState([]);
     const [busqueda, setBusqueda] = useState('');
     const [filtro, setFiltro] = useState('Listado completo');
+   
+    const [nombreEmpresa, setNombreEmpresa] = useState('');
 
     const { usuario } = useParams();
+
+    // PDF
+    const fechaActual = new Date().toLocaleDateString();
+    const nombrePDF = "listaProductos-" + fechaActual + ".pdf";
+    
+    
+    const recuperarConfiguracion = async () => {
+        const configuracionFirebase = await getDoc( doc(db, "configuracion", "establecida") );
+
+        if(configuracionFirebase.exists) {
+            setNombreEmpresa(configuracionFirebase.data().nombreEmpresa);
+        }
+    }
 
     const navigate = useNavigate();
 
     const productosCollection = collection(db, "productos");
-   
+
 
     // Funciones
     // Generales
@@ -59,6 +74,7 @@ const Productos = () => {
 
     useEffect(() => {
         obtenerProductos();
+        recuperarConfiguracion();
     }, []);
 
 
@@ -94,42 +110,42 @@ const Productos = () => {
 
     // Específicas
     const obtenerProductosByNombre = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("producto", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("producto", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByCategoria = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("categoria", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("categoria", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByDisponibilidad = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("disponibilidad", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("disponibilidad", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByDescuento = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("descuento", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("descuento", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByCodigo = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("codigo", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("codigo", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
 
     const obtenerProductosByTipo = async () => {
-        const dataFiltrada = await getDocs(query(productosCollection,where("tipo", '==', busqueda)));
+        const dataFiltrada = await getDocs(query(productosCollection, where("tipo", '==', busqueda)));
         setProductos(
             dataFiltrada.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
@@ -139,7 +155,7 @@ const Productos = () => {
 
     const realizarFiltrado = (e) => {
         e.preventDefault();
-        
+
         if (filtro === 'Listado completo') {
             obtenerProductos();
         } else if (filtro === 'Nombre producto') {
@@ -155,7 +171,7 @@ const Productos = () => {
         } else if (filtro === 'Tipo de producto') {
             obtenerProductosByTipo();
         }
-        
+
     }
 
     // Enlaces
@@ -244,18 +260,19 @@ const Productos = () => {
                             </Tabla>
 
                             <ContenedorOpcionesTabla>
-                                <BotonHeaderTabla tipo='descarga'>Descargar PDF</BotonHeaderTabla>
+                                <PDFDownloadLink document={<PDFTablaDemo productos={productos} nombreEmpresa={nombreEmpresa} fechaActual={fechaActual} />} fileName={nombrePDF}>
+                                    <BotonHeaderTabla tipo='descarga'>Descargar PDF</BotonHeaderTabla>
+                                </PDFDownloadLink>
+
                                 <BotonHeaderTabla tipo='modificar' onClick={irAModificarCantidad}>Modificar cantidad</BotonHeaderTabla>
-                                <BotonHeaderTabla tipo='agregar-subcategoria'onClick={irAAgregarSubcategoria}>Agregar subcategoría</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='agregar-subcategoria' onClick={irAAgregarSubcategoria}>Agregar subcategoría</BotonHeaderTabla>
                                 <BotonHeaderTabla tipo='regresar' onClick={irAInicio}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonHeaderTabla>
                             </ContenedorOpcionesTabla>
-
-
                         </div>
                     </div>
                 </div>
                 { /* FALTA AGREGAR PDF Y CANTIDAD */}
-            </ContenedorGeneral>
+            </ContenedorGeneral >
         </>
     )
 }

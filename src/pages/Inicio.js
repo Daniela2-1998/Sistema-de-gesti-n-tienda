@@ -120,34 +120,34 @@ function Inicio() {
         <ContenedorCards>
 
           <Cards>
-            <ImagenesCards className='imagen-productos' />
+            <ImagenesCards className='imagen imagen-productos' />
             <BotonesCards onClick={irAProductos} guardarSesionUsuario={usuarioSesion}>Productos</BotonesCards>
           </Cards>
 
           <Cards>
-            <ImagenesCards className='imagen-proveedores' />
+            <ImagenesCards className='imagen imagen-proveedores' />
             <BotonesCards onClick={irAProveedores} guardarSesionUsuario={usuarioSesion}>Proveedores</BotonesCards>
           </Cards>
 
           <Cards>
-            <ImagenesCards className='imagen-clientes' />
+            <ImagenesCards className='imagen imagen-clientes' />
             <BotonesCards onClick={irAClientes} guardarSesionUsuario={usuarioSesion}>Clientes</BotonesCards>
           </Cards>
 
           <Cards>
-            <ImagenesCards className='imagen-operaciones' />
+            <ImagenesCards className='imagen imagen-operaciones' />
             <BotonesCards onClick={irAOperaciones} guardarSesionUsuario={usuarioSesion}>Operaciones</BotonesCards>
           </Cards>
 
           <Cards>
-            <ImagenesCards className='imagen-empleados' />
+            <ImagenesCards className='imagen imagen-empleados' />
             <BotonesCards onClick={irAEmpleados} guardarSesionUsuario={usuarioSesion}>Empleados</BotonesCards>
           </Cards>
 
           {rol === 'Administrador'
             ?
             <Cards>
-              <ImagenesCards className='imagen-administrador' />
+              <ImagenesCards className='imagen imagen-administrador' />
               <BotonesCards onClick={irAAdministrador} guardarSesionUsuario={usuarioSesion}>Administrador</BotonesCards>
             </Cards>
             :

@@ -19,12 +19,14 @@ import Listado from "../components/Listado";
 const MySwal = withReactContent(Swal);
 
 
-const AgregarSubcategoria = () => {
+const Sucursales = () => {
 
     const { usuario } = useParams();
 
     // Variables
-    const [subcategoria, setSubcategoria] = useState('');
+    const [sucursal, setSucursal] = useState('');
+
+    // ventas, empleados, productos
 
     const [estadoAlerta, cambiarEstadoAlerta] = useState(false);
     const [alerta, cambiarAlerta] = useState('');
@@ -32,54 +34,59 @@ const AgregarSubcategoria = () => {
 
     const navigate = useNavigate();
 
-    const verificarNoExistenciaDeSubcategoria = async () => {
-        const subCategoriaFirebase = await getDoc(doc(db, "subcategorias", subcategoria));
+    const verificarNoExistenciaDeSucursal = async () => {
+        const sucursalFirebase = await getDoc(doc(db, "sucursales", sucursal));
 
-        if (subCategoriaFirebase.exists()) {
+        if (sucursalFirebase.exists()) {
             // AGREGAR ALERTA
-            console.log("Subcategoría existente");
+            console.log("Sucursal existente");
         } else {
-            console.log("No existe la subcategoría solicitada.");
+            console.log("No existe la sucursal solicitada.");
         }
     }
 
+    const iniciarStockSucursal = async () => {
+
+    }
+
+
 
     // Funciones
-    const guardarNuevaSubcategoria = async (e) => {
+    const guardarNuevaSucursal = async (e) => {
         e.preventDefault();
 
         // Verificaciones
-        if (subcategoria === '') {
+        if (sucursal === '') {
             cambiarEstadoAlerta(true);
             cambiarAlerta({
                 tipo: 'error',
-                mensaje: 'Ingresa un nombre para la subcategoría.'
+                mensaje: 'Ingresa un nombre para la sucursal.'
             });
             return;
         }
 
-        verificarNoExistenciaDeSubcategoria();
+        verificarNoExistenciaDeSucursal();
 
-        await setDoc(doc(db, "subcategorias", subcategoria), { subcategoria: subcategoria });
+        await setDoc(doc(db, "sucursales", sucursal), { sucursal: sucursal });
 
         new MySwal({
             title: "Ingreso éxitoso",
-            text: "La subcategoría " + subcategoria + " fue agregada al sistema.",
+            text: "La sucursal " + sucursal + " fue agregada al sistema.",
             icon: "success",
             button: "aceptar",
         });
 
-        irAProductos();
+        irAAdministrador();
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        guardarNuevaSubcategoria(e);
+        guardarNuevaSucursal(e);
     }
 
 
-    const irAProductos = () => {
-        navigate(`/productos/${usuario}`);
+    const irAAdministrador = () => {
+        navigate(`/administrador/${usuario}`);
     }
 
 
@@ -89,7 +96,7 @@ const AgregarSubcategoria = () => {
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>System Solutions - Agregar subcategoría - productos</title>
+                <title>System Solutions - Sucursales</title>
                 <link rel="icon" href="../images/Logo.svg" />
             </Helmet>
 
@@ -99,26 +106,26 @@ const AgregarSubcategoria = () => {
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
 
-                <Titulo>Agregar subcategoría:</Titulo>
+                <Titulo>Agregar sucursal:</Titulo>
 
                 <ContenedorGeneralBusquedaFormulario>
 
                     <ContenedorBusquedaFormulario onSubmit={handleSubmit}>
                         <InputFormularioRegistro
-                            placeholder="Ingresa la subcategoría"
+                            placeholder="Ingresa la sucursal"
                             tipo='agregar subcategoria'
                             type="text"
-                            value={subcategoria}
-                            onChange={(e) => setSubcategoria(e.target.value)}
+                            value={sucursal}
+                            onChange={(e) => setSucursal(e.target.value)}
                         />
                         <BotonFormularioRegistro tipo='agregar subcategoria'>Agregar</BotonFormularioRegistro >
                     </ContenedorBusquedaFormulario>
 
-                    <BotonFormularioRegistro tipo='a-inicio' onClick={irAProductos}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
+                    <BotonFormularioRegistro tipo='a-inicio' onClick={irAAdministrador}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
 
                 </ContenedorGeneralBusquedaFormulario>
 
-                <Listado contenidoListado='subcategorias'/>
+                <Listado contenidoListado='sucursales'/>
 
             </ContenedorGeneral>
 
@@ -131,7 +138,7 @@ const AgregarSubcategoria = () => {
 
         </>
     )
-
 }
 
-export default AgregarSubcategoria;
+
+export default Sucursales;

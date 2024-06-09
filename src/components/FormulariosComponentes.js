@@ -139,6 +139,14 @@ const ContenedorCampoFormularioRegistro = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+
+
+   ${(props) => {
+    if (props.tipo === 'configuracion') {
+      return 'margin-left: 4%;';
+    } 
+  }}
+
 `;
 
 const TituloFormularioRegistro = styled.h3`
@@ -208,6 +216,21 @@ const ContenedorBotonesDoblesFormularioRegistro = styled.div`
   height: 60px;
   width: 100%;-
   display: flex;
+
+
+  ${(props) => {
+    if (props.tipo === 'configuracion') {
+      return 'margin-left: 5%;';
+    }
+  }}
+
+  @media(max-width: 600px){
+    ${(props) => {
+      if (props.tipo === 'configuracion') {
+        return 'margin-left: 1%;';
+      }
+    }}
+  }
 `;
 
 const BotonFormularioRegistro = styled.button`
@@ -246,13 +269,15 @@ const BotonFormularioRegistro = styled.button`
       return 'width: 20%; background-color: #ED8936; color: #fff; margin-top: 5%; margin-left: 8%;';
     } else if (props.tipo === 'agregar subcategoria'){
       return 'width: 20%; margin-top: 4%; margin-left: 10%;';
-    }
+    } else if (props.tipo === 'regresar-configuracion') {
+      return 'width: 15%; margin-left: 5%;';
+    } 
   }}
 
 
   @media(max-width: 1400px){
     ${(props) => {
-      if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+      if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'width: 20%; margin-top: 15%;';
       }
     }}
@@ -260,7 +285,7 @@ const BotonFormularioRegistro = styled.button`
 
   @media(max-width: 1100px){
     ${(props) => {
-      if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+      if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'margin-top: 20%;';
       } else if (props.tipo === 'a-inicio') {
         return 'margin-left: 5%;';
@@ -270,7 +295,7 @@ const BotonFormularioRegistro = styled.button`
 
     @media(max-width: 900px){
       ${(props) => {
-        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'width: 25%; margin-top: 5%;';
         } 
       }}
@@ -286,7 +311,7 @@ const BotonFormularioRegistro = styled.button`
 
     @media(max-width: 700px){
       ${(props) => {
-        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'margin-top: 10%;';
         } 
       }}
@@ -305,7 +330,7 @@ const BotonFormularioRegistro = styled.button`
 
     @media(max-width: 500px){
       ${(props) => {
-        if (props.tipo === 'regresar' || props.tipo === 'ingresar') {
+        if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'width: 35%;';
         }
       }}
@@ -343,6 +368,8 @@ const ContenedorBusquedaFormulario = styled.form`
   ${(props) => {
     if (props.tipo === 'data-formulario') {
       return 'height: 450px; margin-top: 5%; display: flex; flex-direction: column;';
+    } else if (props.tipo === 'configuracion') {
+      return 'height: 850px; margin-top: 5%; display: flex; flex-direction: column;';
     }
   }}
 
@@ -359,6 +386,13 @@ const ContenedorBusquedaFormulario = styled.form`
   @media(max-width: 600px){
     height: 450px;
     flex-direction: column;
+
+
+    ${(props) => {
+      if (props.tipo === 'configuracion') {
+        return 'height: 750px;';
+      }
+    }}
   }
 
 
