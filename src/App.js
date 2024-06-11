@@ -14,6 +14,8 @@ import AgregarSubcategoria from './pages/AgregarSubcategoria';
 import Administrador from './pages/Administrador';
 import Sucursales from './pages/Sucursales';
 import Configuracion from './pages/Configuracion';
+import Usuarios from './pages/Usuarios';
+import AgregarUsuario from './pages/AgregarUsuario';
 
 
 
@@ -38,6 +40,8 @@ function App() {
             <Route path='/clientes/:usuario' element={<Inicio />} />
 
             <Route path='/administrador/:usuario' element={<Administrador />} />
+            <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
+            <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
           </Routes>

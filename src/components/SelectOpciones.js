@@ -6,21 +6,44 @@ import { getDocs, collection } from 'firebase/firestore';
 
 import styled from 'styled-components';
 import theme from '../theme';
-//import { ReactComponent as IconDown } from '../images/down.svg';
 
 
-function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
+function SelectOpciones({ tipo, opciones, setOpciones }) {
 
     const [mostrarSelect, cambiarMostrarSelect] = useState(false);
 
 
+    // Usuarios
+    const opcionesRoles = [
+        { id: 'Empleado', texto: 'Empleado' },
+        { id: 'Administrador', texto: 'Administrador' },
+    ];
+
+    const opcionesEstado = [
+        { id: 'Activo', texto: 'Activo' },
+        { id: 'Suspendido', texto: 'Suspendido' },
+        { id: 'Inactivo', texto: 'Inactivo' },
+    ];
+
+
+    const [opcionesSucursales, setOpcionesSucursales] = useState([]);
+    const sucursalesCollection = collection(db, "sucursales");
+
+    const obtenerSucursales = async () => {
+        const data = await getDocs(sucursalesCollection);
+        setOpcionesSucursales(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
+
+    // Productos
     const opcionesDisponibilidad = [
         { id: 'en stock', texto: 'En stock' },
         { id: 'sin stock', texto: 'Sin stock' },
         { id: 'próximo ingreso', texto: 'Próximo ingreso' },
         { id: 'preventa', texto: 'Preventa' },
     ];
-
 
     const opcionesCategorias = [
         { id: 'General', texto: 'General' },
@@ -43,15 +66,6 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
         );
     }
 
-    const [opcionesSucursales, setOpcionesSucursales] = useState([]);
-    const sucursalesCollection = collection(db, "sucursales");
-
-    const obtenerSucursales = async () => {
-        const data = await getDocs(sucursalesCollection);
-        setOpcionesSucursales(
-            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-        );
-    }
 
     useEffect(() => {
         obtenerSubCategorias();
@@ -70,8 +84,8 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
         <ContenedorSelect onClick={() => cambiarMostrarSelect(!mostrarSelect)}>
             <></>
             <OpcionSeleccionada>
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 {opciones}
-                { /* <IconDown /> */}
             </OpcionSeleccionada>
 
 
@@ -110,17 +124,37 @@ function SelectOpciones({ tipo, opciones, setOpciones, cantidad }) {
                                     })
 
                                     : tipo === 'sucursales' ?
-                                    opcionesSucursales.map((opcionSucursal) => {
-                                        return <Opcion
-                                            key={opcionSucursal.id}
-                                            data-valor={opcionSucursal.id}
-                                            onClick={handleClick}
-                                        >
-                                            {opcionSucursal.sucursal}
-                                        </Opcion>
-                                    })
-                                    :
-                                    ''
+                                        opcionesSucursales.map((opcionSucursal) => {
+                                            return <Opcion
+                                                key={opcionSucursal.id}
+                                                data-valor={opcionSucursal.id}
+                                                onClick={handleClick}
+                                            >
+                                                {opcionSucursal.sucursal}
+                                            </Opcion>
+                                        })
+                                        : tipo === 'roles' ?
+                                            opcionesRoles.map((opcionRol) => {
+                                                return <Opcion
+                                                    key={opcionRol.id}
+                                                    data-valor={opcionRol.id}
+                                                    onClick={handleClick}
+                                                >
+                                                    {opcionRol.texto}
+                                                </Opcion>
+                                            })
+                                            : tipo === 'estado' ?
+                                                opcionesEstado.map((opcionEstado) => {
+                                                    return <Opcion
+                                                        key={opcionEstado.id}
+                                                        data-valor={opcionEstado.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {opcionEstado.texto}
+                                                    </Opcion>
+                                                })
+                                                :
+                                                ''
                     }
                 </Opciones>
             }

@@ -251,8 +251,8 @@ const Productos = () => {
                                             <RegistroTabla>{producto.cantidad}</RegistroTabla>
                                             <RegistroTabla>${producto.precio}</RegistroTabla>
                                             <RegistroTabla>
-                                                <Link to={`/productos/modificar/${usuario}/${producto.id}`} className="icono btn btn-light"><i className="fa-solid fa-pencil"></i></Link>
-                                                <button onClick={() => { confirmacionEliminar(producto.id) }} className="btn btn-danger"><i className="fa-solid fa-trash"></i></button>
+                                                <Link to={`/productos/modificar/${usuario}/${producto.id}`} className="iconos-blancos"><i className="fa-solid fa-pencil"></i></Link>
+                                                <button onClick={() => { confirmacionEliminar(producto.id) }} className="iconos-rojos"><i className="fa-solid fa-trash"></i></button>
                                             </RegistroTabla>
                                         </tr>
                                     ))}
@@ -271,7 +271,6 @@ const Productos = () => {
                         </div>
                     </div>
                 </div>
-                { /* FALTA AGREGAR PDF Y CANTIDAD */}
             </ContenedorGeneral >
         </>
     )

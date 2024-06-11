@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 import theme from '../theme';
-//import { ReactComponent as IconDown } from '../images/down.svg';
+
 
 
 function SelectFiltros({ tipo, filtro, setFiltro }) {
@@ -19,6 +19,17 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
         { id: 'Tipo de producto', texto: 'Tipo de producto' },
     ];
 
+    const filtrosUsuario = [
+        { id: 'Listado completo', texto: 'Listado completo' },
+        { id: 'Nombre', texto: 'Nombre' },
+        { id: 'Mail/Usuario', texto: 'Mail/Usuario' },
+        { id: 'Rol', texto: 'Rol' },
+        { id: 'Cargo', texto: 'Cargo' },
+        { id: 'Fecha de ingreso', texto: 'Fecha de ingreso' },
+        { id: 'Estado', texto: 'Estado' },
+    ];
+
+
     const handleClick = (e) => {
         setFiltro(e.currentTarget.dataset.valor);
     }
@@ -28,8 +39,8 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
         <ContenedorSelect onClick={() => cambiarMostrarSelect(!mostrarSelect)}>
             <></>
             <OpcionSeleccionada>
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
                 {filtro}
-                { /* <IconDown /> */}
             </OpcionSeleccionada>
 
             {mostrarSelect &&
@@ -48,7 +59,21 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     {filtrosProducto.texto}
                                 </Opcion>
                             })
-                            : ''
+                            : tipo === 'usuarios' ?
+                            filtrosUsuario.map((filtrosUsuario) => {
+
+                                setFiltro(filtrosUsuario.texto);
+
+                                return <Opcion
+                                    key={filtrosUsuario.id}
+                                    data-valor={filtrosUsuario.id}
+                                    onClick={handleClick}
+                                >
+                                    {filtrosUsuario.texto}
+                                </Opcion>
+                            })
+                            : 
+                            ''
                     }
                 </Opciones>
             }
@@ -105,4 +130,4 @@ const Opcion = styled.div`
 `;
 
 
-export default SelectFiltros;
+export default  SelectFiltros;

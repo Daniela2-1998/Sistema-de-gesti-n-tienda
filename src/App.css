@@ -1,3 +1,13 @@
+/* COLOR ICONOS */
+.iconos-blancos{
+  color: #ED8936;;
+}
+
+.iconos-rojos{
+  color: #dc1212;
+  border: none;
+}
+
 /* IMÁGENES SECCIÓN DE INICIO */
 .imagen{
   background-repeat: no-repeat;
