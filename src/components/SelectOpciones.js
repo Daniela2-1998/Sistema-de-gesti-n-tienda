@@ -36,6 +36,16 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
         );
     }
 
+    const [listadoUsuarios, setListadoUsuarios] = useState([]);
+    const usuariosCollection = collection(db, "usuarios");
+
+    const obtenerUsuarios = async () => {
+        const data = await getDocs(usuariosCollection);
+        setListadoUsuarios(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
 
     // Productos
     const opcionesDisponibilidad = [
@@ -70,6 +80,7 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
     useEffect(() => {
         obtenerSubCategorias();
         obtenerSucursales();
+        obtenerUsuarios();
     }, []);
 
 
@@ -151,6 +162,16 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
                                                         onClick={handleClick}
                                                     >
                                                         {opcionEstado.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'listado-usuarios' ?
+                                                listadoUsuarios.map((usuarioListado) => {
+                                                    return <Opcion
+                                                        key={usuarioListado.id}
+                                                        data-valor={usuarioListado.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {usuarioListado.mail}
                                                     </Opcion>
                                                 })
                                                 :

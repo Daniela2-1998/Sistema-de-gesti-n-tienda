@@ -16,7 +16,10 @@ import Sucursales from './pages/Sucursales';
 import Configuracion from './pages/Configuracion';
 import Usuarios from './pages/Usuarios';
 import AgregarUsuario from './pages/AgregarUsuario';
-
+import ModificarUsuario from './pages/ModificarUsuario';
+import Empleados from './pages/Empleados';
+import AgregarEmpleado from './pages/AgregarEmpleado';
+import ModificarEmpleado from './pages/ModificarEmpleado';
 
 
 function App() {
@@ -42,6 +45,13 @@ function App() {
             <Route path='/administrador/:usuario' element={<Administrador />} />
             <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
             <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
+            <Route path='/admin/usuarios/modificar/:usuario/:id' element={<ModificarUsuario />} />
+            <Route path='/admin/empleados/:usuario' element={<Empleados />} />
+            <Route path='/admin/empleados/agregar/:usuario' element={<AgregarEmpleado />} />
+            <Route path='/admin/empleados/modificar/:usuario/:id' element={<ModificarEmpleado />} />
+
+
+
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
           </Routes>

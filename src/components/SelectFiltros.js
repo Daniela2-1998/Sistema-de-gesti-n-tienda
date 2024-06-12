@@ -30,6 +30,17 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
     ];
 
 
+    const filtrosEmpleado = [
+        { id: 'Listado completo', texto: 'Listado completo' },
+        { id: 'Nombre', texto: 'Nombre' },
+        { id: 'Mail/Usuario', texto: 'Mail/Usuario' },
+        { id: 'ID', texto: 'ID' },
+        { id: 'DNI', texto: 'DNI' },
+        { id: 'Sucursal', texto: 'Sucursal' },
+        { id: 'Estado', texto: 'Estado' },
+    ];
+
+
     const handleClick = (e) => {
         setFiltro(e.currentTarget.dataset.valor);
     }
@@ -70,6 +81,19 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     onClick={handleClick}
                                 >
                                     {filtrosUsuario.texto}
+                                </Opcion>
+                            })
+                            : tipo === 'empleados' ?
+                            filtrosEmpleado.map((filtrosEmpleado) => {
+
+                                setFiltro(filtrosEmpleado.texto);
+
+                                return <Opcion
+                                    key={filtrosEmpleado.id}
+                                    data-valor={filtrosEmpleado.id}
+                                    onClick={handleClick}
+                                >
+                                    {filtrosEmpleado.texto}
                                 </Opcion>
                             })
                             : 

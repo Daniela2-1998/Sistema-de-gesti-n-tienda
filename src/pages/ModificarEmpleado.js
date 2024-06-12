@@ -3,7 +3,8 @@ import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 // Imports estilos
@@ -16,64 +17,66 @@ import {
 import SelectOpciones from '../components/SelectOpciones';
 import Alerta from '../components/Alerta';
 
+
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 
 
-// Alerta de confirmación de borrado.
 const MySwal = withReactContent(Swal);
 
 
 
-const ModificarUsuario = () => {
+const ModificarEmpleado = () => {
 
     const { usuario } = useParams();
     const { id } = useParams();
 
-    // Variables
-    const [mail, setMail] = useState('');
-    const [contraseña, setContraseña] = useState('');
-    const [nombre, setNombre] = useState('');
-    const [rol, setRol] = useState('');
-    const [cargo, setCargo] = useState('');
-    const [añoIngreso, setAñoIngreso] = useState();
-    const [salario, setSalario] = useState('');
-    const [estado, setEstado] = useState('');
 
+    // Variables
+    const [nombre, setNombre] = useState('');
+    const [genero, setGenero] = useState('');
+    const [estado, setEstado] = useState('Activo');
+    const [dni, setDni] = useState('');
+    const [idRecuperado, setIdRecuperado] = useState('');
+
+    const [usuarioAsociado, setUsuarioAsociado] = useState('');
+    const [sucursal, setSucursal] = useState('');
+    const [ventas, setVentas] = useState(0);
 
     const navigate = useNavigate();
+
     const [estadoAlerta, cambiarEstadoAlerta] = useState(false);
     const [alerta, cambiarAlerta] = useState('');
 
 
-    const obtenerUsuarioById = async (id) => {
-        const usuarioFirebase = await getDoc( doc(db, "usuarios", id) );
+    const obtenerEmpleadoById = async (id) => {
+        const empleadoFirebase = await getDoc( doc(db, "empleados", id) );
 
-        if(usuarioFirebase.exists) {
-            setMail(usuarioFirebase.data().mail);
-            setContraseña(usuarioFirebase.data().contraseña);
-            setNombre(usuarioFirebase.data().nombre);
-            setRol(usuarioFirebase.data().rol);
-            setCargo(usuarioFirebase.data().cargo);
-            setAñoIngreso(usuarioFirebase.data().añoIngreso);
-            setSalario(usuarioFirebase.data().salario);
-            setEstado(usuarioFirebase.data().estado);
+        if(empleadoFirebase.exists) {
+            setIdRecuperado(empleadoFirebase.data().id);
+            setNombre(empleadoFirebase.data().nombre);
+            setGenero(empleadoFirebase.data().genero);
+            setDni(empleadoFirebase.data().dni);
+            setUsuarioAsociado(empleadoFirebase.data().usuarioAsociado);
+            setSucursal(empleadoFirebase.data().sucursal);
+            setVentas(empleadoFirebase.data().ventas);
+            setEstado(empleadoFirebase.data().estado);
         }else{
-            console.log("No existe el usuario solicitado.");
+            console.log("No existe el empleado solicitado.");
         }
     }
 
     useEffect( () => {
-        obtenerUsuarioById(id);
+        obtenerEmpleadoById(id);
     }, []);
 
 
-    const actualizarUsuario = async (e) => {
+    const actualizarEmpleado = async (e) => {
         e.preventDefault();
 
         // Verificaciones
-        if (mail === '' || nombre === '' || contraseña === '' || rol === '' || cargo === '' || estado === '' || añoIngreso === '') {
+        if (nombre === '' || genero === '' || usuarioAsociado === '' || sucursal === '') {
             cambiarEstadoAlerta(true);
             cambiarAlerta({
                 tipo: 'error',
@@ -82,47 +85,25 @@ const ModificarUsuario = () => {
             return;
         }
 
-        const expresionRegularMail = /[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/;
+        const empleadoRecuperado = doc(db, "empleados", id);
+        const empleadoActualizado =   { nombre: nombre, genero: genero, usuarioAsociado: usuarioAsociado,
+            sucursal: sucursal, ventas: ventas, dni: dni, estado: estado };
 
-        if (!expresionRegularMail.test(mail)) {
-            cambiarEstadoAlerta(true);
-            cambiarAlerta({
-                tipo: 'error',
-                mensaje: "Por favor ingresa un mail válido para el usuario."
-            });
-            return;
-        }
-
-        if(contraseña.length  < 8){
-            cambiarEstadoAlerta(true);
-            cambiarAlerta({
-                tipo: 'error',
-                mensaje: "La contraseña debe tener al menos 8 caracteres."
-            });
-            return;
-        }
-        
-        
-
-        const usuarioRecuperado = doc(db, "usuarios", id);
-        const usuarioActualizado = { mail: mail, nombre: nombre, contraseña: contraseña, rol: rol,
-            cargo: cargo, añoIngreso: añoIngreso, estado: estado, salario: salario };
-
-        await updateDoc(usuarioRecuperado, usuarioActualizado);
+        await updateDoc(empleadoRecuperado, empleadoActualizado);
 
         new MySwal({
             title: "Modificación éxitosa",
-            text: "Se modificó el usuario solicitado.",
+            text: "Se modificó el empleado solicitado.",
             icon: "success",
             button: "aceptar",
         });
 
-        irAUsuarios();
+        irAEmpleados();
     }
+    
 
-
-    const irAUsuarios = () => {
-        navigate(`/admin/usuarios/${usuario}`);
+    const irAEmpleados = () => {
+        navigate(`/admin/empleados/${usuario}`);
     }
 
 
@@ -130,7 +111,7 @@ const ModificarUsuario = () => {
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>System Solutions - Modificar usuarios</title>
+                <title>System Solutions - Modifcar empleados</title>
                 <link rel="icon" href="../images/Logo.svg" />
             </Helmet>
 
@@ -141,9 +122,9 @@ const ModificarUsuario = () => {
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
 
-                <Titulo>Modificar usuario:</Titulo>
+                <Titulo>Modificar empleado:</Titulo>
 
-                <ContenedorFormularioRegistro onSubmit={actualizarUsuario}>
+                <ContenedorFormularioRegistro onSubmit={actualizarEmpleado}>
 
                     <ContenedorCamposTriplesFormularioRegistro>
 
@@ -157,54 +138,19 @@ const ModificarUsuario = () => {
                         </ContenedorCampoFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Mail:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="mail"
-                                value={mail}
-                                onChange={(e) => setMail(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Contraseña:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>ID:</TituloFormularioRegistro>
                             <InputFormularioRegistro
                                 type="text"
-                                value={contraseña}
-                                onChange={(e) => setContraseña(e.target.value)} 
-                                placeholder='La contraseña debe tener al menos 8 caracteres.'      
+                                value={id}
                             />
                         </ContenedorCampoFormularioRegistro>
 
-                    </ContenedorCamposTriplesFormularioRegistro>
-
-
-
-                    <ContenedorCamposTriplesFormularioRegistro>
-
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Rol:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>Usuario asociado:</TituloFormularioRegistro>
                             <SelectOpciones
-                                tipo='roles'
-                                opciones={rol}
-                                setOpciones={setRol}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Cargo:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={cargo}
-                                onChange={(e) => setCargo(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Salario:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={salario}
-                                onChange={(e) => setSalario(e.target.value)}
+                                tipo='listado-usuarios'
+                                opciones={usuarioAsociado}
+                                setOpciones={setUsuarioAsociado}
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -215,11 +161,44 @@ const ModificarUsuario = () => {
                     <ContenedorCamposTriplesFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Año de ingreso:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>Sucursal:</TituloFormularioRegistro>
+                            <SelectOpciones
+                                tipo='sucursales'
+                                opciones={sucursal}
+                                setOpciones={setSucursal}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Ventas:</TituloFormularioRegistro>
                             <InputFormularioRegistro
-                                type="date"
-                                value={añoIngreso}
-                                onChange={(e) => setAñoIngreso(e.target.value)}
+                                type="number"
+                                value={ventas}
+                                onChange={(e) => setVentas(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Género:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="text"
+                                value={genero}
+                                onChange={(e) => setGenero(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                    </ContenedorCamposTriplesFormularioRegistro>
+
+
+
+                    <ContenedorCamposTriplesFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>DNI:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="text"
+                                value={dni}
+                                onChange={(e) => setDni(e.target.value)}
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -236,7 +215,7 @@ const ModificarUsuario = () => {
 
 
                     <ContenedorBotonesDoblesFormularioRegistro>
-                        <BotonFormularioRegistro tipo='regresar' onClick={irAUsuarios}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='regresar' onClick={irAEmpleados}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
                         <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Ingresar</BotonFormularioRegistro>
                     </ContenedorBotonesDoblesFormularioRegistro>
                 </ContenedorFormularioRegistro>
@@ -254,4 +233,4 @@ const ModificarUsuario = () => {
     )
 }
 
-export default ModificarUsuario;
+export default ModificarEmpleado;
