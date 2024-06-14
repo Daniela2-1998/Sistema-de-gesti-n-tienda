@@ -29,7 +29,6 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
         { id: 'Estado', texto: 'Estado' },
     ];
 
-
     const filtrosEmpleado = [
         { id: 'Listado completo', texto: 'Listado completo' },
         { id: 'Nombre', texto: 'Nombre' },
@@ -37,6 +36,15 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
         { id: 'ID', texto: 'ID' },
         { id: 'DNI', texto: 'DNI' },
         { id: 'Sucursal', texto: 'Sucursal' },
+        { id: 'Estado', texto: 'Estado' },
+    ];
+
+    const filtrosProveedor = [
+        { id: 'Listado completo', texto: 'Listado completo' },
+        { id: 'Proveedor', texto: 'Proveedor' },
+        { id: 'Nombre de contacto', texto: 'Nombre de contacto' },
+        { id: 'Mail', texto: 'Mail' },
+        { id: 'Número', texto: 'Número' },
         { id: 'Estado', texto: 'Estado' },
     ];
 
@@ -94,6 +102,19 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     onClick={handleClick}
                                 >
                                     {filtrosEmpleado.texto}
+                                </Opcion>
+                            })
+                            : tipo === 'proveedores' ?
+                            filtrosProveedor.map((filtrosProveedor) => {
+
+                                setFiltro(filtrosProveedor.texto);
+
+                                return <Opcion
+                                    key={filtrosProveedor.id}
+                                    data-valor={filtrosProveedor.id}
+                                    onClick={handleClick}
+                                >
+                                    {filtrosProveedor.texto}
                                 </Opcion>
                             })
                             : 

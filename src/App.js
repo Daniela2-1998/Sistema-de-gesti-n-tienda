@@ -20,6 +20,9 @@ import ModificarUsuario from './pages/ModificarUsuario';
 import Empleados from './pages/Empleados';
 import AgregarEmpleado from './pages/AgregarEmpleado';
 import ModificarEmpleado from './pages/ModificarEmpleado';
+import Proveedores from './pages/Proveedores';
+import AgregarProveedor from './pages/AgregarProveedor';
+import ModificarProveedor from './pages/ModificarProveedor';
 
 
 function App() {
@@ -39,19 +42,21 @@ function App() {
             <Route path='/productos/modificar-cantidad/:usuario' element={<ModificarCantidad />} />
             <Route path='/productos/agregar-subcategoria/:usuario' element={<AgregarSubcategoria />} />
            
-            <Route path='/proveedores/:usuario' element={<Inicio />} />
+            <Route path='/proveedores/:usuario' element={<Proveedores />} />
+            <Route path='/proveedores/agregar/:usuario' element={<AgregarProveedor />} />
+            <Route path='/proveedores/modificar/:usuario/:id' element={<ModificarProveedor />} />
+
             <Route path='/clientes/:usuario' element={<Inicio />} />
 
             <Route path='/administrador/:usuario' element={<Administrador />} />
             <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
             <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
             <Route path='/admin/usuarios/modificar/:usuario/:id' element={<ModificarUsuario />} />
+            
             <Route path='/admin/empleados/:usuario' element={<Empleados />} />
             <Route path='/admin/empleados/agregar/:usuario' element={<AgregarEmpleado />} />
             <Route path='/admin/empleados/modificar/:usuario/:id' element={<ModificarEmpleado />} />
-
-
-
+          
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
           </Routes>
