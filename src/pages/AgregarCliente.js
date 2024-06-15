@@ -1,9 +1,9 @@
-import React, { useState, useEffect, act } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { setDoc, doc } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 // Imports estilos
@@ -21,24 +21,24 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 
-
 const MySwal = withReactContent(Swal);
 
 
 
-const ModificarProveedor = () => {
+const AgregarCliente = () => {
 
     const { usuario } = useParams();
-    const { id } = useParams();
 
     // Variables
-    const [identificacion, setIdentificacion] = useState('');
-    const [proveedor, setProveedor] = useState('');
-    const [CUIT, setCUIT] = useState('');
-    const [contacto, setContacto] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [DNI, setDNI] = useState('');
     const [mail, setMail] = useState('');
     const [numero, setNumero] = useState('');
+    const [fechaNacimiento, setFechaNacimiento] = useState('');
+    const [tipo, setTipo] = useState('Particular');
+    const [rango, setRango] = useState('General');
     const [estado, setEstado] = useState('');
+
 
     const navigate = useNavigate();
 
@@ -46,66 +46,47 @@ const ModificarProveedor = () => {
     const [alerta, cambiarAlerta] = useState('');
 
 
-    const irAProveedores = () => {
-        navigate(`/proveedores/${usuario}`);
+    const irAClientes = () => {
+        navigate(`/clientes/${usuario}`);
     }
 
-    const obtenerProveedorById = async (id) => {
-        const proveedorFirebase = await getDoc( doc(db, "proveedores", id) );
 
-        if(proveedorFirebase.exists) {
-            setIdentificacion(proveedorFirebase.data().id);
-            setProveedor(proveedorFirebase.data().proveedor);
-            setCUIT(proveedorFirebase.data().CUIT);
-            setContacto(proveedorFirebase.data().contacto);
-            setMail(proveedorFirebase.data().mail);
-            setNumero(proveedorFirebase.data().numero);
-            setEstado(proveedorFirebase.data().estado);
-        }else{
-            console.log("No existe el proveedor solicitado.");
-        }
-    }
-
-    useEffect( () => {
-        obtenerProveedorById(id);
-    }, []);
-
-
-    const actualizarProveedor = async (e) => {
+    const almacenarCliente = async (e) => {
         e.preventDefault();
 
         // Verificaciones
-        if (identificacion === '' || proveedor === '') {
+        if (nombre === '' || mail === '') {
             cambiarEstadoAlerta(true);
             cambiarAlerta({
                 tipo: 'error',
-                mensaje: 'Debes completar los campos básicos.'
+                mensaje: 'Debes completar los campos básicos del cliente.'
             });
             return;
         }
 
-        const proveedorRecuperado = doc(db, "proveedores", id);
-        const proveedorActualizado = { proveedor: proveedor, CUIT: CUIT, contacto: contacto, mail: mail, numero: numero, estado: estado };
 
-        await updateDoc(proveedorRecuperado, proveedorActualizado);
+        await setDoc(doc(db, "clientes", mail), 
+        { 
+            nombre: nombre, DNI: DNI, mail: mail, numero: numero, fechaNacimiento: fechaNacimiento, 
+            tipo: tipo, rango: rango, estado: estado
+        })
 
         new MySwal({
-            title: "Modificación éxitosa",
-            text: "Se modificó el proveedor solicitado.",
+            title: "Ingreso éxitoso",
+            text: "Cliente ingresado al sistema.",
             icon: "success",
             button: "aceptar",
         });
 
-        irAProveedores();
+        irAClientes();
     }
     
-
 
     return (
         <>
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>System Solutions - Agregar proveedor</title>
+                <title>System Solutions - Agregar cliente</title>
                 <link rel="icon" href="../images/Logo.svg" />
             </Helmet>
 
@@ -116,52 +97,29 @@ const ModificarProveedor = () => {
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
 
-                <Titulo>Modificar proveedor al sistema:</Titulo>
+                <Titulo>Ingresar cliente al sistema:</Titulo>
 
-                <ContenedorFormularioRegistro onSubmit={actualizarProveedor}>
-
-                    <ContenedorCamposTriplesFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Identificación:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={identificacion}
-                                onChange={(e) => setIdentificacion(e.target.value)}
-                                placeholder='Ingresa el nombre de identificación, este no podrá ser modificado posteriormente.'
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Proveedor:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={proveedor}
-                                onChange={(e) => setProveedor(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Nombre del contacto:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={contacto}
-                                onChange={(e) => setContacto(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                    </ContenedorCamposTriplesFormularioRegistro>
-
-
+                <ContenedorFormularioRegistro onSubmit={almacenarCliente}>
 
                     <ContenedorCamposTriplesFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>CUIT:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>Nombre:</TituloFormularioRegistro>
                             <InputFormularioRegistro
                                 type="text"
-                                value={CUIT}
-                                onChange={(e) => setCUIT(e.target.value)}
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                                placeholder='Nombre del particular o empresa cliente.'
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>DNI/CUIT:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="text"
+                                value={DNI}
+                                onChange={(e) => setDNI(e.target.value)}
+                                placeholder='Ingrese DNI o CUIT de identificación del cliente.'
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -174,6 +132,12 @@ const ModificarProveedor = () => {
                             />
                         </ContenedorCampoFormularioRegistro>
 
+                    </ContenedorCamposTriplesFormularioRegistro>
+
+
+
+                    <ContenedorCamposTriplesFormularioRegistro>
+
                         <ContenedorCampoFormularioRegistro>
                             <TituloFormularioRegistro>Número:</TituloFormularioRegistro>
                             <InputFormularioRegistro
@@ -183,11 +147,38 @@ const ModificarProveedor = () => {
                             />
                         </ContenedorCampoFormularioRegistro>
 
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Fecha de nacimiento/creación:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="date"
+                                value={fechaNacimiento}
+                                onChange={(e) => setFechaNacimiento(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Tipo de cliente:</TituloFormularioRegistro>
+                            <SelectOpciones
+                                tipo='tipos-cliente'
+                                opciones={tipo}
+                                setOpciones={setTipo}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
                     </ContenedorCamposTriplesFormularioRegistro>
 
 
 
                     <ContenedorCamposTriplesFormularioRegistro>
+
+                    <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Rango de cliente:</TituloFormularioRegistro>
+                            <SelectOpciones
+                                tipo='rangos-cliente'
+                                opciones={rango}
+                                setOpciones={setRango}
+                            />
+                        </ContenedorCampoFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
                             <TituloFormularioRegistro>Estado:</TituloFormularioRegistro>
@@ -202,8 +193,8 @@ const ModificarProveedor = () => {
 
 
                     <ContenedorBotonesDoblesFormularioRegistro>
-                        <BotonFormularioRegistro tipo='regresar' onClick={irAProveedores}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
-                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Modificar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='regresar' onClick={irAClientes}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Ingresar</BotonFormularioRegistro>
                     </ContenedorBotonesDoblesFormularioRegistro>
                 </ContenedorFormularioRegistro>
 
@@ -220,4 +211,4 @@ const ModificarProveedor = () => {
     )
 }
 
-export default ModificarProveedor;
+export default AgregarCliente;

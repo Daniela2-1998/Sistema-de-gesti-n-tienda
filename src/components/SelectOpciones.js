@@ -46,6 +46,18 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
         );
     }
 
+    // Clientes
+    const opcionesTipoCliente = [
+        { id: 'Particular', texto: 'Particular' },
+        { id: 'Empresa', texto: 'Empresa' },
+    ];
+
+    const opcionesRangoCliente = [
+        { id: 'General', texto: 'General' },
+        { id: 'Empresa', texto: 'Empresa' },
+        { id: 'VIP', texto: 'VIP' },
+    ];
+
 
     // Productos
     const opcionesDisponibilidad = [
@@ -172,6 +184,26 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
                                                         onClick={handleClick}
                                                     >
                                                         {usuarioListado.mail}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'tipos-cliente' ?
+                                                opcionesTipoCliente.map((tipoCliente) => {
+                                                    return <Opcion
+                                                        key={tipoCliente.id}
+                                                        data-valor={tipoCliente.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {tipoCliente.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'rangos-cliente' ?
+                                                opcionesRangoCliente.map((rangoCliente) => {
+                                                    return <Opcion
+                                                        key={rangoCliente.id}
+                                                        data-valor={rangoCliente.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {rangoCliente.texto}
                                                     </Opcion>
                                                 })
                                                 :

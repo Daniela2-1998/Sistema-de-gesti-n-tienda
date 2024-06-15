@@ -10,7 +10,7 @@ import db from '../firebase/FirebaseConfig';
 import { ContenedorGeneral, Header, Titulo } from '../components/InicioComponentes';
 import {
     ContenedorFormularioRegistro, TituloFormularioRegistro, ContenedorCamposTriplesFormularioRegistro,
-    ContenedorCampoFormularioRegistro, InputFormularioRegistro, TextAreaFormularioRegistro, ContenedorBotonesDoblesFormularioRegistro,
+    ContenedorCampoFormularioRegistro, InputFormularioRegistro, ContenedorBotonesDoblesFormularioRegistro,
     BotonFormularioRegistro
 } from '../components/FormulariosComponentes';
 import SelectOpciones from '../components/SelectOpciones';
