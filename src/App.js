@@ -26,6 +26,8 @@ import ModificarProveedor from './pages/ModificarProveedor';
 import Clientes from './pages/Clientes';
 import AgregarCliente from './pages/AgregarCliente';
 import ModificarCliente from './pages/ModificarCliente';
+import Operaciones from './pages/Operaciones';
+import AgregarOperacion from './pages/AgregarOperacion';
 
 
 function App() {
@@ -52,6 +54,9 @@ function App() {
             <Route path='/clientes/:usuario' element={<Clientes />} />
             <Route path='/clientes/agregar/:usuario' element={<AgregarCliente />} />
             <Route path='/clientes/modificar/:usuario' element={<ModificarCliente />} />
+
+            <Route path='/operaciones/:usuario' element={<Operaciones />} />
+            <Route path='/operaciones/agregar/:usuario' element={<AgregarOperacion />} />
 
             <Route path='/administrador/:usuario' element={<Administrador />} />
             <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />

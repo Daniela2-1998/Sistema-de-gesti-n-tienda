@@ -46,6 +46,18 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
         );
     }
 
+    // Empleados
+    const [listadoEmpleados, setListadoEmpleados] = useState([]);
+    const empleadosCollection = collection(db, "empleados");
+
+    const obtenerEmpleados = async () => {
+        const data = await getDocs(empleadosCollection);
+        setListadoEmpleados(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
+
     // Clientes
     const opcionesTipoCliente = [
         { id: 'Particular', texto: 'Particular' },
@@ -89,10 +101,44 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
     }
 
 
+    // Operaciones
+    const opcionesEstadoOperacion = [
+        { id: 'Ingresado', texto: 'Ingresado' },
+        { id: 'Entregado', texto: 'Entregado' },
+        { id: 'En transito', texto: 'En transito' },
+        { id: 'Reservado', texto: 'Reservado' },
+        { id: 'En preparación', texto: 'En preparación' },
+        { id: 'En control/limpieza', texto: 'En control/limpieza' },
+        { id: 'Separado por error, rotura u otro incidente', texto: 'Separado por error, rotura u otro incidente' },
+        { id: 'Cancelado', texto: 'Cancelado' },
+    ];
+
+    const opcionesTipoOperacion = [
+        { id: 'Compra', texto: 'Compra' },
+        { id: 'Venta', texto: 'Venta' },
+        { id: 'Compra de suministros', texto: 'Compra de suministros' },
+        { id: 'Importación', texto: 'Importación' },
+        { id: 'Exportación', texto: 'Exportación' },
+        { id: 'Transporte nacional', texto: 'Transporte nacional' },
+        { id: 'Transporte internacional', texto: 'Transporte internacional' },
+        { id: 'Deposito', texto: 'Deposito' },
+        { id: 'Limpieza', texto: 'Limpieza' },
+        { id: 'Reparación', texto: 'Reparación' },
+    ];
+
+    const opcionesInvolucradoEnOperacion = [
+        { id: 'Producto propio', texto: 'Producto propio' },
+        { id: 'Producto externo', texto: 'Producto externo' },
+        { id: 'Servicio propio', texto: 'Servicio propio' },
+        { id: 'Servicio externo', texto: 'Servicio externo' },
+    ];
+
+
     useEffect(() => {
         obtenerSubCategorias();
         obtenerSucursales();
         obtenerUsuarios();
+        obtenerEmpleados();
     }, []);
 
 
@@ -206,7 +252,48 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
                                                         {rangoCliente.texto}
                                                     </Opcion>
                                                 })
+                                                : tipo === 'estados-operacion' ?
+                                                opcionesEstadoOperacion.map((estadoOperacion) => {
+                                                    return <Opcion
+                                                        key={estadoOperacion.id}
+                                                        data-valor={estadoOperacion.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {estadoOperacion.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'tipos-operacion' ?
+                                                opcionesTipoOperacion.map((tipoOperacion) => {
+                                                    return <Opcion
+                                                        key={tipoOperacion.id}
+                                                        data-valor={tipoOperacion.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {tipoOperacion.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'involucrado-operacion' ?
+                                                opcionesInvolucradoEnOperacion.map((involucradoOperacion) => {
+                                                    return <Opcion
+                                                        key={involucradoOperacion.id}
+                                                        data-valor={involucradoOperacion.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {involucradoOperacion.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'listado-empleados' ?
+                                                listadoEmpleados.map((empleado) => {
+                                                    return <Opcion
+                                                        key={empleado.id}
+                                                        data-valor={empleado.nombre}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {empleado.nombre} - {empleado.usuarioAsociado}
+                                                    </Opcion>
+                                                })
                                                 :
+                                    
                                                 ''
                     }
                 </Opciones>

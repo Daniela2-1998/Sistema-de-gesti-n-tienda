@@ -9,6 +9,7 @@ import theme from '../theme';
 
 function Listado({ contenidoListado }) {
 
+    // Subcategorías
     const [subcategorias, setOpcionesSubCategorias] = useState([]);
     const [sucursales, setSucursales] = useState([]);
 
@@ -21,6 +22,8 @@ function Listado({ contenidoListado }) {
         );
     }
 
+
+    // Sucursales
     const sucursalesCollection = collection(db, "sucursales");
 
     const obtenerSucursales = async () => {
@@ -29,7 +32,6 @@ function Listado({ contenidoListado }) {
             data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
     }
-
 
     useEffect(() => {
         obtenerSubCategorias();

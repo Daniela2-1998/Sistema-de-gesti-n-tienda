@@ -60,6 +60,7 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
     ];
 
 
+
     const handleClick = (e) => {
         setFiltro(e.currentTarget.dataset.valor);
     }
@@ -128,7 +129,7 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     {filtrosProveedor.texto}
                                 </Opcion>
                             })
-                            :  tipo === 'clientes' ?
+                            : tipo === 'clientes' ?
                             filtrosCliente.map((filtrosCliente) => {
 
                                 setFiltro(filtrosCliente.texto);
@@ -141,7 +142,7 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     {filtrosCliente.texto}
                                 </Opcion>
                             })
-                            : 
+                            :
                             ''
                     }
                 </Opciones>
@@ -174,7 +175,6 @@ const OpcionSeleccionada = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-
 `;
 
 const Opciones = styled.div`
@@ -184,7 +184,6 @@ const Opciones = styled.div`
     position: absolute;
     top: 260px;
     left: 270px;
-     
     overflow-y: auto;
 `;
 
@@ -197,6 +196,7 @@ const Opcion = styled.div`
         background: ${theme.grisClaro2};
     }
 `;
+
 
 
 export default  SelectFiltros;
