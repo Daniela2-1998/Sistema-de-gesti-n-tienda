@@ -42,6 +42,13 @@ const ContenedorCards = styled.div`
   grid-template-columns: 20% 20% 20%;
   grid-template-rows: fit-content;
 
+  ${(props) => {
+      if (props.tipo === 'admin') {
+        return 'height: 1200px;';
+      } 
+    }
+  }
+
 
   @media (max-width: 1400px) {
     grid-template-columns: 22% 22% 22%;
@@ -56,6 +63,14 @@ const ContenedorCards = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+
+      ${(props) => {
+      if (props.tipo === 'admin') {
+        return 'height: 3000px; margin-bottom: 15%;';
+      } 
+    }
+  }
   }
 `;
 

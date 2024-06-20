@@ -28,6 +28,7 @@ import AgregarCliente from './pages/AgregarCliente';
 import ModificarCliente from './pages/ModificarCliente';
 import Operaciones from './pages/Operaciones';
 import AgregarOperacion from './pages/AgregarOperacion';
+import GenerarCupon from './pages/GenerarCupon';
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
           
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
+            <Route path='/admin/cupones/:usuario' element={<GenerarCupon />} />
           </Routes>
 
       </BrowserRouter >

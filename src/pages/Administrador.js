@@ -45,6 +45,10 @@ function Administrador() {
     navigate(`/admin/configuracion/${usuario}`);
   }
 
+  const irACupones = () => {
+    navigate(`/admin/cupones/${usuario}`);
+  }
+
   const irAInicio = () => {
     navigate(`/inicio/${usuario}`);
   }
@@ -65,7 +69,7 @@ function Administrador() {
           <h1>Sistema de gestión comercial</h1>
         </Header>
 
-        <ContenedorCards>
+        <ContenedorCards tipo='admin'>
 
           <Cards>
             <ImagenesCards className='imagen imagen-empleados' />
@@ -97,8 +101,13 @@ function Administrador() {
             <BotonesCards onClick={irAConfiguracion}>Configuracion</BotonesCards>
           </Cards>
         
+          <Cards>
+            <ImagenesCards className='imagen imagen-cupones' />
+            <BotonesCards onClick={irACupones}>Cupones</BotonesCards>
+          </Cards>
 
         </ContenedorCards>
+        
       </ContenedorGeneral>
     </>
   )
