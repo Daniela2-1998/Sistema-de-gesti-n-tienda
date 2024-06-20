@@ -134,6 +134,23 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
     ];
 
 
+    // Cupones
+    const opcionesCupones = [
+        { id: '10%', texto: '10%' },
+        { id: '15%', texto: '15%' },
+        { id: '20%', texto: '20%' },
+        { id: '25%', texto: '25%' },
+        { id: '30%', texto: '30%' },
+        { id: '40%', texto: '40%' },
+        { id: '50%', texto: '50%' },
+        { id: '$1000', texto: '$1000' },
+        { id: '$5000', texto: '$5000' },
+        { id: '$10000', texto: '$10000' },
+        { id: '$20000', texto: '$20000' },
+        { id: '$50000', texto: '$50000' },
+    ];
+
+
     useEffect(() => {
         obtenerSubCategorias();
         obtenerSucursales();
@@ -290,6 +307,16 @@ function SelectOpciones({ tipo, opciones, setOpciones }) {
                                                         onClick={handleClick}
                                                     >
                                                         {empleado.nombre} - {empleado.usuarioAsociado}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'cupones' ?
+                                                opcionesCupones.map((cupones) => {
+                                                    return <Opcion
+                                                        key={cupones.id}
+                                                        data-valor={cupones.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {cupones.texto}
                                                     </Opcion>
                                                 })
                                                 :

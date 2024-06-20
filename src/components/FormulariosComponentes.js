@@ -333,6 +333,8 @@ const BotonFormularioRegistro = styled.button`
     ${(props) => {
       if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'width: 20%; margin-top: 15%;';
+      } else if (props.tipo === 'generar aleatorio') {
+        return 'width: 20%; margin-top: 15%;;';
       }
     }}
   }
@@ -343,7 +345,9 @@ const BotonFormularioRegistro = styled.button`
         return 'margin-top: 20%;';
       } else if (props.tipo === 'a-inicio') {
         return 'margin-left: 5%;';
-      } 
+      } else if (props.tipo === 'generar aleatorio') {
+        return 'margin-top: 25%;;';
+      }
     }}
   }
 
@@ -430,6 +434,8 @@ const ContenedorBusquedaFormulario = styled.form`
       return 'width: 70%; margin-left: 15%; padding-bottom: 2%;';
     } else if (props.tipo === 'calculo total') {
       return 'width: 70%; margin-top: 5%; margin-left: 15%; padding-bottom: 2%;';
+    } else if (props.tipo === 'cupon') {
+      return 'height: 250px; flex-direction: column;';
     }
   }}
 
@@ -453,12 +459,19 @@ const ContenedorBusquedaFormulario = styled.form`
         return 'width: 90%;';
       } else if (props.tipo === 'calculo total') {
         return 'width: 90%; margin-left: 5%; margin-top: 15%;';
-      }
+      } 
     }}
   }
 
   @media(max-width: 800px){
     width: 90%;
+
+    
+    ${(props) => {
+      if (props.tipo === 'cupon') {
+        return 'height: 650px;';
+      }
+    }}
   }
 
   @media(max-width: 600px){
