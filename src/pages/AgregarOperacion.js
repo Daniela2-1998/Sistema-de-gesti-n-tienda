@@ -33,17 +33,20 @@ const AgregarOperacion = () => {
 
     // Variables
     const [id, setId] = useState('');
-    const [participante, setParticipante] = useState('');
-    const [tipoOperacion, setTipoOperacion] = useState('Compra');
+    
     const [objeto, setObjeto] = useState('Producto propio');
     const [idObjeto, setIdObjeto] = useState('');
     const [cantidad, setCantidad] = useState('');
     const [valorUnitario, setValorUnitario] = useState('');
-    const [descuento, setDescuento] = useState('');
-    const [valorTotal, setValorTotal] = useState('');
+
+    const [participante, setParticipante] = useState('');
+    const [tipoOperacion, setTipoOperacion] = useState('Compra');
     const [fechaFinalizacion, setFechaFinalizacion] = useState('');
     const [empleado, setEmpleado] = useState('');
     const [estado, setEstado] = useState('');
+
+    const [descuento, setDescuento] = useState('');
+    const [valorTotal, setValorTotal] = useState('');
 
 
     const fechaOperacion = new Date().toLocaleDateString();
@@ -250,6 +253,60 @@ const AgregarOperacion = () => {
                 </ContenedorBusquedaFormulario>
 
 
+
+                <ContenedorFormularioRegistro tipo='operacion productos' onSubmit={almacenarOperacion}>
+
+                    <ContenedorCamposTriplesFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Objeto:</TituloFormularioRegistro>
+                            <SelectOpciones
+                                tipo='involucrado-operacion'
+                                opciones={objeto}
+                                setOpciones={setObjeto}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>ID del objeto:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="text"
+                                value={idObjeto}
+                                onChange={(e) => setIdObjeto(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Cantidad:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="number"
+                                value={cantidad}
+                                onChange={(e) => setCantidad(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                    </ContenedorCamposTriplesFormularioRegistro>
+
+                    <ContenedorCamposTriplesFormularioRegistro>
+
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Valor unitario:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="number"
+                                value={valorUnitario}
+                                onChange={(e) => setValorUnitario(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
+                    </ContenedorCamposTriplesFormularioRegistro>
+
+                    <BotonFormularioRegistro tipo='sumar productos a operacion'>+</BotonFormularioRegistro>
+
+                </ContenedorFormularioRegistro>
+
+
+
+
                 <ContenedorFormularioRegistro tipo='operacion' onSubmit={almacenarOperacion}>
 
                     <ContenedorCamposTriplesFormularioRegistro>
@@ -286,50 +343,8 @@ const AgregarOperacion = () => {
                     </ContenedorCamposTriplesFormularioRegistro>
 
 
-
                     <ContenedorCamposTriplesFormularioRegistro>
 
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Objeto:</TituloFormularioRegistro>
-                            <SelectOpciones
-                                tipo='involucrado-operacion'
-                                opciones={objeto}
-                                setOpciones={setObjeto}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>ID del objeto:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="text"
-                                value={idObjeto}
-                                onChange={(e) => setIdObjeto(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Cantidad:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="number"
-                                value={cantidad}
-                                onChange={(e) => setCantidad(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
-
-                    </ContenedorCamposTriplesFormularioRegistro>
-
-
-
-                    <ContenedorCamposTriplesFormularioRegistro>
-
-                        <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Valor unitario:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                type="number"
-                                value={valorUnitario}
-                                onChange={(e) => setValorUnitario(e.target.value)}
-                            />
-                        </ContenedorCampoFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
                             <TituloFormularioRegistro>Empleado involucrado:</TituloFormularioRegistro>
@@ -341,17 +356,13 @@ const AgregarOperacion = () => {
                         </ContenedorCampoFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>fechaFinalizacion:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>Fecha de finalización:</TituloFormularioRegistro>
                             <InputFormularioRegistro
                                 type="date"
                                 value={fechaFinalizacion}
                                 onChange={(e) => setFechaFinalizacion(e.target.value)}
                             />
                         </ContenedorCampoFormularioRegistro>
-                    </ContenedorCamposTriplesFormularioRegistro>
-
-
-                    <ContenedorCamposTriplesFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
                             <TituloFormularioRegistro>Estado:</TituloFormularioRegistro>
@@ -362,8 +373,8 @@ const AgregarOperacion = () => {
                             />
                         </ContenedorCampoFormularioRegistro>
 
-
                     </ContenedorCamposTriplesFormularioRegistro>
+
 
 
                     <ContenedorBusquedaFormulario tipo='calculo total'>
@@ -380,7 +391,7 @@ const AgregarOperacion = () => {
                                 onChange={(e) => setDescuento(e.target.value)}
                                 placeholder='Ingrese cupón de descuento.'
                             />
-                            <BotonFormularioRegistro tipo='calculo total' onClick={aplicarDescuento}>Aplicar descuento</BotonFormularioRegistro >
+                            <BotonFormularioRegistro tipo='aplicar descuento' onClick={aplicarDescuento}>Aplicar descuento</BotonFormularioRegistro >
 
                         </ContenedorCampoFormularioRegistro>
 

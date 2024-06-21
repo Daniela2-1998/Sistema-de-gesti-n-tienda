@@ -113,7 +113,9 @@ const ContenedorFormularioRegistro = styled.form`
 
   ${(props) => {
     if (props.tipo === 'operacion') {
-      return 'height: 640px;';
+      return 'height: 300px;';
+    } else if (props.tipo === 'operacion productos') {
+      return 'height: 400px; margin-bottom: 5%;';
     } 
   }}
 
@@ -122,13 +124,34 @@ const ContenedorFormularioRegistro = styled.form`
 
   ${(props) => {
     if (props.tipo === 'operacion') {
-      return 'height: 1450px;';
+      return 'height: 800px;';
+    } else if (props.tipo === 'operacion productos') {
+      return 'height: 850px;';
+    } 
+  }}
+  }
+
+  
+  @media(max-width: 800px){
+  ${(props) => {
+    if (props.tipo === 'operacion') {
+      return 'height: 750px';
+    } else if (props.tipo === 'operacion productos') {
+      return 'height: 900px';
     } 
   }}
   }
 
   @media(max-width: 700px){
     margin-bottom: 8%;
+  }
+
+  @media(max-width: 600px){
+  ${(props) => {
+    if (props.tipo === 'operacion productos') {
+      return 'margin-top: 15%;';
+    } 
+  }}
   }
 `;
 
@@ -192,7 +215,7 @@ const InputFormularioRegistro = styled.input`
     } else if (props.tipo === 'busqueda-producto') {
       return 'width: 35%; height: 38px; margin-top: 4%; border-left: 1px solid #ED8936; border-top-left-radius: 0px; border-bottom-left-radius: 0px;';
     } else if (props.tipo === 'descuento') {
-      return 'width: 55%; border: none; border-radius: 10px;';
+      return 'width: 55%; height: 50px; border: none; border-radius: 10px;';
     } 
   }}
 
@@ -319,12 +342,14 @@ const BotonFormularioRegistro = styled.button`
       return 'width: 20%; margin-top: 4%; margin-left: 10%;';
     } else if (props.tipo === 'regresar-configuracion') {
       return 'width: 15%; margin-left: 5%;';
-    } else if (props.tipo === 'calculo total') {
+    } else if (props.tipo === 'calculo total' || props.tipo === 'aplicar descuento') {
       return 'width: 35%; background-color: #fff; color: #ED8936; margin-top: 5%; margin-left: 5%;';
     } else if (props.tipo === 'generar cupon') {
       return 'width: 20%; margin-left: 2%; margin-top: 4%;';
     } else if (props.tipo === 'generar aleatorio') {
       return 'width: 12%; margin-left: 25%;';
+    } else if (props.tipo === 'sumar productos a operacion'){
+      return 'width: 7%; background-color: #ED8936; color: #fff; margin-top: 0%; margin-left: 42%; border-radius: 10px; font-size: 45px;';
     }
   }}
 
@@ -333,8 +358,10 @@ const BotonFormularioRegistro = styled.button`
     ${(props) => {
       if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'width: 20%; margin-top: 15%;';
+      } else if (props.tipo === 'aplicar descuento'){
+        return 'width: 77%; margin-left: 0%;';      
       } else if (props.tipo === 'generar aleatorio') {
-        return 'width: 20%; margin-top: 15%;;';
+        return 'width: 20%; margin-top: 15%;';
       }
     }}
   }
@@ -346,7 +373,7 @@ const BotonFormularioRegistro = styled.button`
       } else if (props.tipo === 'a-inicio') {
         return 'margin-left: 5%;';
       } else if (props.tipo === 'generar aleatorio') {
-        return 'margin-top: 25%;;';
+        return 'margin-top: 25%;';
       }
     }}
   }
@@ -355,7 +382,9 @@ const BotonFormularioRegistro = styled.button`
       ${(props) => {
         if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'width: 25%; margin-top: 5%;';
-        } 
+        } else if (props.tipo === 'sumar productos a operacion'){
+          return 'width: 25%; margin-top: -5%; margin-left: 37%;';
+        }
       }}
     }
 
@@ -363,6 +392,10 @@ const BotonFormularioRegistro = styled.button`
       ${(props) => {
         if (props.tipo === 'a-inicio'  || props.tipo === 'generar aleatorio') {
           return 'width: 90%; height: 70px; margin-left: 5%;';
+        } else if (props.tipo === 'sumar productos a operacion'){
+          return 'width: 94%; margin-top: -5%; margin-left: 3%;';
+        } else if (props.tipo === 'calculo total') {
+          return 'width: 77%; margin-left: 10%;';
         } 
       }}
     }
@@ -383,7 +416,8 @@ const BotonFormularioRegistro = styled.button`
           return 'width: 90%; height: 50px; border-radius: 10px;';
         } else if (props.tipo === 'agregar subcategoria'){
           return 'width: 88%; margin-top: 10%; margin-left: 5%;';
-        } 
+        }
+      }}
       }}
     }
 
@@ -433,7 +467,7 @@ const ContenedorBusquedaFormulario = styled.form`
     } else if (props.tipo === 'agregar operacion') {
       return 'width: 70%; margin-left: 15%; padding-bottom: 2%;';
     } else if (props.tipo === 'calculo total') {
-      return 'width: 70%; margin-top: 5%; margin-left: 15%; padding-bottom: 2%;';
+      return 'width: 80%; height: 250px; margin-top: 5%; margin-left: 10%; display: flex;';
     } else if (props.tipo === 'cupon') {
       return 'height: 250px; flex-direction: column;';
     }
@@ -468,9 +502,11 @@ const ContenedorBusquedaFormulario = styled.form`
 
     
     ${(props) => {
-      if (props.tipo === 'cupon') {
+      if (props.tipo === 'calculo total') {
+        return 'height: 550px; display: flex; flex-direction: column;';
+      } else if (props.tipo === 'cupon') {
         return 'height: 650px;';
-      }
+      } 
     }}
   }
 
@@ -575,13 +611,12 @@ const LabelInformacionCalculos = styled.label`
   margin-left: 5%;
   margin-right: 5%;
 
-
-  @media(max-width: 700px){
+  @media(max-width: 800px){
     font-size: 20px;
-    margin-left: 25%;
-    margin-right: 0%;
-    margin-bottom: 15%;
+    margin-left: 10%;
+    margin-bottom: 10%;
   }
+
 `;
 
 
