@@ -21,6 +21,7 @@ import Alerta from '../components/Alerta';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import FuncionesProductos from '../firebase/FuncionesProductos';
+import { list } from 'firebase/storage';
 
 
 const MySwal = withReactContent(Swal);
@@ -33,18 +34,23 @@ const AgregarOperacion = () => {
 
     // Variables
     const [id, setId] = useState('');
-    
+
+    const [productos, setProductos] = useState([]);
+
+    // Contenedor de tipo de objeto, id, producto, cantidad y valor unitario
     const [objeto, setObjeto] = useState('Producto propio');
     const [idObjeto, setIdObjeto] = useState('');
     const [cantidad, setCantidad] = useState('');
     const [valorUnitario, setValorUnitario] = useState('');
 
+    // Contenedor información general
     const [participante, setParticipante] = useState('');
     const [tipoOperacion, setTipoOperacion] = useState('Compra');
     const [fechaFinalizacion, setFechaFinalizacion] = useState('');
     const [empleado, setEmpleado] = useState('');
     const [estado, setEstado] = useState('');
 
+    // Contenedor de valor total + descuentos
     const [descuento, setDescuento] = useState('');
     const [valorTotal, setValorTotal] = useState('');
 
@@ -53,6 +59,7 @@ const AgregarOperacion = () => {
 
     const [filtroConsulta, setFiltroConsulta] = useState('');
     const [productoConsultado, setProductoConsultado] = useState('');
+    const [productoRecuperado, setProductoRecuperado] = useState('');
     const [idConsulta, setIdConsulta] = useState('');
     const [devolucionConsulta, setDevolucionConsulta] = useState([]);
 
@@ -72,16 +79,15 @@ const AgregarOperacion = () => {
 
     const productosCollection = collection(db, "productos");
 
-
-    // Funciones extras
+    // Contenedor busqueda
     const buscarProductoSolicitado = async (e) => {
         e.preventDefault();
 
         if (filtroConsulta === 'Código') {
             const datosRecuperados = await getDoc(doc(db, "productos", idConsulta));
 
-
             if (datosRecuperados.exists) {
+                setProductoRecuperado(datosRecuperados.data().producto);
                 setIdObjeto(datosRecuperados.data().codigo);
                 setValorUnitario(datosRecuperados.data().precio);
             } else {
@@ -98,6 +104,7 @@ const AgregarOperacion = () => {
             );
 
             devolucionConsulta.map((devolucion) => (
+                setProductoRecuperado(devolucion.producto),
                 setIdObjeto(devolucion.codigo),
                 setValorUnitario(devolucion.precio)
             ))
@@ -106,7 +113,32 @@ const AgregarOperacion = () => {
 
     }
 
-    
+    // Contenedor Productos
+    const sumarAlListadoProductos = (idActual, productoActual, cantidadActual, valorUnitarioActual) => {
+        productos.push({
+            idProducto: idActual,
+            producto: productoActual,
+            precio: valorUnitarioActual,
+            cantidad: cantidadActual,
+        });
+        setValorTotal(parseFloat(valorTotal + (cantidadActual * valorUnitarioActual)))
+        console.log(productos);
+    }
+
+
+    const generarListadoProductos = (e) => {
+        e.preventDefault();
+
+        const idActual = idObjeto;
+        const productoActual = productoRecuperado;
+        const cantidadActual = cantidad;
+        const valorUnitarioActual = valorUnitario;
+
+        sumarAlListadoProductos(idActual, productoActual, cantidadActual, valorUnitarioActual);
+    }
+
+
+
     // CREAR FUNCION PARA FILTRAR SEGUN TIPO DE OPERACION PARA LOS CALCULOS SOBRE CANTIDAD
     const devolucionFuncionARealizar = () => {
         switch (tipoOperacion) {
@@ -129,14 +161,11 @@ const AgregarOperacion = () => {
     }
 
 
-
+    // Contenedor total y descuento
     const calcularTotal = (e) => {
         e.preventDefault();
-        setValorTotal(parseFloat(valorUnitario * cantidad));
         setValorTotal(parseFloat(valorTotal));
     }
-
-
 
     const aplicarDescuento = (e) => {
         e.preventDefault();
@@ -187,9 +216,8 @@ const AgregarOperacion = () => {
 
         await setDoc(doc(db, "operaciones", id),
             {
-                participante: participante, tipoOperacion: tipoOperacion, objeto: objeto, idObjeto: idObjeto,
-                cantidad: cantidad, valorUnitario: valorUnitario, valorTotal: valorTotal, fechaOperacion: fechaOperacion,
-                fechaFinalizacion: fechaFinalizacion, descuento: descuento, empleado: empleado, estado: estado
+                participante: participante, tipoOperacion: tipoOperacion, productos: productos, valorTotal: valorTotal, 
+                fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento, empleado: empleado, estado: estado
             })
 
         new MySwal({
@@ -254,7 +282,7 @@ const AgregarOperacion = () => {
 
 
 
-                <ContenedorFormularioRegistro tipo='operacion productos' onSubmit={almacenarOperacion}>
+                <ContenedorFormularioRegistro tipo='operacion productos'>
 
                     <ContenedorCamposTriplesFormularioRegistro>
 
@@ -277,11 +305,11 @@ const AgregarOperacion = () => {
                         </ContenedorCampoFormularioRegistro>
 
                         <ContenedorCampoFormularioRegistro>
-                            <TituloFormularioRegistro>Cantidad:</TituloFormularioRegistro>
+                            <TituloFormularioRegistro>Nombre del producto:</TituloFormularioRegistro>
                             <InputFormularioRegistro
-                                type="number"
-                                value={cantidad}
-                                onChange={(e) => setCantidad(e.target.value)}
+                                type="text"
+                                value={productoRecuperado}
+                                onChange={(e) => setProductoRecuperado(e.target.value)}
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -298,9 +326,20 @@ const AgregarOperacion = () => {
                             />
                         </ContenedorCampoFormularioRegistro>
 
+                        <ContenedorCampoFormularioRegistro>
+                            <TituloFormularioRegistro>Cantidad:</TituloFormularioRegistro>
+                            <InputFormularioRegistro
+                                type="number"
+                                value={cantidad}
+                                onChange={(e) => setCantidad(e.target.value)}
+                            />
+                        </ContenedorCampoFormularioRegistro>
+
                     </ContenedorCamposTriplesFormularioRegistro>
 
-                    <BotonFormularioRegistro tipo='sumar productos a operacion'>+</BotonFormularioRegistro>
+                    <BotonFormularioRegistro tipo='sumar productos a operacion' onClick={generarListadoProductos}>+</BotonFormularioRegistro>
+                    <BotonFormularioRegistro tipo='ver listado productos operacion'>Listado</BotonFormularioRegistro>
+                    <LabelInformacionCalculos tipo='listado productos operacio'>Ver listado para registrar suma</LabelInformacionCalculos>
 
                 </ContenedorFormularioRegistro>
 

@@ -137,7 +137,7 @@ const ContenedorFormularioRegistro = styled.form`
     if (props.tipo === 'operacion') {
       return 'height: 750px';
     } else if (props.tipo === 'operacion productos') {
-      return 'height: 900px';
+      return 'height: 1050px';
     } 
   }}
   }
@@ -350,6 +350,8 @@ const BotonFormularioRegistro = styled.button`
       return 'width: 12%; margin-left: 25%;';
     } else if (props.tipo === 'sumar productos a operacion'){
       return 'width: 7%; background-color: #ED8936; color: #fff; margin-top: 0%; margin-left: 42%; border-radius: 10px; font-size: 45px;';
+    } else if (props.tipo === 'ver listado productos operacion'){
+      return 'width: 10%; background-color: #ED8936; color: #fff; margin-top: 0%; margin-left: 5%; border-radius: 10px;';
     }
   }}
 
@@ -383,7 +385,9 @@ const BotonFormularioRegistro = styled.button`
         if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'width: 25%; margin-top: 5%;';
         } else if (props.tipo === 'sumar productos a operacion'){
-          return 'width: 25%; margin-top: -5%; margin-left: 37%;';
+          return 'width: 25%; margin-top: -5%; margin-left: 2%;';
+        } else if (props.tipo === 'ver listado productos operacion'){
+          return 'width: 35%;';
         }
       }}
     }
@@ -396,7 +400,9 @@ const BotonFormularioRegistro = styled.button`
           return 'width: 94%; margin-top: -5%; margin-left: 3%;';
         } else if (props.tipo === 'calculo total') {
           return 'width: 77%; margin-left: 10%;';
-        } 
+        } else if (props.tipo === 'ver listado productos operacion'){
+          return 'width: 95%; margin-left: 3%;';
+        }
       }}
     }
 
@@ -611,11 +617,19 @@ const LabelInformacionCalculos = styled.label`
   margin-left: 5%;
   margin-right: 5%;
 
+
   @media(max-width: 800px){
     font-size: 20px;
     margin-left: 10%;
     margin-bottom: 10%;
+
+    ${(props) => {
+    if (props.tipo === 'listado productos operacion') {
+      return 'width: 100%;';
+    } 
+  }}
   }
+
 
 `;
 
