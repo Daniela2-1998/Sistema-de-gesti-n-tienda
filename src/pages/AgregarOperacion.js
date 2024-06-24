@@ -3,10 +3,11 @@ import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { getDocs, getDoc, setDoc, doc, collection, query, where } from 'firebase/firestore';
+import { getDocs, getDoc, setDoc, doc, collection, query, where, updateDoc, deleteDoc } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 // Imports estilos
+import styled from 'styled-components';
 import { ContenedorGeneral, Header, Titulo } from '../components/InicioComponentes';
 import {
     ContenedorBusquedaFormulario,
@@ -16,12 +17,16 @@ import {
 } from '../components/FormulariosComponentes';
 import SelectOpciones from '../components/SelectOpciones';
 import Alerta from '../components/Alerta';
+import ListadoDeProductosOperacion from '../components/ListadoDeProductosOperacion';
+
 
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
 import FuncionesProductos from '../firebase/FuncionesProductos';
-import { list } from 'firebase/storage';
+
+
 
 
 const MySwal = withReactContent(Swal);
@@ -52,11 +57,12 @@ const AgregarOperacion = () => {
 
     // Contenedor de valor total + descuentos
     const [descuento, setDescuento] = useState('');
+    const [tipoDescuento, setTipoDescuento] = useState('%');
     const [valorTotal, setValorTotal] = useState('');
-
 
     const fechaOperacion = new Date().toLocaleDateString();
 
+    // Contenedor filtros de busqueda
     const [filtroConsulta, setFiltroConsulta] = useState('');
     const [productoConsultado, setProductoConsultado] = useState('');
     const [productoRecuperado, setProductoRecuperado] = useState('');
@@ -78,6 +84,8 @@ const AgregarOperacion = () => {
 
 
     const productosCollection = collection(db, "productos");
+    const cuponesCollection = collection(db, "cupones");
+
 
     // Contenedor busqueda
     const buscarProductoSolicitado = async (e) => {
@@ -108,12 +116,12 @@ const AgregarOperacion = () => {
                 setIdObjeto(devolucion.codigo),
                 setValorUnitario(devolucion.precio)
             ))
-    
+
         }
 
     }
 
-    // Contenedor Productos
+    // Contenedor productos
     const sumarAlListadoProductos = (idActual, productoActual, cantidadActual, valorUnitarioActual) => {
         productos.push({
             idProducto: idActual,
@@ -162,20 +170,96 @@ const AgregarOperacion = () => {
 
 
     // Contenedor total y descuento
-    const calcularTotal = (e) => {
+    const aplicarDescuento = async (e) => {
         e.preventDefault();
-        setValorTotal(parseFloat(valorTotal));
+
+        if (tipoDescuento === '%') {
+            const descuentoBase = parseFloat(descuento);
+            const descuentoAAplicar = parseFloat(1 - descuentoBase);
+            const precioConDescuento = parseFloat(valorTotal * descuentoAAplicar);
+            setValorTotal(precioConDescuento);
+        } else if (tipoDescuento === 'cupon') {
+            const cupon = descuento.toString();
+            const cuponRecuperado = await getDoc(doc(db, "cupones", cupon));
+
+            if(cuponRecuperado.exists){
+                const estadoCupon = cuponRecuperado.data().estado;
+                const tipoOperacionCupon = cuponRecuperado.data().operacion;
+                const valorCupon = cuponRecuperado.data().valor;
+
+                if(estadoCupon === 'sin usar' || estadoCupon === 'activo'){
+                    switch (tipoOperacionCupon) {
+                        case "multiplicar":
+                            const descuentoBase = parseFloat(valorCupon);
+                            const descuentoAAplicar = parseFloat(1 - descuentoBase);
+                            const precioConDescuento = parseFloat(valorTotal * descuentoAAplicar);
+                            setValorTotal(precioConDescuento);
+                            break;
+    
+                        case "restar":
+                            const precioADescontar = parseFloat(valorCupon);
+                            setValorTotal(valorTotal - precioADescontar);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    new MySwal({
+                        title: "El cupón no disponible.",
+                        text: "Por favor ingresa un cupón que este activo o sin usar.",
+                        icon: "warning",
+                        button: "aceptar",
+                    });
+                }
+            } else {
+                new MySwal({
+                    title: "El cupón no existe.",
+                    text: "Por favor ingresa un cupón válido.",
+                    icon: "warning",
+                    button: "aceptar",
+                });
+            }
+        }
     }
 
-    const aplicarDescuento = (e) => {
-        e.preventDefault();
-        const descuentoBase = parseFloat(descuento);
-        const descuentoAAplicar = parseFloat(1 - descuentoBase);
-        const precioConDescuento = parseFloat(valorTotal * descuentoAAplicar);
-        setValorTotal(precioConDescuento);
+    
+    const modificarEstadoCupon = async () => {
+        const cuponRecuperado = doc(cuponesCollection, descuento)
+        const dataActualizada = { estado: "utilizado" };
+        await updateDoc(cuponRecuperado, dataActualizada);
+    }
+
+    const eliminarCupon = async () => {
+        const cuponRecuperado = doc(cuponesCollection, descuento);
+        await deleteDoc(cuponRecuperado);
     }
 
 
+    const darDeBajaCupon = async () => {
+        MySwal.fire({
+            title: '¿Desea eliminar el cupón de la base de datos?',
+            text: "Esta acción no se puede revertir.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            cancelButtonText: "mantener inactivo",
+            confirmButtonText: 'eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarCupon();
+                Swal.fire(
+                    '¡Eliminación éxitosa!',
+                    'El cupón fue eliminado.',
+                    'success'
+                )
+                irAOperaciones();
+            } else if (result.isDismissed){
+                modificarEstadoCupon();
+                irAOperaciones();
+            }
+        })
+    }
 
 
     const almacenarOperacion = async (e) => {
@@ -216,7 +300,7 @@ const AgregarOperacion = () => {
 
         await setDoc(doc(db, "operaciones", id),
             {
-                participante: participante, tipoOperacion: tipoOperacion, productos: productos, valorTotal: valorTotal, 
+                participante: participante, tipoOperacion: tipoOperacion, productos: productos, valorTotal: valorTotal,
                 fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento, empleado: empleado, estado: estado
             })
 
@@ -227,7 +311,7 @@ const AgregarOperacion = () => {
             button: "aceptar",
         });
 
-        irAOperaciones();
+        darDeBajaCupon();
     }
 
 
@@ -338,12 +422,23 @@ const AgregarOperacion = () => {
                     </ContenedorCamposTriplesFormularioRegistro>
 
                     <BotonFormularioRegistro tipo='sumar productos a operacion' onClick={generarListadoProductos}>+</BotonFormularioRegistro>
-                    <BotonFormularioRegistro tipo='ver listado productos operacion'>Listado</BotonFormularioRegistro>
-                    <LabelInformacionCalculos tipo='listado productos operacio'>Ver listado para registrar suma</LabelInformacionCalculos>
-
                 </ContenedorFormularioRegistro>
 
-
+                {
+                    productos ?
+                        <ListadoDeProductosOperacion
+                            productos={productos}
+                            fechaActual={fechaOperacion}
+                            fechaFinalizacion={fechaFinalizacion}
+                            operacion={tipoOperacion}
+                            empleado={empleado}
+                            participante={participante}
+                            total={valorTotal}
+                            descuento={descuento}
+                            estado={estado}
+                        />
+                        : ''
+                }
 
 
                 <ContenedorFormularioRegistro tipo='operacion' onSubmit={almacenarOperacion}>
@@ -417,22 +512,28 @@ const AgregarOperacion = () => {
 
 
                     <ContenedorBusquedaFormulario tipo='calculo total'>
+                        <ContenedorDescuento>
+                            <ContenedorCampoFormularioRegistro tipo='descuento'>
+                                <TituloFormularioRegistro>Descuento:</TituloFormularioRegistro>
+                                <InputFormularioRegistro
+                                    tipo='descuento'
+                                    type="text"
+                                    value={descuento}
+                                    onChange={(e) => setDescuento(e.target.value)}
+                                    placeholder='Ingrese código o descuento, ej: 0.30.'
+                                />
+                            </ContenedorCampoFormularioRegistro>
+                            <ContenedorBotonesDoblesFormularioRegistro tipo='% usar cupon'>
+                                <BotonFormularioRegistro tipo='%' onClick={(e) => {e.preventDefault(); setTipoDescuento("%")}}>%</BotonFormularioRegistro >
+                                <BotonFormularioRegistro tipo='usar cupon' onClick={(e) => {e.preventDefault(); setTipoDescuento("cupon")}}>Usar cupon</BotonFormularioRegistro >
+                                <label>Dar doble click</label>
+                            </ContenedorBotonesDoblesFormularioRegistro>
+                        </ContenedorDescuento>
 
-                        <BotonFormularioRegistro tipo='calculo total' onClick={calcularTotal}>Calcular total</BotonFormularioRegistro >
-                        <LabelInformacionCalculos>Total: $ {valorTotal}</LabelInformacionCalculos>
-                       
-                        <ContenedorCampoFormularioRegistro tipo='descuento'>
-                            <TituloFormularioRegistro>Descuento:</TituloFormularioRegistro>
-                            <InputFormularioRegistro
-                                tipo='descuento'
-                                type="text"
-                                value={descuento}
-                                onChange={(e) => setDescuento(e.target.value)}
-                                placeholder='Ingrese cupón de descuento.'
-                            />
+                        <ContenedorDescuento>
                             <BotonFormularioRegistro tipo='aplicar descuento' onClick={aplicarDescuento}>Aplicar descuento</BotonFormularioRegistro >
-
-                        </ContenedorCampoFormularioRegistro>
+                            <LabelInformacionCalculos>Total: $ {valorTotal}</LabelInformacionCalculos>
+                        </ContenedorDescuento>
 
                     </ContenedorBusquedaFormulario>
 
@@ -454,5 +555,18 @@ const AgregarOperacion = () => {
         </>
     )
 }
+
+const ContenedorDescuento = styled.div`
+  display: flex;
+  flex-direction: row;
+
+
+  @media(max-width: 1000px){
+    height: 550px; 
+    flex-direction: column;
+  }
+`;
+
+
 
 export default AgregarOperacion;

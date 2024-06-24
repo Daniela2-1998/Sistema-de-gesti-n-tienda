@@ -137,7 +137,7 @@ const ContenedorFormularioRegistro = styled.form`
     if (props.tipo === 'operacion') {
       return 'height: 750px';
     } else if (props.tipo === 'operacion productos') {
-      return 'height: 1050px';
+      return 'height: 850px';
     } 
   }}
   }
@@ -180,7 +180,7 @@ const ContenedorCampoFormularioRegistro = styled.div`
     if (props.tipo === 'configuracion') {
       return 'margin-left: 4%;';
     } else if (props.tipo === 'descuento'){
-      return 'margin-left: 10%;';
+      return 'margin-left: 5%;';
     }
 
   }}
@@ -215,7 +215,7 @@ const InputFormularioRegistro = styled.input`
     } else if (props.tipo === 'busqueda-producto') {
       return 'width: 35%; height: 38px; margin-top: 4%; border-left: 1px solid #ED8936; border-top-left-radius: 0px; border-bottom-left-radius: 0px;';
     } else if (props.tipo === 'descuento') {
-      return 'width: 55%; height: 50px; border: none; border-radius: 10px;';
+      return 'width: 72%; height: 50px; border: none; border-radius: 10px;';
     } 
   }}
 
@@ -228,6 +228,14 @@ const InputFormularioRegistro = styled.input`
       } else if (props.tipo === 'descuento') {
         return 'width: 75%;';
       }
+    }
+  }
+
+    @media(max-width: 1100px){
+    ${(props) => {
+      if (props.tipo === 'descuento') {
+        return 'width: 88%;';
+      } 
     }
   }
 
@@ -295,6 +303,15 @@ const ContenedorBotonesDoblesFormularioRegistro = styled.div`
     }
   }}
 
+  @media(max-width: 1000px){
+    ${(props) => {
+      if (props.tipo === '% usar cupon') {
+        return 'width: 100%; margin-left: 5%;';
+      }
+    }}
+  }
+
+
   @media(max-width: 600px){
     ${(props) => {
       if (props.tipo === 'configuracion') {
@@ -350,8 +367,10 @@ const BotonFormularioRegistro = styled.button`
       return 'width: 12%; margin-left: 25%;';
     } else if (props.tipo === 'sumar productos a operacion'){
       return 'width: 7%; background-color: #ED8936; color: #fff; margin-top: 0%; margin-left: 42%; border-radius: 10px; font-size: 45px;';
-    } else if (props.tipo === 'ver listado productos operacion'){
-      return 'width: 10%; background-color: #ED8936; color: #fff; margin-top: 0%; margin-left: 5%; border-radius: 10px;';
+    } else if (props.tipo === '%'){
+      return 'width: 15%; background-color: #ED8936; color: #fff; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-right: 2px solid #fff;';
+    } else if (props.tipo === 'usar cupon'){
+      return 'width: 35%; background-color: #ED8936; color: #fff; border-top-left-radius: 0px; border-bottom-left-radius: 0px;';
     }
   }}
 
@@ -361,7 +380,7 @@ const BotonFormularioRegistro = styled.button`
       if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'width: 20%; margin-top: 15%;';
       } else if (props.tipo === 'aplicar descuento'){
-        return 'width: 77%; margin-left: 0%;';      
+        return 'width: 36.5%; margin-left: 5%;';      
       } else if (props.tipo === 'generar aleatorio') {
         return 'width: 20%; margin-top: 15%;';
       }
@@ -376,7 +395,13 @@ const BotonFormularioRegistro = styled.button`
         return 'margin-left: 5%;';
       } else if (props.tipo === 'generar aleatorio') {
         return 'margin-top: 25%;';
-      }
+      } else if (props.tipo === '%'){
+        return 'width: 35%;';
+      } else if (props.tipo === 'usar cupon'){
+        return 'width: 55%; ';
+      } else if (props.tipo === 'aplicar descuento') {
+        return 'width: 90%;';
+      } 
     }}
   }
 
@@ -385,10 +410,8 @@ const BotonFormularioRegistro = styled.button`
         if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
           return 'width: 25%; margin-top: 5%;';
         } else if (props.tipo === 'sumar productos a operacion'){
-          return 'width: 25%; margin-top: -5%; margin-left: 2%;';
-        } else if (props.tipo === 'ver listado productos operacion'){
-          return 'width: 35%;';
-        }
+          return 'width: 25%; margin-top: -5%; margin-left: 38%;';
+        } 
       }}
     }
 
@@ -400,9 +423,7 @@ const BotonFormularioRegistro = styled.button`
           return 'width: 94%; margin-top: -5%; margin-left: 3%;';
         } else if (props.tipo === 'calculo total') {
           return 'width: 77%; margin-left: 10%;';
-        } else if (props.tipo === 'ver listado productos operacion'){
-          return 'width: 95%; margin-left: 3%;';
-        }
+        } 
       }}
     }
 
@@ -473,7 +494,7 @@ const ContenedorBusquedaFormulario = styled.form`
     } else if (props.tipo === 'agregar operacion') {
       return 'width: 70%; margin-left: 15%; padding-bottom: 2%;';
     } else if (props.tipo === 'calculo total') {
-      return 'width: 80%; height: 250px; margin-top: 5%; margin-left: 10%; display: flex;';
+      return 'width: 80%; height: 250px; margin-top: 5%; margin-left: 10%; display: flex; flex-direction: column;';
     } else if (props.tipo === 'cupon') {
       return 'height: 250px; flex-direction: column;';
     }
@@ -499,6 +520,15 @@ const ContenedorBusquedaFormulario = styled.form`
         return 'width: 90%;';
       } else if (props.tipo === 'calculo total') {
         return 'width: 90%; margin-left: 5%; margin-top: 15%;';
+      } 
+    }}
+  }
+
+
+  @media(max-width: 1000px){
+    ${(props) => {
+      if (props.tipo === 'calculo total') {
+        return 'height: 550px; display: flex; flex-direction: column;';
       } 
     }}
   }
@@ -610,27 +640,21 @@ const LabelFormularioRegistro = styled.label`
 `;
 
 const LabelInformacionCalculos = styled.label`
-  width: 30%;
+  width: 38%;
   color: #ED8936;
+  font-size: 20px;
   font-weight: bold;
   margin-top: 5%;
-  margin-left: 5%;
+  margin-left: 13%;
   margin-right: 5%;
 
 
-  @media(max-width: 800px){
+  @media(max-width: 1100px){
+    width: 70%;
     font-size: 20px;
-    margin-left: 10%;
+    margin-left: 30%;
     margin-bottom: 10%;
-
-    ${(props) => {
-    if (props.tipo === 'listado productos operacion') {
-      return 'width: 100%;';
-    } 
-  }}
   }
-
-
 `;
 
 
