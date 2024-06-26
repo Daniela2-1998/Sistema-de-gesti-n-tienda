@@ -16,15 +16,13 @@ import {
     BotonFormularioRegistro, LabelInformacionCalculos
 } from '../components/FormulariosComponentes';
 import SelectOpciones from '../components/SelectOpciones';
-import Alerta from '../components/Alerta';
 import ListadoDeProductosOperacion from '../components/ListadoDeProductosOperacion';
 
-
-
+// Imports Alertas
+import Alerta from '../components/Alerta';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import FuncionesProductos from '../firebase/FuncionesProductos';
 
 
 
@@ -68,9 +66,6 @@ const AgregarOperacion = () => {
     const [productoRecuperado, setProductoRecuperado] = useState('');
     const [idConsulta, setIdConsulta] = useState('');
     const [devolucionConsulta, setDevolucionConsulta] = useState([]);
-
-    const [funcion, setFuncion] = useState('');
-
 
     const navigate = useNavigate();
 
@@ -147,24 +142,60 @@ const AgregarOperacion = () => {
 
 
 
-    // CREAR FUNCION PARA FILTRAR SEGUN TIPO DE OPERACION PARA LOS CALCULOS SOBRE CANTIDAD
-    const devolucionFuncionARealizar = () => {
-        switch (tipoOperacion) {
-            case "Compra":
-                setFuncion("ingresar");
-                break;
-            case "Venta":
-                setFuncion("egresar");
-                break;
-            case "Importación":
-                setFuncion("ingresar");
-                break;
-            case "Exportación":
-                setFuncion("egresar");
-                break;
+    const actualizarStockFirebase = async () => {
 
-            default:
-                break;
+    }
+
+
+    // Modificar stock
+    const modificiarCantidadProductosFirebase = async (funcion) => {
+        const productosCollection = collection(db, "productos");
+        const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
+
+        if (productoFirebase.exists) {
+            const productoAModificar = productoFirebase.data().producto;
+            const cantidadFirebase = parseInt(productoFirebase.data().cantidad);
+
+            const cantidadCarrito = productos.map().filter(prod => {
+                if (prod.producto === productoAModificar) {
+                    return prod.cantidad;
+                    console.log(prod.cantidad)
+                }
+            })
+            console.log(cantidadCarrito)
+
+            let cantidadModificada = 0;
+
+            switch (funcion) {
+                case "ingreso":
+                    return cantidadModificada = parseInt(cantidadFirebase + cantidadCarrito);
+                    break;
+                case "ingreso":
+                    return cantidadModificada = parseInt(cantidadFirebase - cantidadCarrito);
+                    break;
+                default:
+                    break;
+            }
+
+            console.log(cantidadModificada)
+
+            const dataActualizada = { cantidad: cantidadModificada };
+            await updateDoc(productoAModificar, dataActualizada);
+
+            new MySwal({
+                title: "Modificación éxitosa",
+                text: "Se modificó la cantidad éxitosamente.",
+                icon: "success",
+                button: "aceptar",
+            });
+
+        } else {
+            new MySwal({
+                title: "Producto no encontrado",
+                text: "No existe el producto solicitado.",
+                icon: "warning",
+                button: "aceptar",
+            });
         }
     }
 
@@ -182,12 +213,12 @@ const AgregarOperacion = () => {
             const cupon = descuento.toString();
             const cuponRecuperado = await getDoc(doc(db, "cupones", cupon));
 
-            if(cuponRecuperado.exists){
+            if (cuponRecuperado.exists) {
                 const estadoCupon = cuponRecuperado.data().estado;
                 const tipoOperacionCupon = cuponRecuperado.data().operacion;
                 const valorCupon = cuponRecuperado.data().valor;
 
-                if(estadoCupon === 'sin usar' || estadoCupon === 'activo'){
+                if (estadoCupon === 'sin usar' || estadoCupon === 'activo') {
                     switch (tipoOperacionCupon) {
                         case "multiplicar":
                             const descuentoBase = parseFloat(valorCupon);
@@ -195,7 +226,7 @@ const AgregarOperacion = () => {
                             const precioConDescuento = parseFloat(valorTotal * descuentoAAplicar);
                             setValorTotal(precioConDescuento);
                             break;
-    
+
                         case "restar":
                             const precioADescontar = parseFloat(valorCupon);
                             setValorTotal(valorTotal - precioADescontar);
@@ -222,7 +253,7 @@ const AgregarOperacion = () => {
         }
     }
 
-    
+    // Cupones
     const modificarEstadoCupon = async () => {
         const cuponRecuperado = doc(cuponesCollection, descuento)
         const dataActualizada = { estado: "utilizado" };
@@ -233,7 +264,6 @@ const AgregarOperacion = () => {
         const cuponRecuperado = doc(cuponesCollection, descuento);
         await deleteDoc(cuponRecuperado);
     }
-
 
     const darDeBajaCupon = async () => {
         MySwal.fire({
@@ -254,7 +284,7 @@ const AgregarOperacion = () => {
                     'success'
                 )
                 irAOperaciones();
-            } else if (result.isDismissed){
+            } else if (result.isDismissed) {
                 modificarEstadoCupon();
                 irAOperaciones();
             }
@@ -262,6 +292,41 @@ const AgregarOperacion = () => {
     }
 
 
+    // Sumar ventas correspondientes al empleado
+    const modificiarVentasEmpleadoFirebase = async () => {
+        const empleadoCollection = collection(db, "empleados");
+        const dataEmpleado = await getDocs(query(empleadoCollection, where("nombre", '==', empleado)));
+
+        let ventas = 0;
+        let idEmpleado = "";
+
+        const empleadoRecuperado = (
+            dataEmpleado.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    
+        empleadoRecuperado.map((empleado) => {
+            ventas = parseInt(empleado.ventas);
+            idEmpleado = empleado.id;
+        });
+    
+        ventas = ventas + 1;
+
+        const empleadoFirebase = doc(db, "empleados", idEmpleado)
+        const dataActualizada = { ventas: ventas };
+        await updateDoc(empleadoFirebase, dataActualizada);
+
+        new MySwal({
+            title: "Venta agregada al empleado",
+            text: "Se incremento el número de ventas del empleado.",
+            icon: "success",
+            button: "aceptar",
+        });
+
+    }
+
+
+
+    // Guardar registro de operación
     const almacenarOperacion = async (e) => {
         e.preventDefault();
 
@@ -294,9 +359,29 @@ const AgregarOperacion = () => {
             return;
         }
 
+        let funcion = "";
 
-        devolucionFuncionARealizar();
-        //FuncionesProductos(idObjeto, cantidad, funcion);
+        switch (tipoOperacion) {
+            case "Compra":
+                funcion = "ingresar";
+                break;
+            case "Venta":
+                funcion = "egresar";
+                break;
+            case "Importación":
+                funcion = "ingresar";
+                break;
+            case "Exportación":
+                funcion = "egresar";
+                break;
+            default:
+                break;
+        }
+
+
+
+        // modificiarCantidadProductosFirebase(funcion);
+        modificiarVentasEmpleadoFirebase();
 
         await setDoc(doc(db, "operaciones", id),
             {
@@ -311,7 +396,9 @@ const AgregarOperacion = () => {
             button: "aceptar",
         });
 
-        darDeBajaCupon();
+        if(descuento.length > 0){
+            darDeBajaCupon();
+        }
     }
 
 
@@ -524,8 +611,8 @@ const AgregarOperacion = () => {
                                 />
                             </ContenedorCampoFormularioRegistro>
                             <ContenedorBotonesDoblesFormularioRegistro tipo='% usar cupon'>
-                                <BotonFormularioRegistro tipo='%' onClick={(e) => {e.preventDefault(); setTipoDescuento("%")}}>%</BotonFormularioRegistro >
-                                <BotonFormularioRegistro tipo='usar cupon' onClick={(e) => {e.preventDefault(); setTipoDescuento("cupon")}}>Usar cupon</BotonFormularioRegistro >
+                                <BotonFormularioRegistro tipo='%' onClick={(e) => { e.preventDefault(); setTipoDescuento("%") }}>%</BotonFormularioRegistro >
+                                <BotonFormularioRegistro tipo='usar cupon' onClick={(e) => { e.preventDefault(); setTipoDescuento("cupon") }}>Usar cupon</BotonFormularioRegistro >
                                 <label>Dar doble click</label>
                             </ContenedorBotonesDoblesFormularioRegistro>
                         </ContenedorDescuento>

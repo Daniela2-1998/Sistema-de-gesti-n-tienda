@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import theme from '../theme';
 
 
-function SelectOpciones({ tipo, opciones, setOpciones }) {
+function SelectOpciones({ tipo, opciones, setOpciones, setFuncion }) {
 
     const [mostrarSelect, cambiarMostrarSelect] = useState(false);
 
