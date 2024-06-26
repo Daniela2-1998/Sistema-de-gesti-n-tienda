@@ -124,7 +124,7 @@ const AgregarOperacion = () => {
             precio: valorUnitarioActual,
             cantidad: cantidadActual,
         });
-        setValorTotal(parseFloat(valorTotal + (cantidadActual * valorUnitarioActual)))
+        setValorTotal(parseFloat(valorTotal + (cantidadActual * valorUnitarioActual)));
         console.log(productos);
     }
 
@@ -138,65 +138,6 @@ const AgregarOperacion = () => {
         const valorUnitarioActual = valorUnitario;
 
         sumarAlListadoProductos(idActual, productoActual, cantidadActual, valorUnitarioActual);
-    }
-
-
-
-    const actualizarStockFirebase = async () => {
-
-    }
-
-
-    // Modificar stock
-    const modificiarCantidadProductosFirebase = async (funcion) => {
-        const productosCollection = collection(db, "productos");
-        const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
-
-        if (productoFirebase.exists) {
-            const productoAModificar = productoFirebase.data().producto;
-            const cantidadFirebase = parseInt(productoFirebase.data().cantidad);
-
-            const cantidadCarrito = productos.map().filter(prod => {
-                if (prod.producto === productoAModificar) {
-                    return prod.cantidad;
-                    console.log(prod.cantidad)
-                }
-            })
-            console.log(cantidadCarrito)
-
-            let cantidadModificada = 0;
-
-            switch (funcion) {
-                case "ingreso":
-                    return cantidadModificada = parseInt(cantidadFirebase + cantidadCarrito);
-                    break;
-                case "ingreso":
-                    return cantidadModificada = parseInt(cantidadFirebase - cantidadCarrito);
-                    break;
-                default:
-                    break;
-            }
-
-            console.log(cantidadModificada)
-
-            const dataActualizada = { cantidad: cantidadModificada };
-            await updateDoc(productoAModificar, dataActualizada);
-
-            new MySwal({
-                title: "Modificación éxitosa",
-                text: "Se modificó la cantidad éxitosamente.",
-                icon: "success",
-                button: "aceptar",
-            });
-
-        } else {
-            new MySwal({
-                title: "Producto no encontrado",
-                text: "No existe el producto solicitado.",
-                icon: "warning",
-                button: "aceptar",
-            });
-        }
     }
 
 
@@ -291,6 +232,66 @@ const AgregarOperacion = () => {
         })
     }
 
+    // Modificación del stock según operación
+    const actualizarStockFirebase = async (funcion) => {
+
+        const productosCollection = collection(db, "productos");
+        const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
+
+        if (productoFirebase.exists) {
+            const productoAModificar = productoFirebase.data().producto;
+            let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
+
+            if (cantidadFirebase > 0) {
+
+                let idCarrito = "";
+                let cantidadCarrito = 0;
+
+                productos.map(prod => {
+                    if (prod.producto === productoAModificar) {
+                        idCarrito = prod.idProducto;
+                        cantidadCarrito = parseInt(prod.cantidad);
+                    }
+                });
+
+                if (funcion === 'ingresar') {
+                    cantidadFirebase = parseInt(cantidadFirebase + cantidadCarrito);
+                } else if (funcion === 'egresar') {
+                    cantidadFirebase = parseInt(cantidadFirebase - cantidadCarrito);
+                }
+
+                if (cantidadFirebase >= cantidadCarrito) {
+                    const registro = doc(db, "productos", idCarrito);
+                    const dataActualizada = { cantidad: cantidadFirebase };
+                    await updateDoc(registro, dataActualizada);
+
+                } else {
+                    new MySwal({
+                        title: "Error en cantidad solicitada",
+                        text: "No hay stock de " + cantidadCarrito + " de " + productoAModificar,
+                        icon: "warning",
+                        button: "aceptar",
+                    });
+                }
+
+            } else {
+                new MySwal({
+                    title: "Producto sin stock",
+                    text: "El producto solicitado no tiene stock.",
+                    icon: "warning",
+                    button: "aceptar",
+                });
+            }
+
+        } else {
+            new MySwal({
+                title: "Producto no encontrado",
+                text: "No existe el producto solicitado.",
+                icon: "warning",
+                button: "aceptar",
+            });
+        }
+    }
 
     // Sumar ventas correspondientes al empleado
     const modificiarVentasEmpleadoFirebase = async () => {
@@ -311,16 +312,9 @@ const AgregarOperacion = () => {
     
         ventas = ventas + 1;
 
-        const empleadoFirebase = doc(db, "empleados", idEmpleado)
+        const empleadoFirebase = doc(db, "empleados", idEmpleado);
         const dataActualizada = { ventas: ventas };
         await updateDoc(empleadoFirebase, dataActualizada);
-
-        new MySwal({
-            title: "Venta agregada al empleado",
-            text: "Se incremento el número de ventas del empleado.",
-            icon: "success",
-            button: "aceptar",
-        });
 
     }
 
@@ -378,9 +372,7 @@ const AgregarOperacion = () => {
                 break;
         }
 
-
-
-        // modificiarCantidadProductosFirebase(funcion);
+        actualizarStockFirebase(funcion);
         modificiarVentasEmpleadoFirebase();
 
         await setDoc(doc(db, "operaciones", id),
@@ -395,10 +387,13 @@ const AgregarOperacion = () => {
             icon: "success",
             button: "aceptar",
         });
+        
 
-        if(descuento.length > 0){
+        if(tipoDescuento === 'cupon' && descuento.length > 0){
             darDeBajaCupon();
         }
+
+        irAOperaciones();
     }
 
 
@@ -613,7 +608,6 @@ const AgregarOperacion = () => {
                             <ContenedorBotonesDoblesFormularioRegistro tipo='% usar cupon'>
                                 <BotonFormularioRegistro tipo='%' onClick={(e) => { e.preventDefault(); setTipoDescuento("%") }}>%</BotonFormularioRegistro >
                                 <BotonFormularioRegistro tipo='usar cupon' onClick={(e) => { e.preventDefault(); setTipoDescuento("cupon") }}>Usar cupon</BotonFormularioRegistro >
-                                <label>Dar doble click</label>
                             </ContenedorBotonesDoblesFormularioRegistro>
                         </ContenedorDescuento>
 
