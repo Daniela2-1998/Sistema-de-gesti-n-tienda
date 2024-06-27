@@ -77,7 +77,6 @@ const AgregarOperacion = () => {
         navigate(`/operaciones/${usuario}`);
     }
 
-
     const productosCollection = collection(db, "productos");
     const cuponesCollection = collection(db, "cupones");
 
@@ -128,7 +127,6 @@ const AgregarOperacion = () => {
         console.log(productos);
     }
 
-
     const generarListadoProductos = (e) => {
         e.preventDefault();
 
@@ -139,8 +137,7 @@ const AgregarOperacion = () => {
 
         sumarAlListadoProductos(idActual, productoActual, cantidadActual, valorUnitarioActual);
     }
-
-
+      
     // Contenedor total y descuento
     const aplicarDescuento = async (e) => {
         e.preventDefault();
@@ -235,40 +232,49 @@ const AgregarOperacion = () => {
     // Modificación del stock según operación
     const actualizarStockFirebase = async (funcion) => {
 
-        const productosCollection = collection(db, "productos");
-        const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
+      
+            const productosCollection = collection(db, "productos");
+            const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
 
-        if (productoFirebase.exists) {
-            const productoAModificar = productoFirebase.data().producto;
-            let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
+            if (productoFirebase.exists) {
+                const productoAModificar = productoFirebase.data().producto;
+                let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
 
-            if (cantidadFirebase > 0) {
+                if (cantidadFirebase > 0) {
 
-                let idCarrito = "";
-                let cantidadCarrito = 0;
+                    let idCarrito = "";
+                    let cantidadCarrito = 0;
 
-                productos.map(prod => {
-                    if (prod.producto === productoAModificar) {
-                        idCarrito = prod.idProducto;
-                        cantidadCarrito = parseInt(prod.cantidad);
+                    productos.map(prod => {
+                        if (prod.producto === productoAModificar) {
+                            idCarrito = prod.idProducto;
+                            cantidadCarrito = parseInt(prod.cantidad);
+                        }
+                    });
+
+                    if (funcion === 'ingresar') {
+                        cantidadFirebase = parseInt(cantidadFirebase + cantidadCarrito);
+                    } else if (funcion === 'egresar') {
+                        cantidadFirebase = parseInt(cantidadFirebase - cantidadCarrito);
                     }
-                });
 
-                if (funcion === 'ingresar') {
-                    cantidadFirebase = parseInt(cantidadFirebase + cantidadCarrito);
-                } else if (funcion === 'egresar') {
-                    cantidadFirebase = parseInt(cantidadFirebase - cantidadCarrito);
-                }
-
-                if (cantidadFirebase >= cantidadCarrito) {
-                    const registro = doc(db, "productos", idCarrito);
-                    const dataActualizada = { cantidad: cantidadFirebase };
-                    await updateDoc(registro, dataActualizada);
+                    if (cantidadFirebase >= cantidadCarrito) {
+                        const registro = doc(db, "productos", idCarrito);
+                        const dataActualizada = { cantidad: cantidadFirebase };
+                        await updateDoc(registro, dataActualizada);
+                    } else {
+                        new MySwal({
+                            title: "Error en cantidad solicitada",
+                            text: "No hay stock de " + cantidadCarrito + " de " + productoAModificar,
+                            icon: "warning",
+                            button: "aceptar",
+                        });
+                    }
 
                 } else {
                     new MySwal({
-                        title: "Error en cantidad solicitada",
-                        text: "No hay stock de " + cantidadCarrito + " de " + productoAModificar,
+                        title: "Producto sin stock",
+                        text: "El producto solicitado no tiene stock.",
                         icon: "warning",
                         button: "aceptar",
                     });
@@ -276,21 +282,13 @@ const AgregarOperacion = () => {
 
             } else {
                 new MySwal({
-                    title: "Producto sin stock",
-                    text: "El producto solicitado no tiene stock.",
+                    title: "Producto no encontrado",
+                    text: "No existe el producto solicitado.",
                     icon: "warning",
                     button: "aceptar",
                 });
             }
-
-        } else {
-            new MySwal({
-                title: "Producto no encontrado",
-                text: "No existe el producto solicitado.",
-                icon: "warning",
-                button: "aceptar",
-            });
-        }
+        
     }
 
     // Sumar ventas correspondientes al empleado
@@ -510,6 +508,7 @@ const AgregarOperacion = () => {
                     productos ?
                         <ListadoDeProductosOperacion
                             productos={productos}
+                            setProductos={setProductos}
                             fechaActual={fechaOperacion}
                             fechaFinalizacion={fechaFinalizacion}
                             operacion={tipoOperacion}

@@ -1,17 +1,59 @@
 import React, { useState, useEffect } from 'react';
 
 import db from '../firebase/FirebaseConfig';
-import { getDocs, collection } from 'firebase/firestore';
+import { getDoc, doc } from 'firebase/firestore';
 
 import styled from 'styled-components';
 import theme from '../theme';
 
+// Import alerta
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
-function ListadoDeProductosOperacion({ productos, fechaActual, fechaFinalizacion, operacion, empleado, participante, total, descuento, estado }) {
 
+
+const MySwal = withReactContent(Swal);
+
+
+function ListadoDeProductosOperacion({ productos, setProductos, fechaActual, fechaFinalizacion, operacion, empleado, participante, total, descuento, estado }) {
+
+  const [nombreEmpresa, setNombreEmpresa] = useState('');
+
+  const recuperarConfiguracion = async () => {
+    const configuracionFirebase = await getDoc(doc(db, "configuracion", "establecida"));
+
+    if (configuracionFirebase.exists) {
+      setNombreEmpresa(configuracionFirebase.data().nombreEmpresa);
+    } else {
+      console.log("Error al recuperar configuración.");
+    }
+  }
 
   useEffect(() => {
+    recuperarConfiguracion();
   }, []);
+
+
+  const eliminarProductoDelCarrito =  (id) => {
+    const nuevoArray = productos.filter((p) => p.idProducto !== id);
+    setProductos(nuevoArray);
+  }
+
+  const confirmacionEliminar = (id) => {
+    MySwal.fire({
+      title: '¿Desea eliminar el producto del carrito?',
+      text: "Esta acción no se puede revertir.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Si'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminarProductoDelCarrito(id);
+      }
+    })
+  }
 
   return (
     <>
@@ -20,6 +62,7 @@ function ListadoDeProductosOperacion({ productos, fechaActual, fechaFinalizacion
 
         <ContenedorDetallesOperacion>
           <FechaActual>{fechaActual}</FechaActual>
+          <InformacionDetalles>Empresa emisora: {nombreEmpresa}</InformacionDetalles>
           <InformacionDetalles>Tipo de operación: {operacion}</InformacionDetalles>
 
           {
@@ -82,7 +125,7 @@ function ListadoDeProductosOperacion({ productos, fechaActual, fechaFinalizacion
               <ContenidoTabla>{produ.precio}</ContenidoTabla>
               <ContenidoTabla>{produ.cantidad}</ContenidoTabla>
               <ContenidoTabla>
-                <button className="iconos-rojos"><i className="fa-solid fa-trash"></i></button>
+                <button className="iconos-rojos" onClick={() => { confirmacionEliminar(produ.idProducto) }}><i className="fa-solid fa-trash"></i></button>
               </ContenidoTabla>
             </ContenedorContenidoTabla>
           ))}
