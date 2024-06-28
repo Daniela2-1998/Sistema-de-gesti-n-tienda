@@ -1,70 +1,43 @@
-# Getting Started with Create React App
+<h1 align="center"> Sistema de gestión para tiendas y negocios. </h1>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> [!IMPORTANT]\
+> Actualmente, el README y el proyecto se encuentran en desarrollo por lo que podrán encontrar funcionalidades faltantes o sin mencionar en el actual documento.
 
-## Available Scripts
+## :computer: Descripción del proyecto:
+System Solutions es un sistema de gestión web desarrollado para pequeñas y medianas tiendas, locales, negocios, emprendimientos, quioscos, minimercados y todo aquel que necesite un sistema de gestión de negocio.
+El proyecto surge de la necesidad de llevar un mejor control de las operaciones diarias y de la estructura y conformación del comercio, permitiendo de esta forma, gestionar el stock, todo tipo de operaciones, clientes, proveedores, empleados, usuarios, pedidos, contabilidad, sucursales, cupones y la configuración de la aplicación. 
 
-In the project directory, you can run:
+Se trata de un sistema de gestión completo para poder facilitar y agrupar todas aquellas tareas que necesitan ser controladas diariamente para una mejor gestión.
 
-### `npm start`
+A lo largo de la descripción encontrarás información detallada sobre los roles, funciones, tecnologías y librerías utilizadas, y sobre su uso.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Deploy:
+:hammer_and_wrench: Próximamente 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Roles:
+* **Empleado**: tiene acceso a las secciones y funcionalidades básicas detalladas en el apartado correspondiente (**FUNCIONES BÁSICAS**).
+* **Administrador**: tiene acceso a las secciones y funcinalidades básicas y a las extras detalladas en el apartado correspondiente (**FUNCIONES BÁSICAS** y **FUNCIONES EXTRAS**).
 
-### `npm test`
+## Funciones:
+### Funciones básicas:
+* **Productos**: ingreso, modificación, eliminación, visualización en tabla junto con una busqueda por filtro (busqueda por: ID o código de producto, nombre de producto, disponibilidad, descuento, tipo de producto y categorías). Se pueden registrar nuevas categorías en el sistema. Se puede modificar la cantidad de un producto en concreto ingresando su ID y la cantidad a sumar o restar del stock actual. También es posible descargar un PDF con el listado de los productos ingresados al sistema. 
+* **Proveedores y clientes**: registro, modificación, eliminación y visualización en tabla junto con una busqueda por filtro (busqueda por: ID, proveedor, cliente, nombre de contacto, mail, número, estado, fecha de nacimiento, tipo de cliente y rango o categoría del cliente.
+* **Empleados y usuarios**: cada usuario podrá modificar la información sobre él mismo. Respecto a los empleados, los usuarios podrán visualizar en tabla y filtrar por información básica y limitada, como: nombre, sucursal y estado.
+* 
+### Funciones extras:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### :hammer_and_wrench: Próximas funciones:
+- [ ] Sección de stock general para la gestión de todos los productos de la empresa.
+- [X] Sección de usuarios para la administración de los usuarios de forma apropiada y responsable. Únicamente disponible para los **administradores**.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### :keyboard: Tecnologías usadas:
+* HTML
+* CSS
+* Bootstrap
+* Javascript
+* React
+* Firebase
