@@ -232,32 +232,32 @@ const AgregarOperacion = () => {
     // Modificación del stock según operación
     const actualizarStockFirebase = async (funcion) => {
 
-      
-            const productosCollection = collection(db, "productos");
-            const productoFirebase = await getDoc(doc(productosCollection, idObjeto));
-
+        const productosCollection = collection(db, "productos");
+        
+        productos.map(async (p) => {
+            const productoFirebase = await getDoc(doc(productosCollection, p.idProducto));
             if (productoFirebase.exists) {
                 const productoAModificar = productoFirebase.data().producto;
                 let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
-
+    
                 if (cantidadFirebase > 0) {
-
+    
                     let idCarrito = "";
                     let cantidadCarrito = 0;
-
+    
                     productos.map(prod => {
                         if (prod.producto === productoAModificar) {
                             idCarrito = prod.idProducto;
                             cantidadCarrito = parseInt(prod.cantidad);
                         }
                     });
-
+    
                     if (funcion === 'ingresar') {
                         cantidadFirebase = parseInt(cantidadFirebase + cantidadCarrito);
                     } else if (funcion === 'egresar') {
                         cantidadFirebase = parseInt(cantidadFirebase - cantidadCarrito);
                     }
-
+    
                     if (cantidadFirebase >= cantidadCarrito) {
                         const registro = doc(db, "productos", idCarrito);
                         const dataActualizada = { cantidad: cantidadFirebase };
@@ -270,7 +270,7 @@ const AgregarOperacion = () => {
                             button: "aceptar",
                         });
                     }
-
+    
                 } else {
                     new MySwal({
                         title: "Producto sin stock",
@@ -279,7 +279,7 @@ const AgregarOperacion = () => {
                         button: "aceptar",
                     });
                 }
-
+    
             } else {
                 new MySwal({
                     title: "Producto no encontrado",
@@ -288,6 +288,7 @@ const AgregarOperacion = () => {
                     button: "aceptar",
                 });
             }
+        });
         
     }
 
