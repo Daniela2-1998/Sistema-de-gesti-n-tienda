@@ -303,20 +303,51 @@ const AgregarOperacion = () => {
         const empleadoRecuperado = (
             dataEmpleado.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
-    
+
         empleadoRecuperado.map((empleado) => {
             ventas = parseInt(empleado.ventas);
             idEmpleado = empleado.id;
         });
-    
+
         ventas = ventas + 1;
 
         const empleadoFirebase = doc(db, "empleados", idEmpleado);
         const dataActualizada = { ventas: ventas };
         await updateDoc(empleadoFirebase, dataActualizada);
+    }
+
+
+    // Agregar cliente o proveedor
+    const almacenarCliente = async () => {
+
+        await setDoc(doc(db, "clientes", participante), 
+        { 
+            nombre: participante, DNI: "", mail: "", numero: "", fechaNacimiento: "", 
+            tipo: "", rango: "", estado: ""
+        })
+
+        new MySwal({
+            title: "Ingreso éxitoso",
+            text: "Cliente ingresado al sistema.",
+            icon: "success",
+            button: "aceptar",
+        });
 
     }
 
+    const almacenarProveedor = async () => {
+
+        await setDoc(doc(db, "proveedores", participante), { 
+            proveedor: participante, CUIT: "", contacto: "", mail: "", numero: "", estado: "" 
+        })
+
+        new MySwal({
+            title: "Ingreso éxitoso",
+            text: "Proveedor ingresado al sistema.",
+            icon: "success",
+            button: "aceptar",
+        });
+    }
 
 
     // Guardar registro de operación
@@ -372,7 +403,6 @@ const AgregarOperacion = () => {
         }
 
         actualizarStockFirebase(funcion);
-        modificiarVentasEmpleadoFirebase();
 
         await setDoc(doc(db, "operaciones", id),
             {
@@ -386,12 +416,41 @@ const AgregarOperacion = () => {
             icon: "success",
             button: "aceptar",
         });
-        
 
-        if(tipoDescuento === 'cupon' && descuento.length > 0){
+
+        MySwal.fire({
+            title: '¿Desea registrar automáticamente al participante?',
+            text: "Sino, puede ingresarlo en su sección correspondiente: cliente o proveedor.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            cancelButtonText: "no registrar",
+            confirmButtonText: 'registrar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (tipoOperacion === 'Venta') {
+                    almacenarCliente();
+                } else if (tipoOperacion === 'Compra') {
+                    almacenarProveedor();
+                }
+                if (tipoDescuento === 'cupon' && descuento.length > 0) {
+                    darDeBajaCupon();
+                }
+                Swal.fire(
+                    '¡Registro éxitoso!',
+                    'Se ha registrado el contacto.',
+                    'success'
+                )
+                irAOperaciones();
+            }
+        })
+        if (tipoOperacion === 'Venta') {
+            modificiarVentasEmpleadoFirebase();
+        }
+        if (tipoDescuento === 'cupon' && descuento.length > 0) {
             darDeBajaCupon();
         }
-
         irAOperaciones();
     }
 

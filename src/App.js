@@ -28,6 +28,7 @@ import AgregarCliente from './pages/AgregarCliente';
 import ModificarCliente from './pages/ModificarCliente';
 import Operaciones from './pages/Operaciones';
 import AgregarOperacion from './pages/AgregarOperacion';
+import ListadoOperaciones from './pages/ListadoOperaciones';
 import GenerarCupon from './pages/GenerarCupon';
 
 
@@ -58,6 +59,7 @@ function App() {
 
             <Route path='/operaciones/:usuario' element={<Operaciones />} />
             <Route path='/operaciones/agregar/:usuario' element={<AgregarOperacion />} />
+            <Route path='/operaciones/listado/:usuario' element={<ListadoOperaciones />} />
 
             <Route path='/administrador/:usuario' element={<Administrador />} />
             <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />

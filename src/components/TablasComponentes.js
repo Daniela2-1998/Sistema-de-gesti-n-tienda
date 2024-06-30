@@ -184,6 +184,13 @@ const RegistroTabla = styled.th`
     margin-right: 15%;
   }
 
+   ${(props) => {
+    if (props.tipo === 'egreso') {
+      return 'color: red; font-weight: bold;';
+    } else if (props.tipo === 'ingreso') {
+      return 'color: green; font-weight: bold;';
+    } 
+  }}
 
 `;
 

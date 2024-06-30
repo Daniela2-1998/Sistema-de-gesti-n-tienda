@@ -343,7 +343,7 @@ const BotonFormularioRegistro = styled.button`
   }
 
   ${(props) => {
-    if (props.tipo === 'regresar') {
+    if (props.tipo === 'regresar' || props.tipo === 'regresar listado') {
       return 'width: 12%; margin-left: 5%;';
     } else if (props.tipo === 'ingresar') {
       return 'width: 25%; margin-left: 21%;';
@@ -377,7 +377,7 @@ const BotonFormularioRegistro = styled.button`
 
   @media(max-width: 1400px){
     ${(props) => {
-      if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
+      if (props.tipo === 'regresar' || props.tipo === 'regresar listado' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'width: 20%; margin-top: 15%;';
       } else if (props.tipo === 'aplicar descuento'){
         return 'width: 36.5%; margin-left: 5%;';      
@@ -389,7 +389,7 @@ const BotonFormularioRegistro = styled.button`
 
   @media(max-width: 1100px){
     ${(props) => {
-      if (props.tipo === 'regresar' || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
+      if (props.tipo === 'regresar'  || props.tipo === 'ingresar' || props.tipo === 'regresar-configuracion') {
         return 'margin-top: 20%;';
       } else if (props.tipo === 'a-inicio') {
         return 'margin-left: 5%;';
@@ -401,9 +401,17 @@ const BotonFormularioRegistro = styled.button`
         return 'width: 55%; ';
       } else if (props.tipo === 'aplicar descuento') {
         return 'width: 90%;';
-      } 
+      }
     }}
   }
+
+    @media(max-width: 1000px){
+      ${(props) => {
+        if (props.tipo === 'regresar listado'){
+          return 'margin-top: 0%; margin-left: 40%;';
+        }
+      }}
+    }
 
     @media(max-width: 900px){
       ${(props) => {
@@ -411,7 +419,7 @@ const BotonFormularioRegistro = styled.button`
           return 'width: 25%; margin-top: 5%;';
         } else if (props.tipo === 'sumar productos a operacion'){
           return 'width: 25%; margin-top: -5%; margin-left: 38%;';
-        } 
+        }
       }}
     }
 
@@ -423,7 +431,9 @@ const BotonFormularioRegistro = styled.button`
           return 'width: 94%; margin-top: -5%; margin-left: 3%;';
         } else if (props.tipo === 'calculo total') {
           return 'width: 77%; margin-left: 10%;';
-        } 
+        } else if (props.tipo === 'regresar listado'){
+          return 'width: 40%; margin-left: 30%;';
+        }
       }}
     }
 
