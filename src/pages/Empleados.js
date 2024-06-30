@@ -41,6 +41,8 @@ const Empleados = () => {
     const [busqueda, setBusqueda] = useState('');
     const [filtro, setFiltro] = useState('Listado completo');
 
+    const [rol, setRol] = useState('');
+
     const { usuario } = useParams();
 
     const navigate = useNavigate();
@@ -58,8 +60,21 @@ const Empleados = () => {
         );
     }
 
+    const recuperarRolFirebase = async () => {
+        const usuarioFirebase = await getDoc(doc(db, "usuarios", usuario));
+        if (usuarioFirebase.exists()) {
+          setRol(usuarioFirebase.data().rol);
+        } else {
+          console.log("Usuario inválido o inexistente.");
+          <div>
+            <p>Usuario inválido o inexistente, por favor vuelve a intentarlo.</p>
+          </div>
+        }
+      };
+
     useEffect(() => {
         obtenerEmpleados();
+        recuperarRolFirebase();
     }, []);
 
 
@@ -163,7 +178,7 @@ const Empleados = () => {
     }
 
     const regresar = () => {
-        navigate(`/administrador/${usuario}`);
+        navigate(`/inicio/${usuario}`);
     }
 
 
@@ -200,8 +215,11 @@ const Empleados = () => {
                                         onChange={(e) => setBusqueda(e.target.value)}
                                     />
                                 </ContenedorFiltroHeaderTabla>
-
-                                <BotonHeaderTabla tipo='agregar' onClick={irAAgregarEmpleados} ><i class="fa-solid fa-plus fa-beat fa-lg"></i>Agregar empleado</BotonHeaderTabla>
+                                {
+                                    rol === 'Administrador' ?
+                                        <BotonHeaderTabla tipo='agregar' onClick={irAAgregarEmpleados} ><i class="fa-solid fa-plus fa-beat fa-lg"></i>Agregar empleado</BotonHeaderTabla>
+                                        : ''
+                                }
                             </ContenedorHeaderTabla>
 
                             <Tabla className='table table-ligth table-hover'>
@@ -210,11 +228,23 @@ const Empleados = () => {
                                         <EncabezadoTabla>ID</EncabezadoTabla>
                                         <EncabezadoTabla>Usuario</EncabezadoTabla>
                                         <EncabezadoTabla>Nombre</EncabezadoTabla>
-                                        <EncabezadoTabla>DNI</EncabezadoTabla>
+                                        {
+                                            rol === 'Administrador' ?
+                                                <EncabezadoTabla>DNI</EncabezadoTabla>
+                                                : ''
+                                        }
                                         <EncabezadoTabla>Sucursal</EncabezadoTabla>
-                                        <EncabezadoTabla>Ventas</EncabezadoTabla>
+                                        {
+                                            rol === 'Administrador' ?
+                                                <EncabezadoTabla>Ventas</EncabezadoTabla>
+                                                : ''
+                                        }
                                         <EncabezadoTabla>Estado</EncabezadoTabla>
-                                        <EncabezadoTabla>Acciones</EncabezadoTabla>
+                                        {
+                                            rol === 'Administrador' ?
+                                                <EncabezadoTabla>Acciones</EncabezadoTabla>
+                                                : ''
+                                        }
                                     </tr>
                                 </thead>
                                 <tbody className='borde-tabla'>
@@ -224,21 +254,32 @@ const Empleados = () => {
                                             <RegistroTabla>{empleado.id}</RegistroTabla>
                                             <RegistroTabla>{empleado.usuarioAsociado}</RegistroTabla>
                                             <RegistroTabla>{empleado.nombre}</RegistroTabla>
-                                            <RegistroTabla>{empleado.dni}</RegistroTabla>
+                                            {
+                                                rol === 'Administrador' ?
+                                                    <RegistroTabla>{empleado.dni}</RegistroTabla>
+                                                    : ''
+                                            }
                                             <RegistroTabla>{empleado.sucursal}</RegistroTabla>
-                                            <RegistroTabla>{empleado.ventas}</RegistroTabla>
+                                            {
+                                                rol === 'Administrador' ?
+                                                    <RegistroTabla>{empleado.ventas}</RegistroTabla>
+                                                    : ''
+                                            }
                                             <RegistroTabla>{empleado.estado}</RegistroTabla>
-                                            <RegistroTabla>
-                                                <Link to={`/admin/empleados/modificar/${usuario}/${empleado.id}`} className="iconos-blancos"><i className="fa-solid fa-pencil"></i></Link>
-                                                <button onClick={() => { confirmacionEliminar(empleado.id) }} className="iconos-rojos"><i className="fa-solid fa-trash"></i></button>
-                                            </RegistroTabla>
+                                            {
+                                                rol === 'Administrador' ?
+                                                    <RegistroTabla>
+                                                        <Link to={`/admin/empleados/modificar/${usuario}/${empleado.id}`} className="iconos-blancos"><i className="fa-solid fa-pencil"></i></Link>
+                                                        <button onClick={() => { confirmacionEliminar(empleado.id) }} className="iconos-rojos"><i className="fa-solid fa-trash"></i></button>
+                                                    </RegistroTabla> : ''
+                                            }
                                         </tr>
                                     ))}
                                 </tbody>
                             </Tabla>
 
                             <ContenedorOpcionesTabla>
-                                <BotonHeaderTabla tipo='regresar' onClick={regresar}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonHeaderTabla>
+                                <BotonHeaderTabla tipo='regresar' onClick={regresar}><i class="fa fa-undo" aria-hidden="true"></i>Inicio</BotonHeaderTabla>
                             </ContenedorOpcionesTabla>
                         </div>
                     </div>

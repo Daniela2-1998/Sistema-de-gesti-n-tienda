@@ -65,7 +65,8 @@ function App() {
             <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
             <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
             <Route path='/admin/usuarios/modificar/:usuario/:id' element={<ModificarUsuario />} />
-            
+           
+            <Route path='/empleados/:usuario' element={<Empleados />} />
             <Route path='/admin/empleados/:usuario' element={<Empleados />} />
             <Route path='/admin/empleados/agregar/:usuario' element={<AgregarEmpleado />} />
             <Route path='/admin/empleados/modificar/:usuario/:id' element={<ModificarEmpleado />} />
