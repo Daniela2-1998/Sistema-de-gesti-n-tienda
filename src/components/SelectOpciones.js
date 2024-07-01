@@ -151,11 +151,50 @@ function SelectOpciones({ tipo, opciones, setOpciones, setFuncion }) {
     ];
 
 
+    // Contabilidad
+    const opcionesCategoriaRegistroContable= [
+        { id: 'Ingreso', texto: 'Ingreso' },
+        { id: 'Gasto', texto: 'Gasto' },
+    ];
+
+    const [listadoSubcategoriasContables, setListadoSubcategoriasContables] = useState([]);
+    const subcategoriasContablesCollection = collection(db, "subcategoriasRegistrosContables");
+
+    const obtenerSubCategoriasContables = async () => {
+        const data = await getDocs(subcategoriasContablesCollection);
+        setListadoSubcategoriasContables(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
+    // Forma de pago
+    const opcionesMedioDePago = [
+        { id: 'Efectivo', texto: 'Efectivo' },
+        { id: 'Tarjeta', texto: 'Tarjeta' },
+        { id: 'Mercado pago', texto: 'Mercado pago' },
+    ];
+
+    const opcionesModalidadDePago = [
+        { id: '1 pago', texto: '1 pago' },
+        { id: '3 cuotas con interés', texto: '3 cuotas con interés' },
+        { id: '6 cuotas con interés', texto: '6 cuotas con interés' },
+        { id: '9 cuotas con interés', texto: '9 cuotas con interés' },
+        { id: '12 cuotas con interés', texto: '12 cuotas con interés' },
+        { id: '24 cuotas con interés', texto: '24 cuotas con interés' },
+        { id: '3 cuotas sin interés', texto: '3 cuotas sin interés' },
+        { id: '6 cuotas sin interés', texto: '6 cuotas sin interés' },
+        { id: '9 cuotas sin interés', texto: '9 cuotas sin interés' },
+        { id: '12 cuotas sin interés', texto: '12 cuotas sin interés' },
+        { id: '24 cuotas sin interés', texto: '24 cuotas sin interés' },
+    ];
+
+
     useEffect(() => {
         obtenerSubCategorias();
         obtenerSucursales();
         obtenerUsuarios();
         obtenerEmpleados();
+        obtenerSubCategoriasContables();
     }, []);
 
 
@@ -317,6 +356,46 @@ function SelectOpciones({ tipo, opciones, setOpciones, setFuncion }) {
                                                         onClick={handleClick}
                                                     >
                                                         {cupones.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'categorias contables' ?
+                                                opcionesCategoriaRegistroContable.map((catc) => {
+                                                    return <Opcion
+                                                        key={catc.id}
+                                                        data-valor={catc.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {catc.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'subcategorias contables' ?
+                                                listadoSubcategoriasContables.map((subc) => {
+                                                    return <Opcion
+                                                        key={subc.id}
+                                                        data-valor={subc.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {subc.subcategoria}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'medio de pago' ?
+                                                opcionesMedioDePago.map((medio) => {
+                                                    return <Opcion
+                                                        key={medio.id}
+                                                        data-valor={medio.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {medio.texto}
+                                                    </Opcion>
+                                                })
+                                                : tipo === 'modalidad de pago' ?
+                                                opcionesModalidadDePago.map((modalidad) => {
+                                                    return <Opcion
+                                                        key={modalidad.id}
+                                                        data-valor={modalidad.id}
+                                                        onClick={handleClick}
+                                                    >
+                                                        {modalidad.texto}
                                                     </Opcion>
                                                 })
                                                 :

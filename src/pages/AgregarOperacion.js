@@ -57,6 +57,8 @@ const AgregarOperacion = () => {
     const [descuento, setDescuento] = useState('');
     const [tipoDescuento, setTipoDescuento] = useState('%');
     const [valorTotal, setValorTotal] = useState('');
+    const [medioDePago, setMedioDePago] = useState('Efectivo');
+    const [modalidadDePago, setModalidadDePago] = useState('1 pago');
 
     const fechaOperacion = new Date().toLocaleDateString();
 
@@ -229,6 +231,7 @@ const AgregarOperacion = () => {
         })
     }
 
+
     // Modificación del stock según operación
     const actualizarStockFirebase = async (funcion) => {
 
@@ -236,7 +239,10 @@ const AgregarOperacion = () => {
         
         productos.map(async (p) => {
             const productoFirebase = await getDoc(doc(productosCollection, p.idProducto));
-            if (productoFirebase.exists) {
+
+            console.log(productoFirebase)
+
+            if (productoFirebase.exists.length > 0) {
                 const productoAModificar = productoFirebase.data().producto;
                 let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
     
@@ -281,14 +287,14 @@ const AgregarOperacion = () => {
                 }
     
             } else {
-                new MySwal({
-                    title: "Producto no encontrado",
-                    text: "No existe el producto solicitado.",
-                    icon: "warning",
-                    button: "aceptar",
+                await setDoc(doc(productosCollection, p.idProducto),
+                {
+                    producto: p.producto, codigo: p.idProducto, categoria: "", tipo: "", descripcion: "", cantidad: p.cantidad,
+                    descuento: "", disponibilidad: "en stock", precio: p.precio, promocion: ""
                 });
-            }
-        });
+            } 
+   
+        })
         
     }
 
@@ -314,6 +320,26 @@ const AgregarOperacion = () => {
         const empleadoFirebase = doc(db, "empleados", idEmpleado);
         const dataActualizada = { ventas: ventas };
         await updateDoc(empleadoFirebase, dataActualizada);
+    }
+
+    // Registrar en contabilidad
+    const registrarContablemente = async (funcion) => {
+        
+        let categoria = "";
+
+        if (funcion === 'Compra' || funcion === 'Compra de suministros' || funcion === 'Importación' ){
+            categoria = "Egreso";
+        } else if (funcion === 'Venta' || funcion === 'Exportación' ){
+            categoria = "Ingreso";
+        }
+
+        console.log(categoria);
+
+        await setDoc(doc(db, "registrosContables", id),
+            {
+                concepto: tipoOperacion, importe: valorTotal, categoria: categoria, subCategoria: '', estado: '', 
+                formaDePago: medioDePago, modalidadDePago: modalidadDePago
+            });
     }
 
 
@@ -407,7 +433,8 @@ const AgregarOperacion = () => {
         await setDoc(doc(db, "operaciones", id),
             {
                 participante: participante, tipoOperacion: tipoOperacion, productos: productos, valorTotal: valorTotal,
-                fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento, empleado: empleado, estado: estado
+                fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento, 
+                empleado: empleado, estado: estado, medioDePago: medioDePago, modalidadDePago: modalidadDePago
             })
 
         new MySwal({
@@ -417,7 +444,8 @@ const AgregarOperacion = () => {
             button: "aceptar",
         });
 
-
+        registrarContablemente(funcion);
+        
         MySwal.fire({
             title: '¿Desea registrar automáticamente al participante?',
             text: "Sino, puede ingresarlo en su sección correspondiente: cliente o proveedor.",
@@ -653,6 +681,26 @@ const AgregarOperacion = () => {
 
 
                     <ContenedorBusquedaFormulario tipo='calculo total'>
+
+                        <ContenedorDescuento>
+                            <ContenedorCampoFormularioRegistro tipo='descuento'>
+                                <TituloFormularioRegistro>Forma de pago:</TituloFormularioRegistro>
+                                <SelectOpciones
+                                    tipo='medio de pago'
+                                    opciones={medioDePago}
+                                    setOpciones={setMedioDePago}
+                                />
+                            </ContenedorCampoFormularioRegistro>
+                            <ContenedorCampoFormularioRegistro tipo='descuento'>
+                                <TituloFormularioRegistro>Modalidad:</TituloFormularioRegistro>
+                                <SelectOpciones
+                                    tipo='modalidad de pago'
+                                    opciones={modalidadDePago}
+                                    setOpciones={setModalidadDePago}
+                                />
+                            </ContenedorCampoFormularioRegistro>
+                        </ContenedorDescuento>
+
                         <ContenedorDescuento>
                             <ContenedorCampoFormularioRegistro tipo='descuento'>
                                 <TituloFormularioRegistro>Descuento:</TituloFormularioRegistro>
@@ -671,7 +719,7 @@ const AgregarOperacion = () => {
                         </ContenedorDescuento>
 
                         <ContenedorDescuento>
-                            <BotonFormularioRegistro tipo='aplicar descuento' onClick={aplicarDescuento}>Aplicar descuento</BotonFormularioRegistro >
+                            <BotonFormularioRegistro tipo='aplicar descuento' onClick={aplicarDescuento}>Aplicar descuento</BotonFormularioRegistro>
                             <LabelInformacionCalculos>Total: $ {valorTotal}</LabelInformacionCalculos>
                         </ContenedorDescuento>
 
@@ -702,7 +750,12 @@ const ContenedorDescuento = styled.div`
 
 
   @media(max-width: 1000px){
-    height: 550px; 
+    height: 750px; 
+    flex-direction: column;
+  }
+
+    @media(max-width: 1000px){
+    height: 750px; 
     flex-direction: column;
   }
 `;

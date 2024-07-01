@@ -127,6 +127,8 @@ const ContenedorFormularioRegistro = styled.form`
       return 'height: 800px;';
     } else if (props.tipo === 'operacion productos') {
       return 'height: 850px;';
+    } else if (props.tipo === 'pago') {
+      return 'height: 1150px; margin-bottom: 12%;';
     } 
   }}
   }
@@ -167,6 +169,12 @@ const ContenedorCamposTriplesFormularioRegistro = styled.div`
     width: 100%;
     flex-direction: column;
     height: 360px;
+
+    ${(props) => {
+      if (props.tipo === 'dobles') {
+        return 'height: 220px;';
+      } 
+    }}
   }
 `;
 
@@ -504,7 +512,7 @@ const ContenedorBusquedaFormulario = styled.form`
     } else if (props.tipo === 'agregar operacion') {
       return 'width: 70%; margin-left: 15%; padding-bottom: 2%;';
     } else if (props.tipo === 'calculo total') {
-      return 'width: 80%; height: 250px; margin-top: 5%; margin-left: 10%; display: flex; flex-direction: column;';
+      return 'width: 80%; height: 450px; margin-top: 5%; margin-left: 10%; display: flex; flex-direction: column;';
     } else if (props.tipo === 'cupon') {
       return 'height: 250px; flex-direction: column;';
     }
@@ -538,7 +546,7 @@ const ContenedorBusquedaFormulario = styled.form`
   @media(max-width: 1000px){
     ${(props) => {
       if (props.tipo === 'calculo total') {
-        return 'height: 550px; display: flex; flex-direction: column;';
+        return 'height: 850px; display: flex; flex-direction: column;';
       } 
     }}
   }
@@ -549,7 +557,7 @@ const ContenedorBusquedaFormulario = styled.form`
     
     ${(props) => {
       if (props.tipo === 'calculo total') {
-        return 'height: 550px; display: flex; flex-direction: column;';
+        return 'display: flex; flex-direction: column;';
       } else if (props.tipo === 'cupon') {
         return 'height: 650px;';
       } 
@@ -564,7 +572,9 @@ const ContenedorBusquedaFormulario = styled.form`
     ${(props) => {
       if (props.tipo === 'configuracion') {
         return 'height: 750px;';
-      }
+      } else if (props.tipo === 'calculo total') {
+        return 'height: 850px;';
+      } 
     }}
   }
 

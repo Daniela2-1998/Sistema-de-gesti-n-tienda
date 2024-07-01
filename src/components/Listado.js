@@ -12,6 +12,7 @@ function Listado({ contenidoListado }) {
     // Subcategorías
     const [subcategorias, setOpcionesSubCategorias] = useState([]);
     const [sucursales, setSucursales] = useState([]);
+    const [subcategoriasContables, setOpcionesSubCategoriasContables] = useState([]);
 
     const subCategoriasCollection = collection(db, "subcategorias");
 
@@ -33,9 +34,20 @@ function Listado({ contenidoListado }) {
         );
     }
 
+    // Subcategoria contable
+    const subcategoriasContablesCollection = collection(db, "subcategoriasRegistrosContables");
+
+    const obtenerSubcategoriasContables = async () => {
+        const data = await getDocs(subcategoriasContablesCollection);
+        setOpcionesSubCategoriasContables(
+            data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+        );
+    }
+
     useEffect(() => {
         obtenerSubCategorias();
         obtenerSucursales();
+        obtenerSubcategoriasContables();
     }, []);
 
 
@@ -63,6 +75,18 @@ function Listado({ contenidoListado }) {
                                     data-valor={sucursal.id}
                                 >
                                     {sucursal.sucursal}
+                                </div>
+                            })
+                            }
+                        </ContenedorListado>
+                        : contenidoListado === 'subcategorias contables' ?
+                        <ContenedorListado>
+                            {subcategoriasContables.map((subC) => {
+                                return <div
+                                    key={subC}
+                                    data-valor={subC}
+                                >
+                                    {subC.subcategoria}
                                 </div>
                             })
                             }

@@ -157,6 +157,12 @@ const ContenedorListado = styled.div`
 
 const Titulo = styled.h1`
     margin-left: 32%;
+    text-align: center;
+
+    @media(max-width: 1000px){
+      margin-left: 5%;
+    }
+
 `;
 
 const ContenedorDetallesOperacion = styled.div`
@@ -168,6 +174,18 @@ const ContenedorDetallesOperacion = styled.div`
 const FechaActual = styled.label`
     margin-left: 90%;
     font-size: 20px;
+
+
+    @media(max-width: 1000px){
+      margin-left: 85%;
+      margin-bottom: 5%;
+    }
+
+    @media(max-width: 800px){
+      margin-top: 7%;
+      margin-left: 70%;
+      margin-bottom: 12%;
+    }
 `;
 
 const InformacionDetalles = styled.label`

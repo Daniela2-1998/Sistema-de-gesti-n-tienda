@@ -30,6 +30,8 @@ import Operaciones from './pages/Operaciones';
 import AgregarOperacion from './pages/AgregarOperacion';
 import ListadoOperaciones from './pages/ListadoOperaciones';
 import GenerarCupon from './pages/GenerarCupon';
+import AgregarGastoIngreso from './pages/AgregarGastoIngreso';
+import AgregarSubcategoriaContable from './pages/AgregarSubcategoriaContable';
 
 
 function App() {
@@ -74,6 +76,10 @@ function App() {
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
             <Route path='/admin/cupones/:usuario' element={<GenerarCupon />} />
+            <Route path='/admin/contabilidad/:usuario' element={<AgregarGastoIngreso />} />
+            <Route path='/admin/contabilidad/agregar-subcategoria/:usuario' element={<AgregarSubcategoriaContable />} />
+
+
           </Routes>
 
       </BrowserRouter >
