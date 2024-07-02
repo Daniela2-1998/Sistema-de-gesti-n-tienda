@@ -32,6 +32,9 @@ import ListadoOperaciones from './pages/ListadoOperaciones';
 import GenerarCupon from './pages/GenerarCupon';
 import AgregarGastoIngreso from './pages/AgregarGastoIngreso';
 import AgregarSubcategoriaContable from './pages/AgregarSubcategoriaContable';
+import RegistrosContables from './pages/RegistrosContables';
+import ModificarGastoIngreso from './pages/ModificarGastoIngreso';
+import ListadoRegistrosContables from './pages/ListadoRegistrosContables';
 
 
 function App() {
@@ -76,8 +79,13 @@ function App() {
             <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
             <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
             <Route path='/admin/cupones/:usuario' element={<GenerarCupon />} />
-            <Route path='/admin/contabilidad/:usuario' element={<AgregarGastoIngreso />} />
+
+            <Route path='/admin/contabilidad/:usuario' element={<RegistrosContables />} />
+            <Route path='/admin/contabilidad/registros/listado/:usuario' element={<ListadoRegistrosContables />} />
+            <Route path='/admin/contabilidad/registros/agregar/:usuario' element={<AgregarGastoIngreso />} />
+            <Route path='/admin/contabilidad/registros/modificar/:usuario/:id' element={<ModificarGastoIngreso />} />
             <Route path='/admin/contabilidad/agregar-subcategoria/:usuario' element={<AgregarSubcategoriaContable />} />
+
 
 
           </Routes>

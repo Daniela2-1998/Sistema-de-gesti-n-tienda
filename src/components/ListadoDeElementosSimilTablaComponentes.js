@@ -86,6 +86,14 @@ const ContenedorInformacionCards = styled.div`
   display: flex;
   flex-direction: column;
 
+
+  ${(props) => {
+    if (props.tipo === 'medio y modalidad de pago') {
+      return 'min-height: 100px;';
+    }
+  }}
+
+
   @media(max-width: 1300px){
     margin-bottom: 10%;
   }
@@ -138,6 +146,8 @@ const LabelProductosCards = styled.div`
       return 'width: 30%; min-width: fit-content; max-width: 65%; height: 40px; padding-top: 5%; margin-top: 7%; margin-left: 32%; text-transform: uppercase; font-weight: bolder; background-color: rgb(30, 30, 150);';
     } else if (props.tipo === 'reparacion limpieza deposito') {
       return 'width: 30%; min-width: fit-content; max-width: 65%; height: 40px; padding-top: 5%; margin-top: 7%; margin-left: 32%; text-transform: uppercase; font-weight: bolder; background-color: rgb(44, 44, 66);';
+    } else if (props.tipo === 'otros') {
+      return 'width: 30%; min-width: fit-content; max-width: 65%; height: 40px; padding-top: 5%; margin-top: 7%; margin-left: 32%; text-transform: uppercase; font-weight: bolder; background-color: #6b26d3;';
     }
   }}
 `;
@@ -150,7 +160,40 @@ const TextoDetalleProductosCards = styled.p`
   margin-left: 2%;
 `;
 
+const ContenedorAccionesCards = styled.div`
+  height: 120px;
+  width: 80%;
+  margin-left: 12%;
+  display: flex;
+  justify-content: space-evenly;
+
+  button{
+    margin-top: 7%;
+    border: none;
+    background-color: transparent;
+
+    &:placeholder{
+      color: #bf1010;
+    }
+
+  }
+
+  a{
+    margin-top: 22%;
+
+    &:placeholder{
+      color: #cb732a;
+    }
+  }
+
+  i{
+    font-size: 30px;
+  }
+
+  
+`;
+
 export {
     ContenedorCards, Cards, TituloCards, ContenedorLabelsCards, LabelCards, ContenedorInformacionCards, InformacionCards, 
-    DetalleProductosCards, LabelProductosCards, ContenedorIDYProductoCards, TextoDetalleProductosCards
+    DetalleProductosCards, LabelProductosCards, ContenedorIDYProductoCards, TextoDetalleProductosCards, ContenedorAccionesCards
 };

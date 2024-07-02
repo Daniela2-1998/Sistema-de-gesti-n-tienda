@@ -338,7 +338,7 @@ const AgregarOperacion = () => {
         await setDoc(doc(db, "registrosContables", id),
             {
                 concepto: tipoOperacion, importe: valorTotal, categoria: categoria, subCategoria: '', estado: '', 
-                formaDePago: medioDePago, modalidadDePago: modalidadDePago
+                formaDePago: medioDePago, modalidadDePago: modalidadDePago, fecha: fechaOperacion
             });
     }
 

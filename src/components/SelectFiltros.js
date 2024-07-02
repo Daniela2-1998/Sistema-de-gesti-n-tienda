@@ -69,6 +69,15 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
         { id: 'Estado', texto: 'Estado' },
     ];
 
+    const filtrosRegistrosContables = [
+        { id: 'Listado completo', texto: 'Listado completo' },
+        { id: 'Concepto', texto: 'Concepto' },
+        { id: 'Categoría', texto: 'Categoría' },
+        { id: 'Subcategoría', texto: 'Subcategoría' },
+        { id: 'Fecha de registro', texto: 'Fecha de registro' },
+        { id: 'Forma de pago', texto: 'Forma de pago' },
+        { id: 'Estado', texto: 'Estado' },
+    ];
     const handleClick = (e) => {
         setFiltro(e.currentTarget.dataset.valor);
     }
@@ -161,6 +170,19 @@ function SelectFiltros({ tipo, filtro, setFiltro }) {
                                     onClick={handleClick}
                                 >
                                     {filtrosOperaciones.texto}
+                                </Opcion>
+                            })
+                            : tipo === 'registros contables' ?
+                            filtrosRegistrosContables.map((filtroRegistrosContables) => {
+
+                                setFiltro(filtroRegistrosContables.texto);
+
+                                return <Opcion
+                                    key={filtroRegistrosContables.id}
+                                    data-valor={filtroRegistrosContables.id}
+                                    onClick={handleClick}
+                                >
+                                    {filtroRegistrosContables.texto}
                                 </Opcion>
                             })
                             :

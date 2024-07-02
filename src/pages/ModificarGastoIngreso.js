@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { setDoc, doc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 // Imports estilos
@@ -26,12 +26,12 @@ const MySwal = withReactContent(Swal);
 
 
 
-const AgregarGastoIngreso = () => {
+const ModificarGastoIngreso = () => {
 
     const { usuario } = useParams();
+    const { id } = useParams();
 
     // Variables
-    const [id, setId] = useState('');
     const [concepto, setConcepto] = useState('');
     const [importe, setImporte] = useState(0);
     const [categoria, setCategoria] = useState('Ingreso');
@@ -48,8 +48,27 @@ const AgregarGastoIngreso = () => {
     const [alerta, cambiarAlerta] = useState('');
 
 
+    const obtenerRegistroById = async (id) => {
+        const registroFirebase = await getDoc( doc(db, "registrosContables", id) );
 
-    const almacenarRegistroContable = async (e) => {
+        if(registroFirebase.exists) {
+            setConcepto(registroFirebase.data().concepto);
+            setImporte(registroFirebase.data().importe);
+            setCategoria(registroFirebase.data().categoria);
+            setSubcategoria(registroFirebase.data().subCategoria);
+            setEstado(registroFirebase.data().estado);
+            setFormaDePago(registroFirebase.data().formaDePago);
+            setModalidadPago(registroFirebase.data().modalidadDePago);
+        }else{
+            console.log("No existe el registro solicitado.");
+        }
+    }
+
+    useEffect( () => {
+        obtenerRegistroById(id);
+    }, []);
+
+    const actualizarRegistro = async (e) => {
         e.preventDefault();
 
         // Verificaciones
@@ -62,23 +81,24 @@ const AgregarGastoIngreso = () => {
             return;
         }
 
-        await setDoc(doc(db, "registrosContables", id),
-            {
-                concepto: concepto, importe: importe, categoria: categoria, subCategoria: subCategoria, 
-                estado: estado, medioDePago: formaDePago, modalidadDePago: modalidadPago, fecha: fechaActual
-            });
+        const registroRecuperado = doc(db, "registrosContables", id);
+        const registroActualizado = { concepto: concepto, importe: importe, categoria: categoria, subCategoria: subCategoria, 
+            estado: estado, medioDePago: formaDePago, modalidadDePago: modalidadPago, fecha: fechaActual };
+
+        await updateDoc(registroRecuperado, registroActualizado);
 
         new MySwal({
-            title: "Ingreso éxitoso",
-            text: "Registro contable ingresado al sistema.",
+            title: "Modificación éxitosa",
+            text: "Se modificó el registro solicitado.",
             icon: "success",
             button: "aceptar",
         });
 
-        irAAdmin();
+        irAAtras();
     }
 
-    const irAAdmin = () => {
+
+    const irAAtras = () => {
         navigate(`/admin/contabilidad/${usuario}`);
     }
 
@@ -99,7 +119,7 @@ const AgregarGastoIngreso = () => {
 
                 <Titulo>Ingresar registro contable al sistema:</Titulo>
 
-                <ContenedorFormularioRegistro tipo='pago' onSubmit={almacenarRegistroContable}>
+                <ContenedorFormularioRegistro tipo='pago' onSubmit={actualizarRegistro}>
 
                     <ContenedorCamposTriplesFormularioRegistro>
 
@@ -108,7 +128,7 @@ const AgregarGastoIngreso = () => {
                             <InputFormularioRegistro
                                 type="text"
                                 value={id}
-                                onChange={(e) => setId(e.target.value)}
+                                readOnly
                             />
                         </ContenedorCampoFormularioRegistro>
 
@@ -191,8 +211,8 @@ const AgregarGastoIngreso = () => {
 
 
                     <ContenedorBotonesDoblesFormularioRegistro>
-                        <BotonFormularioRegistro tipo='regresar' onClick={irAAdmin}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
-                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Ingresar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='regresar' onClick={irAAtras}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonFormularioRegistro>
+                        <BotonFormularioRegistro tipo='ingresar' typeof='submit'>Modificar</BotonFormularioRegistro>
                     </ContenedorBotonesDoblesFormularioRegistro>
                 </ContenedorFormularioRegistro>
 
@@ -209,4 +229,4 @@ const AgregarGastoIngreso = () => {
     )
 }
 
-export default AgregarGastoIngreso;
+export default ModificarGastoIngreso;

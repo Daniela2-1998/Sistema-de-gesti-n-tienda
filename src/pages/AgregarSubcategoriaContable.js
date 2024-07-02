@@ -55,7 +55,8 @@ const AgregarSubcategoriaContable = () => {
             icon: "success",
             button: "aceptar",
         });
-
+        
+        setSubcategoria("");
     }
 
     const handleSubmit = (e) => {
@@ -63,8 +64,9 @@ const AgregarSubcategoriaContable = () => {
         guardarNuevaSubcategoria(e);
     }
 
+
     const irAAdmin = () => {
-        navigate(`/administrador/${usuario}`);
+        navigate(`/admin/contabilidad/${usuario}`);
     }
 
 

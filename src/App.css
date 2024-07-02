@@ -1,11 +1,14 @@
 /* COLOR ICONOS */
 .iconos-blancos{
   color: #ED8936;
+  cursor: pointer;
 }
 
 .iconos-rojos{
   color: #dc1212;
+  background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 
 /* IMÁGENES SECCIÓN DE INICIO */
