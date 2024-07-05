@@ -3,19 +3,20 @@ import { Helmet } from "react-helmet";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { collection, getDoc, getDocs, deleteDoc, doc, query, where, orderBy } from 'firebase/firestore';
+import { collection, getDoc, getDocs, setDoc, deleteDoc, doc, query, where, orderBy } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 
 // Imports styles
+import '../App.css';
 import { ContenedorGeneral, Header } from '../components/InicioComponentes';
 import {
     ContenedorHeaderTabla, ContenedorFiltroHeaderTabla, BotonHeaderTabla, InputHeaderTabla, Tabla, EncabezadoTabla, RegistroTabla,
-    ContenedorOpcionesTabla,
-    BusquedaDescargaPDF
-} from '../components/TablasComponentes';
+    ContenedorOpcionesTabla } from '../components/TablasComponentes';
+import { ContenedorBusquedaFormulario, TituloFormularioRegistro, InputFormularioRegistro, ContenedorCampoFormularioRegistro
+ } from '../components/FormulariosComponentes';
 import SelectFiltros from '../components/SelectFiltros';
-
+import styled from 'styled-components';
 
 // Imports de SweetAlert2 para el modal de alerta de confirmación de eliminación.
 import Swal from 'sweetalert2';
@@ -47,6 +48,20 @@ const Operaciones = () => {
     const fechaActual = new Date().toLocaleDateString();
     const nombrePDF = "listaOperaciones-" + fechaActual + ".pdf";
 
+
+    // Operación recuperada
+    const [empleado, setEmpleado] = useState('');
+    const [fechaFinalizacion, setFechaFinalizacion] = useState('');
+    const [fechaOperacion, setFechaOperacion] = useState('');
+    const [participante, setParticipante] = useState('');
+    const [productos, setProductos] = useState([]);
+    const [tipoOperacion, setTipoOperacion] = useState('');
+    const [total, setTotal] = useState('');
+    const [medioDePago, setMedioDePago] = useState('');
+    const [modalidadPago, setModalidadPago] = useState('');
+    const [estado, setEstado] = useState('');
+
+
     const operacionesCollection = collection(db, "operaciones");
 
 
@@ -56,9 +71,9 @@ const Operaciones = () => {
 
 
     const recuperarConfiguracion = async () => {
-        const configuracionFirebase = await getDoc( doc(db, "configuracion", "establecida") );
+        const configuracionFirebase = await getDoc(doc(db, "configuracion", "establecida"));
 
-        if(configuracionFirebase.exists) {
+        if (configuracionFirebase.exists) {
             setNombreEmpresa(configuracionFirebase.data().nombreEmpresa);
         }
     }
@@ -66,7 +81,7 @@ const Operaciones = () => {
     // Funciones
     // Generales
     const obtenerOperaciones = async () => {
-        const data = await getDocs(query(operacionesCollection, orderBy("fechaOperacion", "desc"))) ;
+        const data = await getDocs(query(operacionesCollection, orderBy("fechaOperacion", "desc")));
         setOperaciones(
             data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
         );
@@ -163,7 +178,7 @@ const Operaciones = () => {
             obtenerOperacionesByFechaRegistro();
         } else if (filtro === 'Fecha de finalización') {
             obtenerOperacionesByFechaFinalización();
-        }else if (filtro === 'Tipo de operación') {
+        } else if (filtro === 'Tipo de operación') {
             obtenerOperacionesByTipoOperacion();
         } else if (filtro === 'Estado') {
             obtenerOperacionesByEstado();
@@ -178,6 +193,10 @@ const Operaciones = () => {
 
     const irAListadoOperaciones = () => {
         navigate(`/operaciones/listado/${usuario}`);
+    }
+
+    const irADescargarFactura = () => {
+        navigate(`/operaciones/descargar-factura/${usuario}`);
     }
 
     const regresar = () => {
@@ -274,9 +293,12 @@ const Operaciones = () => {
                             </Tabla>
 
                             <ContenedorOpcionesTabla>
-                                <PDFDownloadLink document={<PDFOperaciones operaciones={operaciones} nombreEmpresa={nombreEmpresa} fechaActual={fechaActual} />} fileName={nombrePDF}>
+                                <PDFDownloadLink className='boton-descarga' document={<PDFOperaciones operaciones={operaciones} nombreEmpresa={nombreEmpresa} fechaActual={fechaActual} />} fileName={nombrePDF}>
                                     <BotonHeaderTabla tipo='descarga'>Descargar PDF</BotonHeaderTabla>
                                 </PDFDownloadLink>
+                                {/*
+                                <BotonHeaderTabla tipo='agregar-subcategoria' onClick={irADescargarFactura}>Descargar factura</BotonHeaderTabla>
+                                */}
                                 <BotonHeaderTabla tipo='agregar-subcategoria' onClick={irAListadoOperaciones}>Listado de operaciones</BotonHeaderTabla>
 
                                 <BotonHeaderTabla tipo='regresar' onClick={regresar}><i class="fa fa-undo" aria-hidden="true"></i>Regresar</BotonHeaderTabla>
@@ -284,9 +306,12 @@ const Operaciones = () => {
                         </div>
                     </div>
                 </div>
+
+
             </ContenedorGeneral >
         </>
     )
 }
+
 
 export default Operaciones;

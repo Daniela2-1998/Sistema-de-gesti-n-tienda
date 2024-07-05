@@ -27,6 +27,7 @@ import withReactContent from 'sweetalert2-react-content';
 
 
 
+
 const MySwal = withReactContent(Swal);
 
 
@@ -74,14 +75,13 @@ const AgregarOperacion = () => {
     const [estadoAlerta, cambiarEstadoAlerta] = useState(false);
     const [alerta, cambiarAlerta] = useState('');
 
+    const productosCollection = collection(db, "productos");
+    const cuponesCollection = collection(db, "cupones");
+
 
     const irAOperaciones = () => {
         navigate(`/operaciones/${usuario}`);
     }
-
-    const productosCollection = collection(db, "productos");
-    const cuponesCollection = collection(db, "cupones");
-
 
     // Contenedor busqueda
     const buscarProductoSolicitado = async (e) => {
@@ -139,7 +139,7 @@ const AgregarOperacion = () => {
 
         sumarAlListadoProductos(idActual, productoActual, cantidadActual, valorUnitarioActual);
     }
-      
+
     // Contenedor total y descuento
     const aplicarDescuento = async (e) => {
         e.preventDefault();
@@ -194,11 +194,15 @@ const AgregarOperacion = () => {
     }
 
     // Cupones
+    /*
+    
     const modificarEstadoCupon = async () => {
         const cuponRecuperado = doc(cuponesCollection, descuento)
         const dataActualizada = { estado: "utilizado" };
         await updateDoc(cuponRecuperado, dataActualizada);
     }
+        
+    */
 
     const eliminarCupon = async () => {
         const cuponRecuperado = doc(cuponesCollection, descuento);
@@ -213,7 +217,7 @@ const AgregarOperacion = () => {
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            cancelButtonText: "mantener inactivo",
+            cancelButtonText: "mantener activo",
             confirmButtonText: 'eliminar'
         }).then((result) => {
             if (result.isConfirmed) {
@@ -225,7 +229,6 @@ const AgregarOperacion = () => {
                 )
                 irAOperaciones();
             } else if (result.isDismissed) {
-                modificarEstadoCupon();
                 irAOperaciones();
             }
         })
@@ -236,7 +239,7 @@ const AgregarOperacion = () => {
     const actualizarStockFirebase = async (funcion) => {
 
         const productosCollection = collection(db, "productos");
-        
+
         productos.map(async (p) => {
             const productoFirebase = await getDoc(doc(productosCollection, p.idProducto));
 
@@ -245,25 +248,25 @@ const AgregarOperacion = () => {
             if (productoFirebase.exists.length > 0) {
                 const productoAModificar = productoFirebase.data().producto;
                 let cantidadFirebase = parseInt(productoFirebase.data().cantidad);
-    
+
                 if (cantidadFirebase > 0) {
-    
+
                     let idCarrito = "";
                     let cantidadCarrito = 0;
-    
+
                     productos.map(prod => {
                         if (prod.producto === productoAModificar) {
                             idCarrito = prod.idProducto;
                             cantidadCarrito = parseInt(prod.cantidad);
                         }
                     });
-    
+
                     if (funcion === 'ingresar') {
                         cantidadFirebase = parseInt(cantidadFirebase + cantidadCarrito);
                     } else if (funcion === 'egresar') {
                         cantidadFirebase = parseInt(cantidadFirebase - cantidadCarrito);
                     }
-    
+
                     if (cantidadFirebase >= cantidadCarrito) {
                         const registro = doc(db, "productos", idCarrito);
                         const dataActualizada = { cantidad: cantidadFirebase };
@@ -276,7 +279,7 @@ const AgregarOperacion = () => {
                             button: "aceptar",
                         });
                     }
-    
+
                 } else {
                     new MySwal({
                         title: "Producto sin stock",
@@ -285,17 +288,17 @@ const AgregarOperacion = () => {
                         button: "aceptar",
                     });
                 }
-    
-            } else {
+
+            } else if (0 > productoFirebase.exists.length) {
                 await setDoc(doc(productosCollection, p.idProducto),
-                {
-                    producto: p.producto, codigo: p.idProducto, categoria: "", tipo: "", descripcion: "", cantidad: p.cantidad,
-                    descuento: "", disponibilidad: "en stock", precio: p.precio, promocion: ""
-                });
-            } 
-   
+                    {
+                        producto: p.producto, codigo: p.idProducto, categoria: "", tipo: "", descripcion: "", cantidad: p.cantidad,
+                        descuento: "", disponibilidad: "en stock", precio: p.precio, promocion: ""
+                    });
+            }
+
         })
-        
+
     }
 
     // Sumar ventas correspondientes al empleado
@@ -324,12 +327,12 @@ const AgregarOperacion = () => {
 
     // Registrar en contabilidad
     const registrarContablemente = async (funcion) => {
-        
+
         let categoria = "";
 
-        if (funcion === 'Compra' || funcion === 'Compra de suministros' || funcion === 'Importación' ){
+        if (funcion === 'Compra' || funcion === 'Compra de suministros' || funcion === 'Importación') {
             categoria = "Egreso";
-        } else if (funcion === 'Venta' || funcion === 'Exportación' ){
+        } else if (funcion === 'Venta' || funcion === 'Exportación') {
             categoria = "Ingreso";
         }
 
@@ -337,7 +340,7 @@ const AgregarOperacion = () => {
 
         await setDoc(doc(db, "registrosContables", id),
             {
-                concepto: tipoOperacion, importe: valorTotal, categoria: categoria, subCategoria: '', estado: '', 
+                concepto: tipoOperacion, importe: valorTotal, categoria: categoria, subCategoria: '', estado: '',
                 formaDePago: medioDePago, modalidadDePago: modalidadDePago, fecha: fechaOperacion
             });
     }
@@ -346,11 +349,11 @@ const AgregarOperacion = () => {
     // Agregar cliente o proveedor
     const almacenarCliente = async () => {
 
-        await setDoc(doc(db, "clientes", participante), 
-        { 
-            nombre: participante, DNI: "", mail: "", numero: "", fechaNacimiento: "", 
-            tipo: "", rango: "", estado: ""
-        })
+        await setDoc(doc(db, "clientes", participante),
+            {
+                nombre: participante, DNI: "", mail: "", numero: "", fechaNacimiento: "",
+                tipo: "", rango: "", estado: ""
+            })
 
         new MySwal({
             title: "Ingreso éxitoso",
@@ -363,8 +366,8 @@ const AgregarOperacion = () => {
 
     const almacenarProveedor = async () => {
 
-        await setDoc(doc(db, "proveedores", participante), { 
-            proveedor: participante, CUIT: "", contacto: "", mail: "", numero: "", estado: "" 
+        await setDoc(doc(db, "proveedores", participante), {
+            proveedor: participante, CUIT: "", contacto: "", mail: "", numero: "", estado: ""
         })
 
         new MySwal({
@@ -429,11 +432,12 @@ const AgregarOperacion = () => {
         }
 
         actualizarStockFirebase(funcion);
+        registrarContablemente(funcion);
 
         await setDoc(doc(db, "operaciones", id),
             {
                 participante: participante, tipoOperacion: tipoOperacion, productos: productos, valorTotal: valorTotal,
-                fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento, 
+                fechaOperacion: fechaOperacion, fechaFinalizacion: fechaFinalizacion, descuento: descuento,
                 empleado: empleado, estado: estado, medioDePago: medioDePago, modalidadDePago: modalidadDePago
             })
 
@@ -444,8 +448,6 @@ const AgregarOperacion = () => {
             button: "aceptar",
         });
 
-        registrarContablemente(funcion);
-        
         MySwal.fire({
             title: '¿Desea registrar automáticamente al participante?',
             text: "Sino, puede ingresarlo en su sección correspondiente: cliente o proveedor.",
@@ -472,7 +474,12 @@ const AgregarOperacion = () => {
                 )
                 irAOperaciones();
             }
-        })
+        }
+        )
+
+
+        // SEGUIR
+
         if (tipoOperacion === 'Venta') {
             modificiarVentasEmpleadoFirebase();
         }
@@ -497,6 +504,7 @@ const AgregarOperacion = () => {
                 <Header>
                     <h1>Sistema de gestión comercial</h1>
                 </Header>
+
 
                 <Titulo>Ingresar operación al sistema:</Titulo>
 

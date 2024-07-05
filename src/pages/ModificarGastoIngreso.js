@@ -49,7 +49,7 @@ const ModificarGastoIngreso = () => {
 
 
     const obtenerRegistroById = async (id) => {
-        const registroFirebase = await getDoc( doc(db, "registrosContables", id) );
+        const registroFirebase = await getDoc(doc(db, "registrosContables", id) );
 
         if(registroFirebase.exists) {
             setConcepto(registroFirebase.data().concepto);

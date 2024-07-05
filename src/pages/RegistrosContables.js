@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // Imports Firebase
-import { collection, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, getDoc, getDocs, deleteDoc, doc, query, where } from 'firebase/firestore';
 import db from '../firebase/FirebaseConfig';
 
 
@@ -63,9 +63,17 @@ const RegistrosContables = () => {
         );
     }
 
+    const recuperarConfiguracion = async () => {
+        const configuracionFirebase = await getDoc( doc(db, "configuracion", "establecida") );
+
+        if(configuracionFirebase.exists) {
+            setNombreEmpresa(configuracionFirebase.data().nombreEmpresa);
+        }
+    }
     
     useEffect(() => {
        obtenerRegistros();
+       recuperarConfiguracion();
      }, []);
 
     const eliminarRegistros = async (id) => {

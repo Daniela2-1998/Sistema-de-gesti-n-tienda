@@ -80,6 +80,10 @@ const BotonHeaderTabla = styled.button`
       return 'width: 15%; height: 50px; margin-left: 2%; border-radius: 10px;';
     } else if (props.tipo === 'regresar') {
       return 'height: 50px; margin-left: 32%; border-radius: 10px;';
+    } else if (props.tipo === 'descarga factura') {
+      return 'width: 50%; height: 70px; margin-left: 15%; border-radius: 10px;';
+    } else if (props.tipo === 'buscar operacion') {
+      return 'width: 45.5%; height: 50px; margin-top: 2%; margin-left: 23.5%; border-radius: 10px;';
     }
   }}
 
@@ -89,7 +93,7 @@ const BotonHeaderTabla = styled.button`
       if(props.tipo === 'filtro'){
         return 'width: 20%;';
       } else if (props.tipo === 'agregar') {
-        return 'width: 25%;';
+        return 'width: 25%;'
       } else if (props.tipo === 'agregar-subcategoria' || props.tipo === 'descarga' || props.tipo === 'modificar') {
         return 'width: 22%;';
       } else if (props.tipo === 'regresar') {
@@ -108,9 +112,21 @@ const BotonHeaderTabla = styled.button`
         return 'width: 22%;';
       } else if (props.tipo === 'regresar') {
         return 'margin-left: 10%;';
+      } else if (props.tipo === 'descarga factura') {
+        return 'width: 100%; height: 70px; margin-bottom: 10%; margin-left: -6%;';
+      } 
+    }}
+  }
+
+
+  @media(max-width: 1000px) { 
+    ${(props) => {
+      if (props.tipo === 'buscar operacion') {
+        return 'width: 91%; height: 70px; margin-top: 7%; margin-left: 4%; border-radius: 10px;';
       }
     }}
   }
+
 
   @media(max-width: 900px) { 
     ${(props) => {
@@ -122,6 +138,8 @@ const BotonHeaderTabla = styled.button`
         return 'width: 25%;';
       } else if (props.tipo === 'regresar') {
         return 'margin-left: 2%;';
+      } else if (props.tipo === 'buscar operacion') {
+        return 'height: 70px; margin-top: 7%; margin-left: 4%; border-radius: 10px;';
       }
     }}
   }
@@ -198,6 +216,7 @@ const ContenedorOpcionesTabla = styled.div`
   height: 70px;
   width: 87%;
   margin-left: 5%;
+  margin-bottom: 7%;
   padding-top: 1%;
   background-color: #ED8936;
 

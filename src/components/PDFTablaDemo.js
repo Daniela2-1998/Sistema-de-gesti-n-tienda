@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
         borderRightWidth: 0,
         borderBottomWidth: 0,
         marginTop: 20,
+        marginBottom: 20 + "%",
     },
     tablaFila: {
         margin: "auto",

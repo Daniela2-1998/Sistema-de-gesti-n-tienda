@@ -66,3 +66,18 @@
   background-image: url("../src/images/cupones.svg");
 }
 
+
+/* BOTÓN DESCARGA DE PDF */
+.boton-descarga-factura{
+  width: 90%;
+  margin-top: 10%;
+  margin-left: 10%;
+}
+
+
+@media (max-width: 750px) {
+  .boton-descarga{
+    width: 101%;
+    margin-left: 54%;
+  }
+}

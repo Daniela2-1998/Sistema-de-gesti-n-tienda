@@ -17,11 +17,11 @@ import LogoLogin from '../images/Logo.svg';
 
 
 
+
 function Login() {
 
     const [usuario, setUsuario] = useState("");
     const [contraseña, setContraseña] = useState("");
-
 
     const navigate = useNavigate();
 
@@ -40,7 +40,6 @@ function Login() {
 
         const auth = getAuth();
 
-
         await signInWithEmailAndPassword(auth, usuario, contraseña)
             .then(() => {
                 navigate(`/inicio/${usuario}`);
@@ -50,6 +49,7 @@ function Login() {
                 navigate("/");
             });
     }
+
 
 
     return (

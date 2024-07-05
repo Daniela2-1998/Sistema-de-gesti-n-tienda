@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -35,63 +35,66 @@ import AgregarSubcategoriaContable from './pages/AgregarSubcategoriaContable';
 import RegistrosContables from './pages/RegistrosContables';
 import ModificarGastoIngreso from './pages/ModificarGastoIngreso';
 import ListadoRegistrosContables from './pages/ListadoRegistrosContables';
+import DescargarFactura from './pages/DescargarFactura';
+
 
 
 function App() {
 
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
 
-          <Routes>
-            <Route path='/' element={<Login />} />
+      <Routes>
+        <Route path='/' element={<Login />} />
 
-            <Route path='/inicio/:usuario' element={<Inicio />} />
+        <Route path='/inicio/:usuario' element={<Inicio />} />
 
-            <Route path='/productos/:usuario' element={<Productos />} />
-            <Route path='/productos/agregar/:usuario' element={<AgregarProducto />} />
-            <Route path='/productos/modificar/:usuario/:id' element={<ModificarProducto />} />
-            <Route path='/productos/modificar-cantidad/:usuario' element={<ModificarCantidad />} />
-            <Route path='/productos/agregar-subcategoria/:usuario' element={<AgregarSubcategoria />} />
-           
-            <Route path='/proveedores/:usuario' element={<Proveedores />} />
-            <Route path='/proveedores/agregar/:usuario' element={<AgregarProveedor />} />
-            <Route path='/proveedores/modificar/:usuario/:id' element={<ModificarProveedor />} />
+        <Route path='/productos/:usuario' element={<Productos />} />
+        <Route path='/productos/agregar/:usuario' element={<AgregarProducto />} />
+        <Route path='/productos/modificar/:usuario/:id' element={<ModificarProducto />} />
+        <Route path='/productos/modificar-cantidad/:usuario' element={<ModificarCantidad />} />
+        <Route path='/productos/agregar-subcategoria/:usuario' element={<AgregarSubcategoria />} />
 
-            <Route path='/clientes/:usuario' element={<Clientes />} />
-            <Route path='/clientes/agregar/:usuario' element={<AgregarCliente />} />
-            <Route path='/clientes/modificar/:usuario' element={<ModificarCliente />} />
+        <Route path='/proveedores/:usuario' element={<Proveedores />} />
+        <Route path='/proveedores/agregar/:usuario' element={<AgregarProveedor />} />
+        <Route path='/proveedores/modificar/:usuario/:id' element={<ModificarProveedor />} />
 
-            <Route path='/operaciones/:usuario' element={<Operaciones />} />
-            <Route path='/operaciones/agregar/:usuario' element={<AgregarOperacion />} />
-            <Route path='/operaciones/listado/:usuario' element={<ListadoOperaciones />} />
+        <Route path='/clientes/:usuario' element={<Clientes />} />
+        <Route path='/clientes/agregar/:usuario' element={<AgregarCliente />} />
+        <Route path='/clientes/modificar/:usuario' element={<ModificarCliente />} />
 
-            <Route path='/administrador/:usuario' element={<Administrador />} />
-            <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
-            <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
-            <Route path='/admin/usuarios/modificar/:usuario/:id' element={<ModificarUsuario />} />
-           
-            <Route path='/empleados/:usuario' element={<Empleados />} />
-            <Route path='/admin/empleados/:usuario' element={<Empleados />} />
-            <Route path='/admin/empleados/agregar/:usuario' element={<AgregarEmpleado />} />
-            <Route path='/admin/empleados/modificar/:usuario/:id' element={<ModificarEmpleado />} />
-          
-            <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
-            <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
-            <Route path='/admin/cupones/:usuario' element={<GenerarCupon />} />
+        <Route path='/operaciones/:usuario' element={<Operaciones />} />
+        {/*
+           <Route path='/operaciones/descargar-factura/:usuario' element={<DescargarFactura />} />
+           */}
+        <Route path='/operaciones/agregar/:usuario' element={<AgregarOperacion />} />
+        <Route path='/operaciones/listado/:usuario' element={<ListadoOperaciones />} />
 
-            <Route path='/admin/contabilidad/:usuario' element={<RegistrosContables />} />
-            <Route path='/admin/contabilidad/registros/listado/:usuario' element={<ListadoRegistrosContables />} />
-            <Route path='/admin/contabilidad/registros/agregar/:usuario' element={<AgregarGastoIngreso />} />
-            <Route path='/admin/contabilidad/registros/modificar/:usuario/:id' element={<ModificarGastoIngreso />} />
-            <Route path='/admin/contabilidad/agregar-subcategoria/:usuario' element={<AgregarSubcategoriaContable />} />
+        <Route path='/administrador/:usuario' element={<Administrador />} />
+        <Route path='/admin/usuarios/:usuario' element={<Usuarios />} />
+        <Route path='/admin/usuarios/agregar/:usuario' element={<AgregarUsuario />} />
+        <Route path='/admin/usuarios/modificar/:usuario/:id' element={<ModificarUsuario />} />
+
+        <Route path='/empleados/:usuario' element={<Empleados />} />
+        <Route path='/admin/empleados/:usuario' element={<Empleados />} />
+        <Route path='/admin/empleados/agregar/:usuario' element={<AgregarEmpleado />} />
+        <Route path='/admin/empleados/modificar/:usuario/:id' element={<ModificarEmpleado />} />
+
+        <Route path='/admin/sucursales/:usuario' element={<Sucursales />} />
+        <Route path='/admin/configuracion/:usuario' element={<Configuracion />} />
+        <Route path='/admin/cupones/:usuario' element={<GenerarCupon />} />
+
+        <Route path='/admin/contabilidad/:usuario' element={<RegistrosContables />} />
+        <Route path='/admin/contabilidad/registros/listado/:usuario' element={<ListadoRegistrosContables />} />
+        <Route path='/admin/contabilidad/registros/agregar/:usuario' element={<AgregarGastoIngreso />} />
+        <Route path='/admin/contabilidad/registros/modificar/:usuario/:id' element={<ModificarGastoIngreso />} />
+        <Route path='/admin/contabilidad/agregar-subcategoria/:usuario' element={<AgregarSubcategoriaContable />} />
 
 
 
-          </Routes>
+      </Routes>
 
-      </BrowserRouter >
-    </>
+    </BrowserRouter >
 
   );
 }

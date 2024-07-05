@@ -1,10 +1,10 @@
 import React from 'react';
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
-
 // Tamaños ancho de columna.
 const colAncho1 = 30;
 const colAncho2 = 15;
+
 
 // Estilos del PDF.
 const styles = StyleSheet.create({
@@ -26,6 +26,16 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign: "center",
     },
+    numeroComprobante: {
+        fontSize: 17,
+        marginLeft: 40 + "%",
+        borderStyle: "solid",
+        borderWidth: 1,
+    },
+    detallesOperacion: {
+        fontSize: 15,
+        marginLeft: 7 + "%",
+    },
     tabla: {
         display: "table",
         width: "auto",
@@ -35,7 +45,6 @@ const styles = StyleSheet.create({
         borderRightWidth: 0,
         borderBottomWidth: 0,
         marginTop: 20,
-        marginBottom: 20 + "%",
     },
     tablaFila: {
         margin: "auto",
@@ -132,60 +141,86 @@ const styles = StyleSheet.create({
     }
 });
 
-// Visual del PDF con tabla de productos.
-function PDFRegistrosContables({ registros, fechaActual, nombreEmpresa }) {
+const Factura = ({ fechaActual, nombreEmpresa, numeroComprobante, empleado, fechaFinalizacion, participante, productos,
+    tipoOperacion, total, estado, formaDePago, modalidadDePago }) => {
 
     return (
         <Document>
-            <Page style={styles.page}>
+            <Page style={styles.page} size={'A4'}>
 
                 <Text style={styles.title}>{nombreEmpresa}</Text>
 
 
                 <View style={styles.section}>
-                    <Text style={styles.subtitle}>Listado de registros contables:</Text>
+                    <Text style={styles.numeroComprobante}>Comprobante de pago: {numeroComprobante}</Text>
+                </View>
 
+
+                <Text style={styles.detallesOperacion}>Fecha de emisión: {fechaActual}</Text>
+                {
+                    tipoOperacion === 'Compra' || tipoOperacion === 'Compra de suministros' || tipoOperacion === 'Importación' ?
+                        <View style={styles.section}>
+                            <Text style={styles.detallesOperacion}>Vendedor: {participante}</Text>
+                        </View>
+                        : tipoOperacion === 'Venta' || tipoOperacion === 'Exportación' ?
+                            <View style={styles.section}>
+                                <Text style={styles.detallesOperacion}>Cliente: {participante}</Text>
+                            </View>
+                            :
+                            <View style={styles.section}>
+                                <Text style={styles.detallesOperacion}>Cliente: {participante}</Text>
+                            </View>
+
+                }
+
+
+                <View style={styles.section}>
 
                     <View style={styles.tabla}>
 
                         <View style={styles.tablaFila}>
-                            <View style={styles.tablaColumna0}>
-                                <Text style={styles.tablaCeldaHeader}>Fecha</Text>
+                            <View style={styles.tablaColumna2}>
+                                <Text style={styles.tablaCeldaHeader}>ID</Text>
                             </View>
                             <View style={styles.tablaColumna1}>
-                                <Text style={styles.tablaCeldaHeader}>Importe</Text>
-                            </View>
-                            <View style={styles.tablaColumna2}>
-                                <Text style={styles.tablaCeldaHeader}>Concepto</Text>
-                            </View>
-                            <View style={styles.tablaColumna2}>
-                                <Text style={styles.tablaCeldaHeader}>Subcategoría</Text>
+                                <Text style={styles.tablaCeldaHeader}>Cantidad</Text>
                             </View>
                             <View style={styles.tablaColumna1}>
-                                <Text style={styles.tablaCeldaHeader}>Medio de pago</Text>
+                                <Text style={styles.tablaCeldaHeader}>Producto</Text>
+                            </View>
+                            <View style={styles.tablaColumna2}>
+                                <Text style={styles.tablaCeldaHeader}>Precio</Text>
+                            </View>
+                            <View style={styles.tablaColumna2}>
+                                <Text style={styles.tablaCeldaHeader}>Total</Text>
                             </View>
                         </View>
 
-                        {registros.map((registro) => (
-                            <View style={styles.tablaFila} key={registro.id}>
-                                <View style={styles.tablaColumna0}>
-                                    <Text style={styles.tablaCelda}>{registro.fecha}</Text>
-                                </View>
-                                <View style={styles.tablaColumna1}>
-                                    <Text style={styles.tablaCelda}>{registro.importe}</Text>
-                                </View>
+                        {
+                            <View style={styles.tablaFila}>
+
+                                {productos.map((p) => (
+                                    <View style={styles.tablaFila} key={p.idProducto}>
+                                        <View style={styles.tablaColumna2}>
+                                            <Text style={styles.tablaCelda}>{p.idProducto}</Text>
+                                        </View>
+                                        <View style={styles.tablaColumna0}>
+                                            <Text style={styles.tablaCelda}>{p.cantidad}</Text>
+                                        </View>
+                                        <View style={styles.tablaColumna1}>
+                                            <Text style={styles.tablaCelda}>{p.producto}</Text>
+                                        </View>
+                                        <View style={styles.tablaColumna1}>
+                                            <Text style={styles.tablaCelda}>${p.precio}</Text>
+                                        </View>
+                                    </View>
+                                ))
+                                }
                                 <View style={styles.tablaColumna2}>
-                                    <Text style={styles.tablaCelda}>{registro.concepto}</Text>
-                                </View>
-                                <View style={styles.tablaColumna2}>
-                                    <Text style={styles.tablaCelda}>{registro.subCategoria}</Text>
-                                </View>
-                                <View style={styles.tablaColumna1}>
-                                    <Text style={styles.tablaCelda}>{registro.medioDePago}  -  {registro.modalidadDePago}</Text>
+                                    <Text style={styles.tablaCelda}>${total}</Text>
                                 </View>
                             </View>
-                        ))}
-
+                        }
                     </View>
 
                 </View>
@@ -194,8 +229,8 @@ function PDFRegistrosContables({ registros, fechaActual, nombreEmpresa }) {
                 <View style={styles.footer}>
                     <Text style={styles.textoFooter}>{fechaActual} - System Solutions</Text>
                     <Text style={styles.pageNumber} render={({ pageNumber, totalPages }) => (
-                    `${pageNumber} / ${totalPages}`
-                )} fixed />
+                        `${pageNumber} / ${totalPages}`
+                    )} fixed />
                 </View>
 
             </Page>
@@ -204,4 +239,4 @@ function PDFRegistrosContables({ registros, fechaActual, nombreEmpresa }) {
     )
 }
 
-export default PDFRegistrosContables;
+export default Factura;

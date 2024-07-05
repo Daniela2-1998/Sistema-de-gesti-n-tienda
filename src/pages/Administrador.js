@@ -91,10 +91,12 @@ function Administrador() {
             <BotonesCards onClick={irAContabilidad}>Contabilidad</BotonesCards>
           </Cards>
 
+          { /*
           <Cards>
             <ImagenesCards className='imagen imagen-pedidos' />
             <BotonesCards onClick={irAPedidos}>Pedidos</BotonesCards>
           </Cards>
+          */}
 
           <Cards>
             <ImagenesCards className='imagen imagen-configuracion' />

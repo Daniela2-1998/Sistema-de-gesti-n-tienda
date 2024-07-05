@@ -515,7 +515,9 @@ const ContenedorBusquedaFormulario = styled.form`
       return 'width: 80%; height: 450px; margin-top: 5%; margin-left: 10%; display: flex; flex-direction: column;';
     } else if (props.tipo === 'cupon') {
       return 'height: 250px; flex-direction: column;';
-    }
+    } else if (props.tipo === 'formulario factura') {
+      return 'width: 80%; height: 450px; margin-top: 5%; margin-left: 10%; display: flex; flex-direction: column;';
+    } 
   }}
 
 
@@ -538,7 +540,7 @@ const ContenedorBusquedaFormulario = styled.form`
         return 'width: 90%;';
       } else if (props.tipo === 'calculo total') {
         return 'width: 90%; margin-left: 5%; margin-top: 15%;';
-      } 
+      }
     }}
   }
 
@@ -547,6 +549,8 @@ const ContenedorBusquedaFormulario = styled.form`
     ${(props) => {
       if (props.tipo === 'calculo total') {
         return 'height: 850px; display: flex; flex-direction: column;';
+      } else if (props.tipo === 'formulario factura'){
+        return 'height: 550px;';
       } 
     }}
   }
@@ -560,7 +564,7 @@ const ContenedorBusquedaFormulario = styled.form`
         return 'display: flex; flex-direction: column;';
       } else if (props.tipo === 'cupon') {
         return 'height: 650px;';
-      } 
+      }
     }}
   }
 
@@ -574,7 +578,7 @@ const ContenedorBusquedaFormulario = styled.form`
         return 'height: 750px;';
       } else if (props.tipo === 'calculo total') {
         return 'height: 850px;';
-      } 
+      }
     }}
   }
 
